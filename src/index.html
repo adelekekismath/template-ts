@@ -6,8 +6,40 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <!-- support for mobile touch devices -->
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="css" href="index.css" />
+    <script src="bundle.js"></script>
 </head>
 <body>
-    <h1>Empty Page</h1>
+    <form class="watch">
+        <input id="start" type="checkbox">
+        <label class="watch__start" for="start">
+            <span>Start</span>
+        </label>
+        <label class="watch__light" for="light">
+            <span>Light</span>
+        </label>
+        <label class="watch__increase" for="increase">
+            <span>Increase</span>
+        </label>
+        
+        <div class="watch__stop-start watch__control">
+            <div id="mode-button"></div>
+            Mode
+        </div>
+        <div class="lightwatch__stop-start watch__control">
+            <div id="light-button"></div>
+            Light
+        </div>
+        <div class="increasewatch__stop-start watch__control">
+            <div id="increase-button"></div>
+            Increase
+        </div>
+        <div id="watch__container">
+            <div id="watch-display">
+            </div>
+        </div>
+    </form>
+
 </body>
+
 </html>

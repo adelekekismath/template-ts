@@ -1,3 +1,213 @@
-h1 {
-    color: red;
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+:root {
+    --digit: hsl(87, 43%, 4%);
+    --face: hsl(96, 33%, 97%);
+    --content: hsl(0, 0%, 40%);
+    --glare: hsla(0, 0%, 100%, 0.2);
+    --watch-bg: hsl(270, 100%, 30%);
+    --watch-bg--light: hsl(210, 80%, 90%);
+    --watch-bg--dark: hsl(210, 80%, 20%);
+    --stroke: hsl(0, 0%, 15%);
+    --start: hsl(50, 100%, 50%);
+    --start-two: hsl(50, 100%, 50%);
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+form {
+    margin: 0;
+}
+
+button {
+    appearance: none;
+    border: 0;
+    outline: transparent;
+    background: none;
+}
+
+label span,
+button span,
+[type='checkbox'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+label,
+button {
+    cursor: pointer;
+}
+
+.watch__control--mode {
+    top: -20px;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.watch__control--light {
+    bottom: -20px;
+    left: -30px;
+}
+
+.watch__control--increase {
+    bottom: -20px;
+    right: -30px;
+}
+
+#mode-button,
+#light-button,
+#increase-button {
+    width: 100%;
+    height: 60%;
+    position: absolute;
+    bottom: 0;
+    border: 0.5vmin solid var(--stroke);
+    border-radius: 1vmin;
+    background: var(--start);
+    overflow: hidden;
+}
+
+#mode-button:after,
+#light-button:after,
+#increase-button:after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    border-radius: 1vmin;
+    background: var(--start-two);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    transform: translate(-20%, 35%);
+}
+
+.watch {
+    height: 45vmin;
+    width: 45vmin;
+    background-color: var(--watch-bg);
+    border-radius: 50%;
+    border: 0.5vmin solid var(--stroke);
+    position: relative;
+}
+
+.watch__start,
+.watch__control {
+    --size: min(48px, 10vmin);
+    height: var(--size);
+    width: var(--size);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transition: transform 0.05s;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translate(0, -25vmin) translateY(calc(var(--y, 0) * 1%));
+    z-index: 10;
+}
+
+.watch__control {
+    z-index: -1;
+}
+
+.watch__stop-start {
+    --rotation: 40deg;
+}
+
+.lightwatch__stop-start {
+    --rotation: -130deg;
+}
+
+.increasewatch__stop-start {
+    --rotation: 130deg;
+}
+
+.watch__content {
+    height: 40vmin;
+    border: 0.5vmin solid var(--stroke);
+    width: 40vmin;
+    background-color: var(--content);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.watch__content:before {
+    box-shadow: 0 0 0 5vmin var(--shadow);
+    border-radius: 50%;
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    transform: translate(-50%, -50%) translate(0, 2%);
+}
+
+.watch__content:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    transform: translate(-50%, -50%) rotate(-50deg);
+    background: linear-gradient(transparent 0 15%, var(--glare) 16% 35%, transparent 36% 40%, var(--glare) 41% 45%, transparent 46%);
+}
+.watch__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#watch-display {
+    color: var(--digit);
+    display: flex;
+    font-size: 6vmin;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1.75vmin;
+    border-radius: 1vmin;
+    background: var(--face);
+    width: 350px;
+    justify-content: center;
+}
+
+.ms {
+    padding-left: 1vmin;
+    font-size: 3vmin;
+    transform: translate(0, 38%);
+    position: relative;
+    bottom: 0;
+    right: 0;
 }
