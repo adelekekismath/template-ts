@@ -1,20 +1,65 @@
 
 import './index.css';
-import { WatchModel } from './models/WatchModel';
-import { WatchView } from './views/WatchView';
-import { WatchController } from './controllers/WatchController';
+import { WatchManagerController } from './controllers/WatchManagerController';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const watchDisplay = document.getElementById('watch-display');
-    const modeButton = document.getElementById('mode-button');
-    const lightButton = document.getElementById('light-button');
-    const increaseButton = document.getElementById('increase-button');
 
-    const model = new WatchModel();
-    const view = new WatchView(watchDisplay!, modeButton!, lightButton!, increaseButton!);
-    const controller = new WatchController(model, view);
-    
-    controller.startClock(); // Start the clock
+    const timeZones = [
+        'GMT+12',
+        'GMT+11',
+        'GMT+10',
+        'GMT+9',
+        'GMT+8',
+        'GMT+7',
+        'GMT+6',
+        'GMT+5',
+        'GMT+4',
+        'GMT+3',
+        'GMT+2',
+        'GMT+1',
+        'GMT',
+        'GMT-1',
+        'GMT-2',
+        'GMT-3',
+        'GMT-4',
+        'GMT-5',
+        'GMT-6',
+        'GMT-7',
+        'GMT-8',
+        'GMT-9',
+        'GMT-10',
+        'GMT-11',
+        'GMT-12',
+    ];
+    const watchManager = new WatchManagerController();
+
+    const dialog = document.getElementById('timezone-dialog') as HTMLDialogElement;
+    const timezoneSelect = document.getElementById('timezone') as HTMLSelectElement;
+
+    function populateTimezones() {
+        timeZones.forEach((timeZone) => {
+            const option = document.createElement('option');
+            option.value = timeZone.match(/GMT([+-]\d+)/)?.[1] || "0";
+            option.textContent = timeZone;
+            timezoneSelect.appendChild(option);
+        });
+    }
+
+    document.getElementById('add-clock-btn')?.addEventListener('click', () => {
+        populateTimezones(); // Populate the dropdown when opening the dialog
+        dialog.showModal();
+    });
+
+    document.getElementById('confirm-timezone')?.addEventListener('click', () => {
+        const selectedTimezone = timezoneSelect.value;
+        watchManager.addClock(parseInt(selectedTimezone));
+        dialog.close();
+    });
+
+    document.getElementById('close-dialog')?.addEventListener('click', () => {
+        dialog.close();
+    });
 });
+
 
 

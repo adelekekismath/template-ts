@@ -22,8 +22,6 @@ body {
     --content: hsl(0, 0%, 40%);
     --glare: hsla(0, 0%, 100%, 0.2);
     --watch-bg: hsl(270, 100%, 30%);
-    --watch-bg--light: hsl(210, 80%, 90%);
-    --watch-bg--dark: hsl(210, 80%, 20%);
     --stroke: hsl(0, 0%, 15%);
     --start: hsl(50, 100%, 50%);
     --start-two: hsl(50, 100%, 50%);
@@ -35,10 +33,6 @@ body {
     place-items: center;
 }
 
-form {
-    margin: 0;
-}
-
 button {
     appearance: none;
     border: 0;
@@ -46,9 +40,11 @@ button {
     background: none;
 }
 
-#mode-button,
-#light-button,
-#increase-button {
+.mode-button,
+.light-button,
+.increase-button,
+.reset-button,
+.format-button {
     width: 100%;
     height: 60%;
     position: absolute;
@@ -57,12 +53,55 @@ button {
     border-radius: 0.5vmin;
     background: var(--start);
     overflow: hidden;
+    transition: transform 0.2s ease, height 0.2s ease;
+}
+
+.mode-button:active,
+.light-button:active,
+.increase-button:active,
+.reset-button:active,
+.format-button:active {
+    height: 50%; 
+    transform: scaleY(0.9); 
+}
+
+.reset-button,
+.format-button {
+    background-color: #3e8e41;
+}
+
+#add-clock-btn {
+    background-color: #4CAF50; /* Vert */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 4px #2d6b35;
+    transition: background-color 0.3s ease;
+}
+
+#add-clock-btn:hover {
+    background-color: #45a049; /* Vert plus clair au survol */
+}
+
+#add-clock-btn:active {
+    background-color: #3e8e41; /* Vert plus foncé lors du clic */
+    box-shadow: 0 2px #2d6b35;
+    transform: translateY(2px);
 }
 
 span.label-mode {
     display: inline-block; 
     transform: rotate(-39deg);
-    padding-left: 2.5vmin;
+    left: 3vmin;
+    top: -1.5vmin;
+    position: relative;
     font-size: larger;
 }
 
@@ -83,9 +122,11 @@ span.label-increase {
 }
 
 
-#mode-button:after,
-#light-button:after,
-#increase-button:after {
+.mode-button:after,
+.light-button:after,
+.increase-button:after,
+.reset-button:after,
+.format-button:after {
     content: '';
     height: 100%;
     width: 100%;
@@ -97,24 +138,28 @@ span.label-increase {
     transform: translate(-20%, 35%);
 }
 
+.reset-button:after, .format-button:after {
+    background-color: #3e8e41;
+}
+
 .watch {
-    height: 45vmin;
-    width: 45vmin;
+    height: 30vmin;
+    width: 30vmin;
     background-color: var(--watch-bg);
     border-radius: 50%;
     border: 0.5vmin solid var(--stroke);
     position: relative;
 }
 
-.watch__control {
-    --size: min(48px, 10vmin);
+.watch-control {
+    --size: min(38px, 7vmin);
     height: var(--size);
     width: var(--size);
     position: absolute;
     top: 50%;
     left: 50%;
     transition: transform 0.05s;
-    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translate(0, -25vmin) translateY(calc(var(--y, 0) * 1%));
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translate(0, -17.1vmin) translateY(calc(var(--y, 0) * 1%));
     z-index: 10;
 }
 
@@ -122,8 +167,16 @@ span.label-increase {
     --rotation: 40deg;
 }
 
+.reset-watch {
+    --rotation: -40deg;
+}
+
 .light-watch {
     --rotation: -130deg;
+}
+
+.format-watch {
+    --rotation: 90deg;
 }
 
 .increase-watch {
@@ -165,17 +218,17 @@ span.label-increase {
     transform: translate(-50%, -50%) rotate(-50deg);
     background: linear-gradient(transparent 0 15%, var(--glare) 16% 35%, transparent 36% 40%, var(--glare) 41% 45%, transparent 46%);
 }
-.watch__container {
+.watch-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-#watch-display {
+.watch-display {
     color: var(--digit);
     display: flex;
-    font-size: 6vmin;
+    font-size: 4vmin;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -183,13 +236,14 @@ span.label-increase {
     padding: 1.75vmin;
     border-radius: 1vmin;
     background: var(--face);
-    width: 350px;
+    width: 25vmin;
+    height: 8vmin;
     justify-content: center;
 }
 
 .ms {
     padding-left: 1vmin;
-    font-size: 3vmin;
+    font-size: 2.4vmin;
     transform: translate(0, 38%);
     position: relative;
     bottom: 0;
@@ -205,3 +259,82 @@ span.label-increase {
         opacity: 0;
     }
 }
+
+.clock-wrapper {
+    position: relative;
+    width: 45vmin;
+    height: 40vmin;
+    border: 2px solid #00AEEF;
+    border-radius: 2vmin;
+    padding: 10px;
+    display: inline-block;
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+.custom-dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dialog-form label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#timezone {
+    padding: 5px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.confirm-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+

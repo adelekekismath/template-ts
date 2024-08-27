@@ -8,27 +8,119 @@ enum TimeType {
     HOURS,
     MINUTES,
 }
+enum Format {
+    AM_PM,
+    H24,
+}
 
 export class WatchView {
-    private watchElement: HTMLElement;
+    public id = 0;
+    private watchDisplay: HTMLElement;
     private modeButton: HTMLElement;
     private lightButton: HTMLElement;
     private increaseButton: HTMLElement;
+    private resetButton: HTMLElement;
+    private formatButton: HTMLElement
     private hourElement: HTMLElement;
     private minuteElement: HTMLElement;
     private secondElement: HTMLElement;
+    private formatElement: HTMLElement;
+    private closeButton: HTMLElement;
     private static yellowColor: string = '#FBE106';
     private static whiteColor: string = '#FFFFFF';
     private backgroundColor: string = WatchView.whiteColor;
+    private static clockCounter: number = 0;
 
-    constructor(watchElement: HTMLElement, modeButton: HTMLElement, lightButton: HTMLElement, increaseButton: HTMLElement) {
-        this.watchElement = watchElement;
-        this.modeButton = modeButton;
-        this.lightButton = lightButton;
-        this.lightButton = lightButton;
-        this.increaseButton = increaseButton;
+    constructor() {
+        this.id = WatchView.clockCounter++;
+        const clockWrapper = document.createElement('div');
+        clockWrapper.id = `clock-wrapper-${WatchView.clockCounter}`;
+        clockWrapper.className = 'clock-wrapper';
 
-        this.watchElement.innerHTML = '';
+        this.closeButton = document.createElement('button');
+        this.closeButton.id = `close-button-${WatchView.clockCounter}`;
+        this.closeButton.className = 'close-btn';
+        this.closeButton.textContent = 'X';
+
+        const watch = document.createElement('div');
+        watch.id = `watch-${WatchView.clockCounter}`;
+        watch.className = 'watch';
+
+        const resetControl = document.createElement('div');
+        resetControl.id = `reset-control-${WatchView.clockCounter}`;
+        resetControl.className = 'reset-watch watch-control';
+        this.resetButton = document.createElement('button');
+        this.resetButton.id = `reset-button-${WatchView.clockCounter}`;
+        this.resetButton.className = 'reset-button';
+        const resetLabel = document.createElement('span');
+        resetLabel.id = `label-reset-${WatchView.clockCounter}`;
+        resetLabel.className = 'label-reset';
+        resetLabel.textContent = 'Reset';
+
+        const modeControl = document.createElement('div');
+        modeControl.id = `mode-control-${WatchView.clockCounter}`;
+        modeControl.className = 'mode-watch watch-control';
+        this.modeButton = document.createElement('button');
+        this.modeButton.id = `mode-button-${WatchView.clockCounter}`;
+        this.modeButton.className = 'mode-button';
+        const modeLabel = document.createElement('span');
+        modeLabel.className = 'label-mode';
+        modeLabel.textContent = 'Mode';
+
+        const lightControl = document.createElement('div');
+        lightControl.id = `light-control-${WatchView.clockCounter}`;
+        lightControl.className = 'light-watch watch-control';
+        this.lightButton = document.createElement('button');
+        this.lightButton.id = `light-button-${WatchView.clockCounter}`;
+        this.lightButton.className = 'light-button';
+        const lightLabel = document.createElement('span');
+        lightLabel.className = 'label-light';
+        lightLabel.textContent = 'Light';
+
+        const formatControl = document.createElement('div');
+        formatControl.className = 'format-watch watch-control';
+        formatControl.id = `format-control-${WatchView.clockCounter}`;
+        this.formatButton = document.createElement('button');
+        this.formatButton.id = `format-button-${WatchView.clockCounter}`;
+        this.formatButton.className = 'format-button';
+        const formatLabel = document.createElement('span');
+        formatLabel.id = `label-format-${WatchView.clockCounter}`;
+        formatLabel.className = 'label-format';
+        formatLabel.textContent = 'AM/PM-24H';
+
+        const increaseControl = document.createElement('div');
+        increaseControl.className = 'increase-watch watch-control';
+        this.increaseButton = document.createElement('button');
+        this.increaseButton.id = `increase-button-${WatchView.clockCounter}`;
+        this.increaseButton.className = 'increase-button';
+        const increaseLabel = document.createElement('span');
+        increaseLabel.className = 'label-increase';
+        increaseLabel.textContent = 'Increase';
+
+        const watchContainer = document.createElement('div');
+        watchContainer.id = `watch-container-${WatchView.clockCounter}`;
+        watchContainer.className = 'watch-container';
+
+        this.watchDisplay = document.createElement('div');
+        this.watchDisplay.id = `watch-display-${WatchView.clockCounter}`;
+        this.watchDisplay.className = 'watch-display';
+
+
+        // Assemble the structure
+        resetControl.appendChild(this.resetButton);
+        resetControl.appendChild(resetLabel);
+
+        modeControl.appendChild(this.modeButton);
+        modeControl.appendChild(modeLabel);
+
+        lightControl.appendChild(this.lightButton);
+        lightControl.appendChild(lightLabel);
+
+        formatControl.appendChild(this.formatButton);
+        formatControl.appendChild(formatLabel);
+
+        increaseControl.appendChild(this.increaseButton);
+        increaseControl.appendChild(increaseLabel);
 
         this.hourElement = document.createElement('div');
         this.hourElement.className = 'digit m';
@@ -42,25 +134,46 @@ export class WatchView {
         this.secondElement = document.createElement('div');
         this.secondElement.className = 'digit digit--small ms';
 
-        this.watchElement.appendChild(this.hourElement);
-        this.watchElement.appendChild(separator);
-        this.watchElement.appendChild(this.minuteElement);
-        this.watchElement.appendChild(this.secondElement);
+        this.formatElement = document.createElement('div');
+        this.formatElement.className = 'format';
+
+        this.watchDisplay.appendChild(this.hourElement);
+        this.watchDisplay.appendChild(separator);
+        this.watchDisplay.appendChild(this.minuteElement);
+        this.watchDisplay.appendChild(this.secondElement);
+        this.watchDisplay.appendChild(this.formatElement);
+
+        watchContainer.appendChild(this.watchDisplay);
+
+        watch.appendChild(resetControl);
+        watch.appendChild(modeControl);
+        watch.appendChild(lightControl);
+        watch.appendChild(formatControl);
+        watch.appendChild(increaseControl);
+        watch.appendChild(watchContainer);
+
+        clockWrapper.appendChild(this.closeButton);
+        clockWrapper.appendChild(watch);
+
+        // Assuming you want to add this to an existing element in the document
+        document.body.appendChild(clockWrapper);
+
     }
 
-    displayTime(time: string) {
-        const [hours, minutes, seconds] = time.split(':');
-        this.hourElement.textContent = hours;
+    displayTime(time: string): void {
+        const [hours, minutes, seconds,format] = time.split(':');
+        this.hourElement.textContent = hours
         this.minuteElement.textContent = minutes;
         this.secondElement.textContent = seconds;
+        this.formatElement.textContent = format;
     }
 
-    toggleBackgroundColor() {
+    toggleBackgroundColor(): void {
         this.backgroundColor = this.backgroundColor === WatchView.whiteColor ? WatchView.yellowColor : WatchView.whiteColor;
-        this.watchElement.style.backgroundColor = this.backgroundColor;
+        this.watchDisplay.style.backgroundColor = this.backgroundColor;
     }
 
-    blinkElement(timeType: TimeType) {
+    blinkElement(timeType: TimeType): void {
         if (timeType === TimeType.HOURS) 
             this.hourElement.classList.add('blinking');
         else 
@@ -74,10 +187,16 @@ export class WatchView {
             this.minuteElement.classList.remove('blinking');
     }
 
+    addEventToCloseButton(handleCloseButton: () => void): void {
+        this.closeButton?.addEventListener('click', () => handleCloseButton());
+    }
+
     // Method to initialize button event listeners
-    init(handleModeButton: () => void, handleIncreaseButton: () => void): void {
+    init(handleModeButton: () => void, handleIncreaseButton: () => void, handleResetButton: ()=> void, handleFormatButton: () =>void): void {
         this.modeButton?.addEventListener('click', () => handleModeButton());
         this.lightButton?.addEventListener('click', () => this.toggleBackgroundColor());
         this.increaseButton?.addEventListener('click', () => handleIncreaseButton());
+        this.resetButton?.addEventListener('click', () => handleResetButton());
+        this.formatButton?.addEventListener('click', () => handleFormatButton());
     }
 }

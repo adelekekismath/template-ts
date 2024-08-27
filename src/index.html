@@ -7,27 +7,21 @@
     <!-- support for mobile touch devices -->
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="css" href="index.css" />
-    <script src="bundle.js"></script>
 </head>
 <body>
-    <div class="watch">
-        <div class="mode-watch watch__control">
-            <button id="mode-button"></button>
-            <span class="label-mode">Mode</span>
+    <dialog id="timezone-dialog" class="custom-dialog">
+    <form method="dialog" class="dialog-form">
+        <label for="timezone">Select Timezone:</label>
+        <select id="timezone">
+            <!-- Options will be populated by TypeScript -->
+        </select>
+        <div class="dialog-buttons">
+            <button id="confirm-timezone" class="button confirm-button">Confirm</button>
+            <button id="close-dialog" class="button cancel-button" type="reset">Cancel</button>
         </div>
-        <div  class="light-watch watch__control">
-            <button id="light-button"></button>
-            <span class="label-light">Light</span>
-        </div>
-        <div class="increase-watch watch__control">
-            <button id="increase-button"></button>
-            <span class="label-increase">Increase</span>
-        </div>
-        <div id="watch__container">
-            <div id="watch-display">
-            </div>
-        </div>
-    </div>
+    </form>
+</dialog>
+    <button id="add-clock-btn">Add a new clock</button>
 </body>
 
 </html>
