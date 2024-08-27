@@ -11,12 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const increaseButton = document.getElementById('increase-button');
 
     const model = new WatchModel();
-    const controller = new WatchController(model);
-    const view = new WatchView(controller!, watchDisplay!, modeButton!, lightButton!, increaseButton!);
-
-    controller.startClock(); // Start the clock
-    view.startClock(); // Start the clock
+    const view = new WatchView(watchDisplay!, modeButton!, lightButton!, increaseButton!);
+    const controller = new WatchController(model, view);
     
+    controller.startClock(); // Start the clock
 });
 
 

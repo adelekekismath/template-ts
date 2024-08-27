@@ -19,24 +19,33 @@ export class WatchModel {
     getCurrentTime(): string {
         return `${this.formatTime(this.hours.get())}:${this.formatTime(this.minutes.get())}:${this.formatTime(this.seconds.get())}`;
     }
-    
-    incrementHour() {
+
+    incrementHour(): void {
         const newHour = this.hours.incrementHour();
         this.hours = new HourWrapper(newHour);
+        console.log('this.hours', this.hours);
     }
 
-    incrementMinute() {
+    incrementMinute(): void {
         const newMinute = this.minutes.incrementMinute();
         this.minutes = new MinuteWrapper(newMinute);
     }
 
-    tick() {
+    tick(incrementHours: boolean, incrementMinutes: boolean): void {
         const newSecond = this.seconds.incrementSecond();
         this.seconds = new SecondWrapper(newSecond);
 
         if (newSecond === 0) {
             const newMinute = this.minutes.incrementMinute();
             this.minutes = new MinuteWrapper(newMinute);
+
+            if (incrementHours) {
+                const newHour = this.hours.incrementHour();
+                this.hours = new HourWrapper(newHour);
+            } else if (incrementMinutes) {
+                const newMinute = this.minutes.incrementMinute();
+                this.minutes = new MinuteWrapper(newMinute);
+            }
 
             if (newMinute === 0) {
                 const newHour = this.hours.incrementHour();

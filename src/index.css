@@ -46,53 +46,42 @@ button {
     background: none;
 }
 
-label span,
-button span,
-[type='checkbox'] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-label,
-button {
-    cursor: pointer;
-}
-
-.watch__control--mode {
-    top: -20px;
-    right: 50%;
-    transform: translateX(50%);
-}
-
-.watch__control--light {
-    bottom: -20px;
-    left: -30px;
-}
-
-.watch__control--increase {
-    bottom: -20px;
-    right: -30px;
-}
-
 #mode-button,
 #light-button,
 #increase-button {
     width: 100%;
     height: 60%;
     position: absolute;
-    bottom: 0;
+    bottom: -0.5vmin;
     border: 0.5vmin solid var(--stroke);
-    border-radius: 1vmin;
+    border-radius: 0.5vmin;
     background: var(--start);
     overflow: hidden;
 }
+
+span.label-mode {
+    display: inline-block; 
+    transform: rotate(-39deg);
+    padding-left: 2.5vmin;
+    font-size: larger;
+}
+
+span.label-light {
+    display: inline-block; 
+    transform: rotate(-230deg);
+    font-size: larger;
+}
+
+span.label-increase {
+    display: inline-block; 
+    /* transform: rotate(230deg);
+    padding-left: .5vmin;
+    padding-bottom: 2.5vmin;
+    padding-right: -0.5vmin;
+    padding-top: -1vmin; */
+    font-size: larger;
+}
+
 
 #mode-button:after,
 #light-button:after,
@@ -117,7 +106,6 @@ button {
     position: relative;
 }
 
-.watch__start,
 .watch__control {
     --size: min(48px, 10vmin);
     height: var(--size);
@@ -130,19 +118,15 @@ button {
     z-index: 10;
 }
 
-.watch__control {
-    z-index: -1;
-}
-
-.watch__stop-start {
+.mode-watch {
     --rotation: 40deg;
 }
 
-.lightwatch__stop-start {
+.light-watch {
     --rotation: -130deg;
 }
 
-.increasewatch__stop-start {
+.increase-watch {
     --rotation: 130deg;
 }
 
@@ -210,4 +194,14 @@ button {
     position: relative;
     bottom: 0;
     right: 0;
+}
+
+.blinking {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
 }

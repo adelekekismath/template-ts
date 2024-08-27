@@ -3,48 +3,88 @@
  */
 
 import { WatchModel } from '../models/WatchModel';
-enum Mode {
-    Normal,
-    EditHours,
-    EditMinutes
+import { WatchView } from '../views/WatchView';
+enum TimeType {
+    HOURS,
+    MINUTES,
 }
+
 export class WatchController {
     private model: WatchModel;
-    private mode: Mode = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
+    private view: WatchView;
+    private isHoursEditable: boolean = false;
+    private isMinutesEditable: boolean = false;
+    private incrementHours: boolean = false;
+    private incrementMinutes: boolean = false;
+    private mode: number = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
 
-    constructor(model: WatchModel) {
+    constructor(model: WatchModel, view: WatchView) {
         this.model = model;
+        this.view = view;
+    }
+
+    handleIncreaseButton(): void {
+        if (this.isHoursEditable) {
+            this.model.incrementHour();
+        } else if (this.isMinutesEditable) {
+            this.model.incrementMinute();
+        }
     }
 
     displayCurrentTime() {
         return this.model.getCurrentTime();
     }
 
-    // Méthode pour gérer le changement de mode (normal, édition des heures, édition des minutes)
     handleModeButton() {
         this.mode = (this.mode + 1) % 3;
-    }
 
-    // Méthode pour incrémenter les heures ou les minutes selon le mode actuel
-    handlelightButton() {
-        if (this.mode === 1) {
-            this.model.incrementHour();
-        } else if (this.mode === 2) {
-            this.model.incrementMinute();
+        switch (this.mode) {
+            case 0:
+                // Arrêter le clignotement, rien n'est éditable
+                this.stopBlinking();
+                break;
+            case 1:
+                // Les heures clignotent et sont éditables
+                this.blinkHours();
+                break;
+            case 2:
+                // Les heures arrêtent de clignoter, les minutes clignotent et sont éditables
+                this.stopBlinking();
+                this.blinkMinutes();
+                break;
         }
-        this.displayCurrentTime();  
     }
 
-    // Méthode pour gérer le changement de couleur de l'affichage (non liée directement aux classes de gestion du temps)
-    handleLightButton() {
-        // Implémentation pour changer la couleur de fond, par exemple.
+    blinkHours() {
+        // Implémentation du clignotement des heures
+        this.view.blinkElement(TimeType.HOURS);
+        this.isHoursEditable = true;
+        this.isMinutesEditable = false;
     }
 
-    // Méthode pour gérer le "tick" (incrémentation automatique des secondes)
+    blinkMinutes() {
+        // Implémentation du clignotement des minutes
+        this.view.blinkElement(TimeType.MINUTES);
+        this.isHoursEditable = false;
+        this.isMinutesEditable = true;
+    }
+
+    stopBlinking() {
+        // Arrêter tout clignotement
+        this.view.stopBlinkElement(TimeType.HOURS);
+        this.view.stopBlinkElement(TimeType.MINUTES);
+        this.isHoursEditable = false;
+        this.isMinutesEditable = false;
+    }
+    
+
     startClock() {
+        this.view.init(() => this.handleModeButton(), () => this.handleIncreaseButton());
         setInterval(() => {
-            this.model.tick();
-            this.displayCurrentTime();
+            this.model.tick(this.incrementHours, this.incrementMinutes);
+            this.incrementHours = false;
+            this.incrementMinutes = false;
+            this.view.displayTime(this.model.getCurrentTime());
         }, 1000);
     }
 }

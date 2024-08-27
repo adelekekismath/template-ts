@@ -10,36 +10,24 @@
     <script src="bundle.js"></script>
 </head>
 <body>
-    <form class="watch">
-        <input id="start" type="checkbox">
-        <label class="watch__start" for="start">
-            <span>Start</span>
-        </label>
-        <label class="watch__light" for="light">
-            <span>Light</span>
-        </label>
-        <label class="watch__increase" for="increase">
-            <span>Increase</span>
-        </label>
-        
-        <div class="watch__stop-start watch__control">
-            <div id="mode-button"></div>
-            Mode
+    <div class="watch">
+        <div class="mode-watch watch__control">
+            <button id="mode-button"></button>
+            <span class="label-mode">Mode</span>
         </div>
-        <div class="lightwatch__stop-start watch__control">
-            <div id="light-button"></div>
-            Light
+        <div  class="light-watch watch__control">
+            <button id="light-button"></button>
+            <span class="label-light">Light</span>
         </div>
-        <div class="increasewatch__stop-start watch__control">
-            <div id="increase-button"></div>
-            Increase
+        <div class="increase-watch watch__control">
+            <button id="increase-button"></button>
+            <span class="label-increase">Increase</span>
         </div>
         <div id="watch__container">
             <div id="watch-display">
             </div>
         </div>
-    </form>
-
+    </div>
 </body>
 
 </html>
