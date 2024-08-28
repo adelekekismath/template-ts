@@ -9,19 +9,22 @@
     <link rel="stylesheet" type="css" href="index.css" />
 </head>
 <body>
-    <dialog id="timezone-dialog" class="custom-dialog">
-    <form method="dialog" class="dialog-form">
-        <label for="timezone">Select Timezone:</label>
-        <select id="timezone">
-            <!-- Options will be populated by TypeScript -->
-        </select>
-        <div class="dialog-buttons">
-            <button id="confirm-timezone" class="button confirm-button">Confirm</button>
-            <button id="close-dialog" class="button cancel-button" type="reset">Cancel</button>
-        </div>
-    </form>
-</dialog>
     <button id="add-clock-btn">Add a new clock</button>
+    <div id="clocks-container" class="clocks-container">
+        <dialog id="timezone-dialog" class="custom-dialog">
+            <form method="dialog" class="dialog-form">
+                <label for="timezone">Select Timezone:</label>
+                <select id="timezone">
+                    <!-- Options will be populated by TypeScript -->
+                </select>
+                <div class="dialog-buttons">
+                    <button id="confirm-timezone" class="button confirm-button">Confirm</button>
+                    <button id="close-dialog" class="button cancel-button" type="reset">Cancel</button>
+                </div>
+            </form>
+        </dialog>
+    </div>
+    
 </body>
 
 </html>

@@ -20,21 +20,10 @@ export class WatchManagerController {
 
     removeClock(clockNumber: number) {
         const clockToRemove = this.clocks.find((clock) => clock.id === clockNumber);
-        console.log('clockNumber', clockNumber);
-        console.log('this.clocks', this.clocks);
-        console.log('clockId', clockToRemove?.id);
-        console.log('clockToRemove', clockToRemove);
         if (!clockToRemove) {
             return;
         }
-        
-        console.log('this.clocks', this.clocks);
-        console.log('this.clocks.indexOf(clockToRemove)', this.clocks.indexOf(clockToRemove));
-        this.clocks = this.clocks.slice(this.clocks.indexOf(clockToRemove), 1);
-        document.getElementById(`clock-wrapper-${clockNumber+1}`)?.remove();
-    }
-
-    makeDraggable(clockElement: HTMLElement) {
-        // Implementation of draggable functionality, possibly using a library like interact.js
+        this.clocks = this.clocks.filter((clock) => clock.id !== clockNumber);
+        clockToRemove.deleteClock();
     }
 }

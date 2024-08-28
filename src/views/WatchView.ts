@@ -20,12 +20,13 @@ export class WatchView {
     private lightButton: HTMLElement;
     private increaseButton: HTMLElement;
     private resetButton: HTMLElement;
-    private formatButton: HTMLElement
+    private formatButton: HTMLElement;
     private hourElement: HTMLElement;
     private minuteElement: HTMLElement;
     private secondElement: HTMLElement;
     private formatElement: HTMLElement;
     private closeButton: HTMLElement;
+    private clockWrapper: HTMLElement;
     private static yellowColor: string = '#FBE106';
     private static whiteColor: string = '#FFFFFF';
     private backgroundColor: string = WatchView.whiteColor;
@@ -33,9 +34,9 @@ export class WatchView {
 
     constructor() {
         this.id = WatchView.clockCounter++;
-        const clockWrapper = document.createElement('div');
-        clockWrapper.id = `clock-wrapper-${WatchView.clockCounter}`;
-        clockWrapper.className = 'clock-wrapper';
+        this.clockWrapper = document.createElement('article');
+        this.clockWrapper.id = `clock-wrapper-${WatchView.clockCounter}`;
+        this.clockWrapper.className = 'clock-wrapper clock-article';
 
         this.closeButton = document.createElement('button');
         this.closeButton.id = `close-button-${WatchView.clockCounter}`;
@@ -105,7 +106,6 @@ export class WatchView {
         this.watchDisplay.id = `watch-display-${WatchView.clockCounter}`;
         this.watchDisplay.className = 'watch-display';
 
-
         // Assemble the structure
         resetControl.appendChild(this.resetButton);
         resetControl.appendChild(resetLabel);
@@ -152,17 +152,18 @@ export class WatchView {
         watch.appendChild(increaseControl);
         watch.appendChild(watchContainer);
 
-        clockWrapper.appendChild(this.closeButton);
-        clockWrapper.appendChild(watch);
+        this.clockWrapper.appendChild(this.closeButton);
+        this.clockWrapper.appendChild(watch);
 
         // Assuming you want to add this to an existing element in the document
-        document.body.appendChild(clockWrapper);
-
+        const clockContainer = document.getElementById('clocks-container');
+        console.log('clockContainer', clockContainer);
+        clockContainer.appendChild(this.clockWrapper);
     }
 
     displayTime(time: string): void {
-        const [hours, minutes, seconds,format] = time.split(':');
-        this.hourElement.textContent = hours
+        const [hours, minutes, seconds, format] = time.split(':');
+        this.hourElement.textContent = hours;
         this.minuteElement.textContent = minutes;
         this.secondElement.textContent = seconds;
         this.formatElement.textContent = format;
@@ -174,29 +175,74 @@ export class WatchView {
     }
 
     blinkElement(timeType: TimeType): void {
-        if (timeType === TimeType.HOURS) 
-            this.hourElement.classList.add('blinking');
-        else 
-            this.minuteElement.classList.add('blinking');
+        if (timeType === TimeType.HOURS) this.hourElement.classList.add('blinking');
+        else this.minuteElement.classList.add('blinking');
     }
 
     stopBlinkElement(timeType: TimeType) {
-        if (timeType === TimeType.HOURS) 
-            this.hourElement.classList.remove('blinking');
-        else 
-            this.minuteElement.classList.remove('blinking');
+        if (timeType === TimeType.HOURS) this.hourElement.classList.remove('blinking');
+        else this.minuteElement.classList.remove('blinking');
     }
 
     addEventToCloseButton(handleCloseButton: () => void): void {
         this.closeButton?.addEventListener('click', () => handleCloseButton());
     }
 
+    deleteClock(): void {
+        console.log('deleting clock', this.id);
+        document.getElementById(`clock-wrapper-${this.id + 1}`)?.remove();
+    }
+
     // Method to initialize button event listeners
-    init(handleModeButton: () => void, handleIncreaseButton: () => void, handleResetButton: ()=> void, handleFormatButton: () =>void): void {
+    init(
+        handleModeButton: () => void,
+        handleIncreaseButton: () => void,
+        handleResetButton: () => void,
+        handleFormatButton: () => void
+    ): void {
         this.modeButton?.addEventListener('click', () => handleModeButton());
         this.lightButton?.addEventListener('click', () => this.toggleBackgroundColor());
         this.increaseButton?.addEventListener('click', () => handleIncreaseButton());
         this.resetButton?.addEventListener('click', () => handleResetButton());
         this.formatButton?.addEventListener('click', () => handleFormatButton());
+        this.makeDraggable();
+    }
+
+    makeDraggable() {
+        this.clockWrapper.draggable = true;
+
+        this.clockWrapper.addEventListener('dragstart', (event) => {
+            this.clockWrapper.classList.add('dragging'); // Add a class to style during drag
+            event.dataTransfer!.setData('text/plain', this.clockWrapper.id);
+            event.dataTransfer!.effectAllowed = 'move';
+        });
+
+        this.clockWrapper.addEventListener('dragend', () => {
+            this.clockWrapper.classList.remove('dragging'); // Remove class when drag ends
+        });
+
+        this.clockWrapper.addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        this.clockWrapper.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const draggedId = event.dataTransfer?.getData('text/plain');
+            if (draggedId && draggedId !== this.clockWrapper.id) {
+                const draggedElement = document.getElementById(draggedId);
+                const parent = this.clockWrapper.parentElement;
+
+                if (draggedElement && parent) {
+                    // Determine if the dragged element should be placed before or after the current element
+                    if (this.clockWrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
+                        // If the dragged element comes before the this.clockWrapper in the DOM, insert after
+                        parent.insertBefore(draggedElement, this.clockWrapper.nextSibling);
+                    } else {
+                        // If the dragged element comes after the this.clockWrapper in the DOM, insert before
+                        parent.insertBefore(draggedElement, this.clockWrapper);
+                    }
+                }
+            }
+        });
     }
 }

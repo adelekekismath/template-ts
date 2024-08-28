@@ -46,6 +46,10 @@ export class WatchController {
         return this.model.getCurrentTime(this.format);
     }
 
+    deleteClock() {
+        this.view.deleteClock();
+    }
+
     handleModeButton() {
         this.mode = (this.mode + 1) % 3;
 
@@ -65,7 +69,6 @@ export class WatchController {
 
     handleResetButton() {
         this.model.resetToCurrentTime();
-        //this.view.displayTime(this.model.getCurrentTime(), this.format);
     }
 
     handleFormatButton() {
