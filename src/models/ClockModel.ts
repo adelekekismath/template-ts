@@ -7,7 +7,7 @@ enum Format {
     AM_PM = 'AM_PM',
     H24= 'H24',
 }
-export class WatchModel {
+export class ClockModel {
     private hours: HourWrapper;
     private minutes: MinuteWrapper;
     private seconds: SecondWrapper;
@@ -21,6 +21,18 @@ export class WatchModel {
         this.hours = new HourWrapper(now.getHours());
         this.minutes = new MinuteWrapper(now.getMinutes());
         this.seconds = new SecondWrapper(now.getSeconds());
+    }
+
+    getHours(): number {
+        return this.hours.get();
+    }
+
+    getMinutes(): number {
+        return this.minutes.get();
+    }
+
+    getSeconds(): number {
+        return this.seconds.get();
     }
 
     getCurrentTime(format: Format): string {
@@ -81,7 +93,12 @@ export class WatchModel {
     private formatTime(value: number, format?: Format): string {
             if (format === Format.AM_PM) {
                 this.amPmFormat = value >= 12 ? 'PM' : 'AM';
+                if (value < 10)
+                    return `0${value}`;
+                if (value <= 12)
+                    return `${value}`;
                 return value > 12 ? `${value - 12}` : `${value}`;
+
             } else if (format === Format.H24) {
                 if (this.amPmFormat === 'PM') {
                     return value < 12 ? `${value + 12}` : `${value}`;

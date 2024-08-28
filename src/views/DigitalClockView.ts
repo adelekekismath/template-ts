@@ -2,18 +2,15 @@
  *This class renders the time in hh:mm:ss format and handles the UI elements (blinking, color toggle)
 */
 import { add } from 'lodash';
-import { WatchController } from '../controllers/WatchController';
+import { ClockView } from './ClockView';
+import { TimeType } from '../views/ClockView';
 
-enum TimeType {
-    HOURS,
-    MINUTES,
-}
 enum Format {
     AM_PM,
     H24,
 }
 
-export class WatchView {
+export class DigitalClockView extends ClockView {
     public id = 0;
     private watchDisplay: HTMLElement;
     private modeButton: HTMLElement;
@@ -29,50 +26,51 @@ export class WatchView {
     private clockWrapper: HTMLElement;
     private static yellowColor: string = '#FBE106';
     private static whiteColor: string = '#FFFFFF';
-    private backgroundColor: string = WatchView.whiteColor;
+    private backgroundColor: string = DigitalClockView.whiteColor;
     private static clockCounter: number = 0;
 
     constructor() {
-        this.id = WatchView.clockCounter++;
+        super();
+        this.id = DigitalClockView.clockCounter++;
         this.clockWrapper = document.createElement('article');
-        this.clockWrapper.id = `clock-wrapper-${WatchView.clockCounter}`;
+        this.clockWrapper.id = `digital-clock-wrapper-${DigitalClockView.clockCounter}`;
         this.clockWrapper.className = 'clock-wrapper clock-article';
 
         this.closeButton = document.createElement('button');
-        this.closeButton.id = `close-button-${WatchView.clockCounter}`;
+        this.closeButton.id = `close-button-${DigitalClockView.clockCounter}`;
         this.closeButton.className = 'close-btn';
         this.closeButton.textContent = 'X';
 
         const watch = document.createElement('div');
-        watch.id = `watch-${WatchView.clockCounter}`;
+        watch.id = `watch-${DigitalClockView.clockCounter}`;
         watch.className = 'watch';
 
         const resetControl = document.createElement('div');
-        resetControl.id = `reset-control-${WatchView.clockCounter}`;
+        resetControl.id = `reset-control-${DigitalClockView.clockCounter}`;
         resetControl.className = 'reset-watch watch-control';
         this.resetButton = document.createElement('button');
-        this.resetButton.id = `reset-button-${WatchView.clockCounter}`;
+        this.resetButton.id = `reset-button-${DigitalClockView.clockCounter}`;
         this.resetButton.className = 'reset-button';
         const resetLabel = document.createElement('span');
-        resetLabel.id = `label-reset-${WatchView.clockCounter}`;
+        resetLabel.id = `label-reset-${DigitalClockView.clockCounter}`;
         resetLabel.className = 'label-reset';
         resetLabel.textContent = 'Reset';
 
         const modeControl = document.createElement('div');
-        modeControl.id = `mode-control-${WatchView.clockCounter}`;
+        modeControl.id = `mode-control-${DigitalClockView.clockCounter}`;
         modeControl.className = 'mode-watch watch-control';
         this.modeButton = document.createElement('button');
-        this.modeButton.id = `mode-button-${WatchView.clockCounter}`;
+        this.modeButton.id = `mode-button-${DigitalClockView.clockCounter}`;
         this.modeButton.className = 'mode-button';
         const modeLabel = document.createElement('span');
         modeLabel.className = 'label-mode';
         modeLabel.textContent = 'Mode';
 
         const lightControl = document.createElement('div');
-        lightControl.id = `light-control-${WatchView.clockCounter}`;
+        lightControl.id = `light-control-${DigitalClockView.clockCounter}`;
         lightControl.className = 'light-watch watch-control';
         this.lightButton = document.createElement('button');
-        this.lightButton.id = `light-button-${WatchView.clockCounter}`;
+        this.lightButton.id = `light-button-${DigitalClockView.clockCounter}`;
         this.lightButton.className = 'light-button';
         const lightLabel = document.createElement('span');
         lightLabel.className = 'label-light';
@@ -80,30 +78,30 @@ export class WatchView {
 
         const formatControl = document.createElement('div');
         formatControl.className = 'format-watch watch-control';
-        formatControl.id = `format-control-${WatchView.clockCounter}`;
+        formatControl.id = `format-control-${DigitalClockView.clockCounter}`;
         this.formatButton = document.createElement('button');
-        this.formatButton.id = `format-button-${WatchView.clockCounter}`;
+        this.formatButton.id = `format-button-${DigitalClockView.clockCounter}`;
         this.formatButton.className = 'format-button';
         const formatLabel = document.createElement('span');
-        formatLabel.id = `label-format-${WatchView.clockCounter}`;
+        formatLabel.id = `label-format-${DigitalClockView.clockCounter}`;
         formatLabel.className = 'label-format';
         formatLabel.textContent = 'AM/PM-24H';
 
         const increaseControl = document.createElement('div');
         increaseControl.className = 'increase-watch watch-control';
         this.increaseButton = document.createElement('button');
-        this.increaseButton.id = `increase-button-${WatchView.clockCounter}`;
+        this.increaseButton.id = `increase-button-${DigitalClockView.clockCounter}`;
         this.increaseButton.className = 'increase-button';
         const increaseLabel = document.createElement('span');
         increaseLabel.className = 'label-increase';
         increaseLabel.textContent = 'Increase';
 
         const watchContainer = document.createElement('div');
-        watchContainer.id = `watch-container-${WatchView.clockCounter}`;
+        watchContainer.id = `watch-container-${DigitalClockView.clockCounter}`;
         watchContainer.className = 'watch-container';
 
         this.watchDisplay = document.createElement('div');
-        this.watchDisplay.id = `watch-display-${WatchView.clockCounter}`;
+        this.watchDisplay.id = `watch-display-${DigitalClockView.clockCounter}`;
         this.watchDisplay.className = 'watch-display';
 
         // Assemble the structure
@@ -161,6 +159,14 @@ export class WatchView {
         clockContainer.appendChild(this.clockWrapper);
     }
 
+    drawHandle(lengthRatio: number, angle: number, type: TimeType): void {
+        throw new Error('Method not implemented.');
+    }
+
+    clear(): void {
+        throw new Error('Method not implemented.');
+    }
+
     displayTime(time: string): void {
         const [hours, minutes, seconds, format] = time.split(':');
         this.hourElement.textContent = hours;
@@ -170,7 +176,8 @@ export class WatchView {
     }
 
     toggleBackgroundColor(): void {
-        this.backgroundColor = this.backgroundColor === WatchView.whiteColor ? WatchView.yellowColor : WatchView.whiteColor;
+        this.backgroundColor =
+            this.backgroundColor === DigitalClockView.whiteColor ? DigitalClockView.yellowColor : DigitalClockView.whiteColor;
         this.watchDisplay.style.backgroundColor = this.backgroundColor;
     }
 
@@ -179,7 +186,7 @@ export class WatchView {
         else this.minuteElement.classList.add('blinking');
     }
 
-    stopBlinkElement(timeType: TimeType) {
+    stopBlinkElement(timeType: TimeType): void {
         if (timeType === TimeType.HOURS) this.hourElement.classList.remove('blinking');
         else this.minuteElement.classList.remove('blinking');
     }
@@ -189,8 +196,7 @@ export class WatchView {
     }
 
     deleteClock(): void {
-        console.log('deleting clock', this.id);
-        document.getElementById(`clock-wrapper-${this.id + 1}`)?.remove();
+        document.getElementById(`digital-clock-wrapper-${this.id + 1}`)?.remove();
     }
 
     // Method to initialize button event listeners
@@ -244,5 +250,9 @@ export class WatchView {
                 }
             }
         });
+    }
+
+    drawClockFace(): void {
+        throw new Error('Method not implemented.');
     }
 }

@@ -1,6 +1,10 @@
 
 import './index.css';
-import { WatchManagerController } from './controllers/WatchManagerController';
+import { ClockManagerController } from './controllers/ClockManagerController';
+enum ClockType {
+    ANALOG,
+    DIGITAL,
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -31,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'GMT-11',
         'GMT-12',
     ];
-    const watchManager = new WatchManagerController();
+    const watchManager = new ClockManagerController();
 
     const dialog = document.getElementById('timezone-dialog') as HTMLDialogElement;
     const timezoneSelect = document.getElementById('timezone') as HTMLSelectElement;
@@ -52,7 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('confirm-timezone')?.addEventListener('click', () => {
         const selectedTimezone = timezoneSelect.value;
-        watchManager.addClock(parseInt(selectedTimezone));
+        const selectedType = (document.querySelector('input[name="clock-type"]:checked') as HTMLInputElement).value;
+        const clockType = selectedType === 'analog' ? ClockType.ANALOG : ClockType.DIGITAL;
+        watchManager.addClock(parseInt(selectedTimezone), clockType);
         dialog.close();
     });
 

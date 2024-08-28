@@ -20,6 +20,33 @@
     transform: translateY(-5px);
 }
 
+.clock-type-fieldset {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    padding-bottom: 20px;
+}
+
+.clock-type-legend {
+    font-weight: bold;
+    color: #333;
+    padding: 0 10px;
+}
+
+.clock-type-label {
+    display: block;
+    margin: 8px 0;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.clock-type-label input {
+    margin-right: 8px;
+}
+
+
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
 *,

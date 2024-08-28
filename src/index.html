@@ -13,10 +13,22 @@
     <div id="clocks-container" class="clocks-container">
         <dialog id="timezone-dialog" class="custom-dialog">
             <form method="dialog" class="dialog-form">
+                <fieldset class="clock-type-fieldset">
+                <legend class="clock-type-legend">Select Clock Type:</legend>
+                <label class="clock-type-label" for="digital-clock">
+                    <input type="radio" id="digital-clock" name="clock-type" value="digital" checked>
+                    Digital Clock
+                </label>
+                <label class="clock-type-label" for="analog-clock">
+                    <input type="radio" id="analog-clock" name="clock-type" value="analog">
+                    Analog Clock
+                </label>
+            </fieldset>
                 <label for="timezone">Select Timezone:</label>
                 <select id="timezone">
                     <!-- Options will be populated by TypeScript -->
                 </select>
+
                 <div class="dialog-buttons">
                     <button id="confirm-timezone" class="button confirm-button">Confirm</button>
                     <button id="close-dialog" class="button cancel-button" type="reset">Cancel</button>
