@@ -1,17 +1,16 @@
-import { ClockView } from '../views/ClockView';
-import { TimeType } from '../views/ClockView';
 
+import { TimeType } from '../models/Type';
 
-export class AnalogClockView extends ClockView {
+export class AnalogClockView  {
     private container: HTMLCanvasElement;
     private static clockCounter = 0;
     private id: number;
-    private clockWrapper: HTMLElement;
     private closeButton: HTMLButtonElement;
+    private clockWrapper: HTMLElement;
+    private center: [number, number];
+    private radius: number;
 
     constructor() {
-        super();
-
         this.id = AnalogClockView.clockCounter++;
         this.clockWrapper = document.createElement('article');
         this.clockWrapper.id = `analog-clock-wrapper-${AnalogClockView.clockCounter}`;
@@ -37,14 +36,11 @@ export class AnalogClockView extends ClockView {
         clockContainer.appendChild(this.clockWrapper);
 
         this.drawClockFace();
+        this.makeDraggable();
     }
 
     addEventToCloseButton(handleCloseButton: () => void): void {
         this.closeButton.addEventListener('click', handleCloseButton);
-    }
-
-    makeDraggable(): void {
-        throw new Error('Method not implemented.');
     }
 
     deleteClock(): void {
@@ -74,22 +70,14 @@ export class AnalogClockView extends ClockView {
         });
     }
 
-    drawHandle(lengthRatio: number, position: [number, number], angle : number, type: TimeType) {
+    drawHandle(position: [number, number], angle: number, type: TimeType) {
         const [xPosition, yPosition] = position;
         const ctx = this.container.getContext('2d');
         if (!ctx) return;
 
-        // const length = this.radius * lengthRatio; // longueur constante, liée au ratio
-        // const radian = (Math.PI / 180) * (angle-90);
-        // const xPosition = this.center[0] + length * Math.cos(radian);
-        // const yPosition = this.center[1] + length * Math.sin(radian);
-
-        // Dessiner l'aiguille
-        const finalXPosition = xPosition + this.center[0];
-        const finalYPostion = yPosition + this.center[1];
         ctx.beginPath();
         ctx.moveTo(this.center[0], this.center[1]);
-        ctx.lineTo(finalXPosition, finalYPostion);
+        ctx.lineTo(xPosition, yPosition);
 
         // Définir l'apparence de l'aiguille selon son type
         if (type === TimeType.HOURS) {
@@ -113,19 +101,52 @@ export class AnalogClockView extends ClockView {
         ctx.clearRect(0, 0, this.container.width, this.container.height);
     }
 
-    blinkElement(type: TimeType): void {
-        throw new Error('Method not implemented.');
+    getCloseButton(): HTMLElement {
+        return this.closeButton;
     }
 
-    stopBlinkElement(): void {
-        throw new Error('Method not implemented.');
+    getRadius(): number {
+        return this.radius;
     }
 
-    init(): void {
-        throw new Error('Method not implemented.');
+    getCenter(): [number, number] {
+        return this.center;
     }
+    makeDraggable() {
+        this.clockWrapper.draggable = true;
 
-    displayTime(time: string): void {
-        throw new Error('Method not implemented.');
+        this.clockWrapper.addEventListener('dragstart', (event) => {
+            this.clockWrapper.classList.add('dragging'); // Add a class to style during drag
+            event.dataTransfer!.setData('text/plain', this.clockWrapper.id);
+            event.dataTransfer!.effectAllowed = 'move';
+        });
+
+        this.clockWrapper.addEventListener('dragend', () => {
+            this.clockWrapper.classList.remove('dragging'); // Remove class when drag ends
+        });
+
+        this.clockWrapper.addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        this.clockWrapper.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const draggedId = event.dataTransfer?.getData('text/plain');
+            if (draggedId && draggedId !== this.clockWrapper.id) {
+                const draggedElement = document.getElementById(draggedId);
+                const parent = this.clockWrapper.parentElement;
+
+                if (draggedElement && parent) {
+                    // Determine if the dragged element should be placed before or after the current element
+                    if (this.clockWrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
+                        // If the dragged element comes before the this.clockWrapper in the DOM, insert after
+                        parent.insertBefore(draggedElement, this.clockWrapper.nextSibling);
+                    } else {
+                        // If the dragged element comes after the this.clockWrapper in the DOM, insert before
+                        parent.insertBefore(draggedElement, this.clockWrapper);
+                    }
+                }
+            }
+        });
     }
 }

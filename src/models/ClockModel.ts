@@ -2,15 +2,15 @@
  * This class manages the current time and provides methods to edit hours and minutes
  */
 
-import { HourWrapper, MinuteWrapper, SecondWrapper } from '../example-unit';
+import { HourManager, MinuteManager, SecondManager } from '../example-unit';
 enum Format {
     AM_PM = 'AM_PM',
     H24= 'H24',
 }
 export class ClockModel {
-    private hours: HourWrapper;
-    private minutes: MinuteWrapper;
-    private seconds: SecondWrapper;
+    private hours: HourManager;
+    private minutes: MinuteManager;
+    private seconds: SecondManager;
     private currentFormat: Format = Format.H24;
     private timeZoneOffset: number;
     private amPmFormat: string;
@@ -18,9 +18,9 @@ export class ClockModel {
     constructor(TimezoneOffset: number = 0) {
         this.timeZoneOffset = TimezoneOffset;
         const now = this.getTimeWithOffset();
-        this.hours = new HourWrapper(now.getHours());
-        this.minutes = new MinuteWrapper(now.getMinutes());
-        this.seconds = new SecondWrapper(now.getSeconds());
+        this.hours = new HourManager(now.getHours());
+        this.minutes = new MinuteManager(now.getMinutes());
+        this.seconds = new SecondManager(now.getSeconds());
     }
 
     getHours(): number {
@@ -46,7 +46,7 @@ export class ClockModel {
 
     incrementHour(): void {
         const newHour = this.hours.incrementHour();
-        this.hours = new HourWrapper(newHour);
+        this.hours = new HourManager(newHour);
         console.log('this.hours', this.hours);
     }
 
@@ -58,47 +58,42 @@ export class ClockModel {
 
     incrementMinute(): void {
         const newMinute = this.minutes.incrementMinute();
-        this.minutes = new MinuteWrapper(newMinute);
+        this.minutes = new MinuteManager(newMinute);
     }
 
     tick(incrementHours: boolean, incrementMinutes: boolean): void {
         const newSecond = this.seconds.incrementSecond();
-        this.seconds = new SecondWrapper(newSecond);
+        this.seconds = new SecondManager(newSecond);
 
         if (newSecond === 0) {
             const newMinute = this.minutes.incrementMinute();
-            this.minutes = new MinuteWrapper(newMinute);
+            this.minutes = new MinuteManager(newMinute);
 
             if (incrementHours) {
                 const newHour = this.hours.incrementHour();
-                this.hours = new HourWrapper(newHour);
+                this.hours = new HourManager(newHour);
             } else if (incrementMinutes) {
                 const newMinute = this.minutes.incrementMinute();
-                this.minutes = new MinuteWrapper(newMinute);
+                this.minutes = new MinuteManager(newMinute);
             }
 
             if (newMinute === 0) {
                 const newHour = this.hours.incrementHour();
-                this.hours = new HourWrapper(newHour);
+                this.hours = new HourManager(newHour);
             }
         }
     }
     resetToCurrentTime(): void {
         const now = this.getTimeWithOffset();
-        this.hours = new HourWrapper(now.getHours());
-        this.minutes = new MinuteWrapper(now.getMinutes());
-        this.seconds = new SecondWrapper(now.getSeconds());
+        this.hours = new HourManager(now.getHours());
+        this.minutes = new MinuteManager(now.getMinutes());
+        this.seconds = new SecondManager(now.getSeconds());
     }
 
     private formatTime(value: number, format?: Format): string {
             if (format === Format.AM_PM) {
-                this.amPmFormat = value >= 12 ? 'PM' : 'AM';
-                if (value < 10)
-                    return `0${value}`;
-                if (value <= 12)
-                    return `${value}`;
-                return value > 12 ? `${value - 12}` : `${value}`;
-
+                this.amPmFormat = (value >= 12 )? 'PM' : 'AM';
+                return value > 12 ? `${value - 12}` : value < 10 ? `0${value}` : `${value}`;
             } else if (format === Format.H24) {
                 if (this.amPmFormat === 'PM') {
                     return value < 12 ? `${value + 12}` : `${value}`;

@@ -1,16 +1,14 @@
 /**
- *This class renders the time in hh:mm:ss format and handles the UI elements (blinking, color toggle)
+ *This class renders the time in hh:mm:ss format and handles the UI elements
 */
-import { add } from 'lodash';
-import { ClockView } from './ClockView';
-import { TimeType } from '../views/ClockView';
+import { TimeType } from '../models/Type';
 
 enum Format {
     AM_PM,
     H24,
 }
 
-export class DigitalClockView extends ClockView {
+export class DigitalClockView {
     public id = 0;
     private watchDisplay: HTMLElement;
     private modeButton: HTMLElement;
@@ -23,14 +21,13 @@ export class DigitalClockView extends ClockView {
     private secondElement: HTMLElement;
     private formatElement: HTMLElement;
     private closeButton: HTMLElement;
-    private clockWrapper: HTMLElement;
     private static yellowColor: string = '#FBE106';
     private static whiteColor: string = '#FFFFFF';
     private backgroundColor: string = DigitalClockView.whiteColor;
     private static clockCounter: number = 0;
+    private clockWrapper: HTMLElement;
 
     constructor() {
-        super();
         this.id = DigitalClockView.clockCounter++;
         this.clockWrapper = document.createElement('article');
         this.clockWrapper.id = `digital-clock-wrapper-${DigitalClockView.clockCounter}`;
@@ -156,9 +153,18 @@ export class DigitalClockView extends ClockView {
         const clockContainer = document.getElementById('clocks-container');
         console.log('clockContainer', clockContainer);
         clockContainer.appendChild(this.clockWrapper);
+        this.makeDraggable();
     }
 
-    drawHandle(lengthRatio: number, position: [number, number], angle: number, type: TimeType): void {
+    getCloseButton(): HTMLElement {
+        return this.closeButton;
+    }
+
+    getLightButton(): HTMLElement {
+        return this.lightButton;
+    }
+
+    drawHandle(position: [number, number], angle: number, type: TimeType): void {
         throw new Error('Method not implemented.');
     }
 
@@ -198,21 +204,33 @@ export class DigitalClockView extends ClockView {
         document.getElementById(`digital-clock-wrapper-${this.id + 1}`)?.remove();
     }
 
-    // Method to initialize button event listeners
-    init(
-        handleModeButton: () => void,
-        handleIncreaseButton: () => void,
-        handleResetButton: () => void,
-        handleFormatButton: () => void
-    ): void {
-        this.modeButton?.addEventListener('click', () => handleModeButton());
-        this.lightButton?.addEventListener('click', () => this.toggleBackgroundColor());
-        this.increaseButton?.addEventListener('click', () => handleIncreaseButton());
-        this.resetButton?.addEventListener('click', () => handleResetButton());
-        this.formatButton?.addEventListener('click', () => handleFormatButton());
-        this.makeDraggable();
+    drawClockFace(): void {
+        throw new Error('Method not implemented.');
     }
 
+    getResetButton(): HTMLElement {
+        return this.resetButton;
+    }
+
+    getFormatButton(): HTMLElement {
+        return this.formatButton;
+    }
+
+    getIncreaseButton(): HTMLElement {
+        return this.increaseButton;
+    }
+
+    getModeButton(): HTMLElement {
+        return this.modeButton;
+    }
+
+    getRadius(): number {
+        throw new Error('Method not implemented.');
+    }
+
+    getCenter(): [number, number] {
+        throw new Error('Method not implemented.');
+    }
     makeDraggable() {
         this.clockWrapper.draggable = true;
 
@@ -249,9 +267,5 @@ export class DigitalClockView extends ClockView {
                 }
             }
         });
-    }
-
-    drawClockFace(): void {
-        throw new Error('Method not implemented.');
     }
 }

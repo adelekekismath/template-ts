@@ -1,12 +1,6 @@
-/**
- * This class processes button inputs and updates the model and triggers the view to re-render.
- */
-
-import { ClockModel } from '../models/ClockModel';
 import { DigitalClockView } from '../views/DigitalClockView';
 import { ClockController } from './ClockController';
-import { TimeType } from '../views/ClockView';
-
+import { TimeType } from '../models/Type';
 
 enum Format {
     AM_PM = 'AM_PM',
@@ -14,17 +8,17 @@ enum Format {
 }
 
 export class DigitalClockController extends ClockController {
-    public id: number;
-    private isHoursEditable: boolean = false;
-    private isMinutesEditable: boolean = false;
-    private mode: number = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
+    private isHoursEditable = false;
+    private isMinutesEditable = false;
+    private mode = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
+    private view: DigitalClockView;
 
     constructor(timezoneOffset: number) {
         super(timezoneOffset);
     }
 
     protected initializeView(): void {
-        this.view = new DigitalClockView()
+        this.view = new DigitalClockView();
     }
 
     handleIncreaseButton(): void {
@@ -33,78 +27,79 @@ export class DigitalClockController extends ClockController {
         } else if (this.isMinutesEditable) {
             this.model.incrementMinute();
         }
+        this.updateTimeDisplay();
     }
 
-    displayCurrentTime() {
-        return this.model.getCurrentTime(this.format);
-    }
-
-    deleteClock() {
-        this.view.deleteClock();
-    }
-
-    drawClockFace(): void{
-        throw new Error('Method not implemented.');
-    }
-
-
-    handleModeButton() {
+    handleModeButton(): void {
         this.mode = (this.mode + 1) % 3;
-
         switch (this.mode) {
-            case 0:
-                this.stopBlinking();
-                break;
             case 1:
-                this.blinkHours();
+                this.blink(TimeType.HOURS);
                 break;
             case 2:
                 this.stopBlinking();
-                this.blinkMinutes();
+                this.blink(TimeType.MINUTES);
                 break;
+            default:
+                this.stopBlinking();
         }
     }
 
-    handleResetButton() {
+    addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
+        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));
+    }
+
+    handleResetButton(): void {
         this.model.resetToCurrentTime();
+        this.updateTimeDisplay();
     }
 
-    handleFormatButton() {
+    handleFormatButton(): void {
         this.format = this.format === Format.H24 ? Format.AM_PM : Format.H24;
-        console.log(this.format);    }
-
-    blinkHours() {
-        this.view.blinkElement(TimeType.HOURS);
-        this.isHoursEditable = true;
-        this.isMinutesEditable = false;
+        this.updateTimeDisplay();
     }
 
-    blinkMinutes() {
-        this.view.blinkElement(TimeType.MINUTES);
-        this.isHoursEditable = false;
-        this.isMinutesEditable = true;
+    private blink(timetype: TimeType): void {
+        this.view.blinkElement(timetype);
+        this.isHoursEditable = timetype === TimeType.HOURS;
+        this.isMinutesEditable = timetype === TimeType.MINUTES;
     }
 
-    stopBlinking() {
+    private stopBlinking(): void {
         this.view.stopBlinkElement(TimeType.HOURS);
         this.view.stopBlinkElement(TimeType.MINUTES);
         this.isHoursEditable = false;
         this.isMinutesEditable = false;
     }
 
-    startClock() {
+    private updateTimeDisplay(): void {
+        this.view.displayTime(this.model.getCurrentTime(this.format));
+    }
+
+    protected initializeButonsEvents(): void {
+        this.addEventListener(this.view.getLightButton(), 'click', () => this.view.toggleBackgroundColor());
+        this.addEventListener(this.view.getIncreaseButton(), 'click', () => this.handleIncreaseButton());
+        this.addEventListener(this.view.getModeButton(), 'click', () => this.handleModeButton());
+        this.addEventListener(this.view.getResetButton(), 'click', () => this.handleResetButton());
+        this.addEventListener(this.view.getFormatButton(), 'click', () => this.handleFormatButton());
+    }
+
+    startClock(): void {
         this.initializeView();
-        this.view.init(
-            () => this.handleModeButton(),
-            () => this.handleIncreaseButton(),
-            () => this.handleResetButton(),
-            () => this.handleFormatButton()
-        );
+        this.initializeButonsEvents();
         setInterval(() => {
             this.model.tick(this.incrementHours, this.incrementMinutes);
             this.incrementHours = false;
             this.incrementMinutes = false;
-            this.view.displayTime(this.model.getCurrentTime(this.format));
+            this.updateTimeDisplay();
         }, 1000);
+    }
+
+    deleteClock(): void {
+        this.view.deleteClock();
+    }
+
+    drawClockFace(): void {
+        throw new Error('Method not implemented.');
     }
 }

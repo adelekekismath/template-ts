@@ -1,6 +1,5 @@
 
 import { ClockModel } from '../models/ClockModel';
-import { ClockView } from '../views/ClockView';
 
 export enum Format {
     AM_PM = 'AM_PM',
@@ -13,7 +12,6 @@ export abstract class ClockController {
     protected incrementHours: boolean = false;
     protected incrementMinutes: boolean = false;
     protected format: Format = Format.H24;
-    protected view: ClockView;
 
     constructor(protected timezoneOffset: number) {
         this.model = new ClockModel(timezoneOffset);
@@ -23,8 +21,10 @@ export abstract class ClockController {
     protected abstract handleIncreaseButton(): void;
     protected abstract handleModeButton(): void;
 
-    addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
-        this.view.addEventToCloseButton(() => removeClock(this.id));
+    abstract addEventToCloseButton(removeClock: (clockNumber: number) => void): void;
+
+    protected addEventListener(element: HTMLElement, type: string, listener: EventListenerOrEventListenerObject): void {
+        element.addEventListener(type, listener);
     }
 
     protected generateUniqueId(): number {

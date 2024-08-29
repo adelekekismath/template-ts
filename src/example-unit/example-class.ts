@@ -1,7 +1,7 @@
     /**
      * This class has a very nice and complex method allowing to manipulate a given number.
      */
-    export class HourWrapper {
+    export class HourManager {
         constructor(private readonly hours: number) {}
 
         /**
@@ -19,7 +19,7 @@
         }
     }
 
-    export class MinuteWrapper {
+    export class MinuteManager {
         constructor(private readonly minutes: number) {}
 
         /**
@@ -29,15 +29,15 @@
             return this.minutes;
         }
 
-        /* 
-        *Increments the time value by one unit, cycling through a 60-minute period.
+        /*
+         *Increments the time value by one unit, cycling through a 60-minute period.
          */
         incrementMinute(): number {
             return (this.minutes + 1) % 60;
         }
     }
 
-    export class SecondWrapper {
+    export class SecondManager {
         constructor(private readonly seconds: number) {}
 
         /**
@@ -47,8 +47,8 @@
             return this.seconds;
         }
 
-        /* 
-        *Increments the time value by one unit, cycling through a 60-second period.
+        /*
+         *Increments the time value by one unit, cycling through a 60-second period.
          */
         incrementSecond(): number {
             return (this.seconds + 1) % 60;
