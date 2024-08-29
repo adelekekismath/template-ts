@@ -6,6 +6,7 @@ export enum TimeType {
 
 export abstract class ClockView {
     protected radius: number;
+    protected center: [number, number];
     constructor() {}
 
     abstract deleteClock(): void;
@@ -13,7 +14,7 @@ export abstract class ClockView {
     abstract addEventToCloseButton(handleCloseButton: () => void): void;
 
     abstract makeDraggable(): void;
-    abstract drawHandle(lengthRatio: number, angle: number, type: TimeType): void;
+    abstract drawHandle(lengthRatio: number, position: [number, number], angle: number, type: TimeType): void;
     abstract clear(): void;
     abstract blinkElement(type: TimeType): void;
     abstract stopBlinkElement(timeType: TimeType): void;
@@ -26,6 +27,9 @@ export abstract class ClockView {
     ): void;
     getRadius(): number {
         return this.radius;
+    }
+    getCenter(): [number, number] {
+        return this.center;
     }
 
     abstract drawClockFace(): void;

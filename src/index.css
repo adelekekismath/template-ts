@@ -1,19 +1,19 @@
 .clocks-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px; /* Add spacing between the clocks */
+    gap: 20px; 
     padding: 20px;
 }
 
 .clock-article {
-    border: 2px solid #00BFFF; /* Blue border */
+    border: 2px solid #00BFFF; 
     border-radius: 10px;
     background-color: #ffffff;
     padding: 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    overflow: hidden; /* Ensure the content does not overflow */
+    overflow: hidden; 
 }
 
 .clock-article:hover {
@@ -87,11 +87,11 @@ button {
 .reset-button,
 .format-button {
     width: 100%;
-    height: 60%;
+    height: 50%;
     position: absolute;
     bottom: -0.5vmin;
-    border: 0.5vmin solid var(--stroke);
-    border-radius: 0.5vmin;
+    border: 0.3vmin solid var(--stroke);
+    border-radius: 0.3vmin;
     background: var(--start);
     overflow: hidden;
     transition: transform 0.2s ease, height 0.2s ease;
@@ -141,7 +141,7 @@ span.label-mode {
     display: inline-block; 
     transform: rotate(-39deg);
     left: 3vmin;
-    top: -1.5vmin;
+    top: -1.4vmin;
     position: relative;
     font-size: larger;
 }
@@ -149,17 +149,38 @@ span.label-mode {
 span.label-light {
     display: inline-block; 
     transform: rotate(-230deg);
+    position: relative;
+    top: -1.5vmin;
     font-size: larger;
 }
 
 span.label-increase {
     display: inline-block; 
-    /* transform: rotate(230deg);
-    padding-left: .5vmin;
-    padding-bottom: 2.5vmin;
-    padding-right: -0.5vmin;
-    padding-top: -1vmin; */
+    transform: rotate(230deg);
+    position: relative;
+    top: -2.3vmin;
+    left: -2.2vmin;
     font-size: larger;
+}
+
+span.label-reset {
+        display: inline-block;
+    transform: rotate(39deg);
+    position: relative;
+    top: -1.3vmin;
+    font-size: larger;
+    right: 2.5vmin;
+}
+
+span.label-format {
+    display: inline-block;
+    transform: rotate(-90deg);
+    position: relative;
+    top: -5vmin;
+    font-size: larger;
+    right: 4.5vmin;
+    width: 13vmin;
+    
 }
 
 
@@ -188,12 +209,15 @@ span.label-increase {
     width: 30vmin;
     background-color: var(--watch-bg);
     border-radius: 50%;
-    border: 0.5vmin solid var(--stroke);
+    border: 0.3vmin solid var(--stroke);
     position: relative;
+    left: 2.8vmin;
+    top: 2.5vmin;
+
 }
 
 .watch-control {
-    --size: min(38px, 7vmin);
+    --size: min(35px, 10vmin);
     height: var(--size);
     width: var(--size);
     position: absolute;
@@ -303,7 +327,7 @@ span.label-increase {
 
 .clock-wrapper {
     position: relative;
-    width: 45vmin;
+    width: 50vmin;
     height: 40vmin;
     border: 2px solid #00AEEF;
     border-radius: 2vmin;

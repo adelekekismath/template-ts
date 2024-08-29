@@ -52,7 +52,6 @@ export class DigitalClockView extends ClockView {
         this.resetButton.id = `reset-button-${DigitalClockView.clockCounter}`;
         this.resetButton.className = 'reset-button';
         const resetLabel = document.createElement('span');
-        resetLabel.id = `label-reset-${DigitalClockView.clockCounter}`;
         resetLabel.className = 'label-reset';
         resetLabel.textContent = 'Reset';
 
@@ -159,7 +158,7 @@ export class DigitalClockView extends ClockView {
         clockContainer.appendChild(this.clockWrapper);
     }
 
-    drawHandle(lengthRatio: number, angle: number, type: TimeType): void {
+    drawHandle(lengthRatio: number, position: [number, number], angle: number, type: TimeType): void {
         throw new Error('Method not implemented.');
     }
 

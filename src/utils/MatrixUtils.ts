@@ -6,7 +6,34 @@ export  type Matrix3x3 = number[][];
         [0, 1, 0],
         [0, 0, 1],
     ];
+ }
+
+export function rotationMatrix(angle: number): Matrix3x3 {
+    const rad = (Math.PI / 180) * angle;
+    return [
+        [Math.cos(rad), -Math.sin(rad), 0],
+        [Math.sin(rad), Math.cos(rad), 0],
+        [0, 0, 1],
+    ];
 }
+
+export function translationMatrix(tx: number, ty: number): Matrix3x3 {
+    return [
+        [1, 0, tx],
+        [0, 1, ty],
+        [0, 0, 1],
+    ];
+}
+
+export function scalingMatrix(sx: number, sy: number): Matrix3x3 {
+    return [
+        [sx, 0, 0],
+        [0, sy, 0],
+        [0, 0, 1],
+    ];
+}
+
+
 
 export function multiplyMatrices(a: Matrix3x3, b: Matrix3x3): Matrix3x3 {
     const result: Matrix3x3 = identityMatrix();

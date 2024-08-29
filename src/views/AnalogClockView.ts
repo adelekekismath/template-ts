@@ -4,12 +4,10 @@ import { TimeType } from '../views/ClockView';
 
 export class AnalogClockView extends ClockView {
     private container: HTMLCanvasElement;
-    private center: [number, number];
     private static clockCounter = 0;
     private id: number;
     private clockWrapper: HTMLElement;
     private closeButton: HTMLButtonElement;
-    
 
     constructor() {
         super();
@@ -44,7 +42,6 @@ export class AnalogClockView extends ClockView {
     addEventToCloseButton(handleCloseButton: () => void): void {
         this.closeButton.addEventListener('click', handleCloseButton);
     }
-    
 
     makeDraggable(): void {
         throw new Error('Method not implemented.');
@@ -52,7 +49,7 @@ export class AnalogClockView extends ClockView {
 
     deleteClock(): void {
         console.log('deleteClock', this.id);
-        document.getElementById(`analog-clock-wrapper-${this.id +1}`)?.remove();
+        document.getElementById(`analog-clock-wrapper-${this.id + 1}`)?.remove();
     }
 
     drawClockFace() {
@@ -65,22 +62,36 @@ export class AnalogClockView extends ClockView {
         ctx.lineWidth = 3;
         ctx.stroke();
         ctx.closePath();
+
+        ctx.fillStyle = '#000000'; // Couleur des chiffres
+        ctx.font = '16px Arial'; // Police des chiffres
+        const numbers = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+        numbers.forEach((number, index) => {
+            const angle = ((index - 3) * (Math.PI * 2)) / 12; // Calcul de l'angle
+            const x = this.center[0] + Math.cos(angle) * (this.radius - 20); // Position X
+            const y = this.center[1] + Math.sin(angle) * (this.radius - 20); // Position Y
+            ctx.fillText(number, x - 5, y + 5); // Dessin du chiffre
+        });
     }
 
-    drawHandle(lengthRatio: number, angle: number, type: TimeType) {
+    drawHandle(lengthRatio: number, position: [number, number], angle : number, type: TimeType) {
+        const [xPosition, yPosition] = position;
         const ctx = this.container.getContext('2d');
         if (!ctx) return;
 
-        const length = this.radius * lengthRatio;
-        const radian = (Math.PI / 180) * angle;
+        // const length = this.radius * lengthRatio; // longueur constante, liée au ratio
+        // const radian = (Math.PI / 180) * (angle-90);
+        // const xPosition = this.center[0] + length * Math.cos(radian);
+        // const yPosition = this.center[1] + length * Math.sin(radian);
 
-        const x = this.center[0] + length * Math.cos(radian);
-        const y = this.center[1] + length * Math.sin(radian);
-
+        // Dessiner l'aiguille
+        const finalXPosition = xPosition + this.center[0];
+        const finalYPostion = yPosition + this.center[1];
         ctx.beginPath();
         ctx.moveTo(this.center[0], this.center[1]);
-        ctx.lineTo(x, y);
+        ctx.lineTo(finalXPosition, finalYPostion);
 
+        // Définir l'apparence de l'aiguille selon son type
         if (type === TimeType.HOURS) {
             ctx.lineWidth = 4;
             ctx.strokeStyle = 'teal';
@@ -93,28 +104,7 @@ export class AnalogClockView extends ClockView {
         }
 
         ctx.stroke();
-
-        // Add arrowhead
-        const arrowSize = 6;
-        ctx.beginPath();
-
-        if (type === TimeType.HOURS) {
-            ctx.fillStyle = 'teal';
-        } else if (type === TimeType.MINUTES) {
-            ctx.fillStyle = 'purple';
-        } else {
-            ctx.fillStyle = 'coral';
-        }
-
-        const arrowX = x + arrowSize * Math.cos(radian + Math.PI / 6);
-        const arrowY = y + arrowSize * Math.sin(radian + Math.PI / 6);
-
-        ctx.moveTo(x, y);
-        ctx.lineTo(x - arrowSize * Math.cos(radian - Math.PI / 6), y - arrowSize * Math.sin(radian - Math.PI / 6));
-        ctx.lineTo(arrowX, arrowY);
-        ctx.lineTo(x - arrowSize * Math.cos(radian + Math.PI / 6), y - arrowSize * Math.sin(radian + Math.PI / 6));
         ctx.closePath();
-        ctx.fill();
     }
 
     clear() {
