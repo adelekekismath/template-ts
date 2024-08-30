@@ -1,3 +1,5 @@
+import { Position } from "../models/Type";
+
 export  type Matrix3x3 = number[][];
 
  export function identityMatrix(): Matrix3x3 {
@@ -75,9 +77,10 @@ export function inverseMatrix(m: Matrix3x3): Matrix3x3 | null {
     return invMatrix;
 }
 
-export function applyTransformation(point: [number, number], matrix: Matrix3x3): [number, number] {
-    const [x, y] = point;
+export function applyTransformation(point: Position, matrix: Matrix3x3): Position {
+    const x = point.x;
+    const y = point.y;
     const newX = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2];
     const newY = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2];
-    return [newX, newY];
+    return { x: newX, y: newY };
 }

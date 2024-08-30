@@ -1,136 +1,93 @@
-/**
- *This class renders the time in hh:mm:ss format and handles the UI elements
-*/
 import { TimeType } from '../models/Type';
 
-enum Format {
-    AM_PM,
-    H24,
-}
-
 export class DigitalClockView {
-    public id = 0;
+    private static readonly YELLOW_COLOR: string = '#FBE106';
+    private static readonly WHITE_COLOR: string = '#FFFFFF';
+    private static readonly CLOCK_WRAPPER_CLASS: string = 'clock-wrapper clock-article';
+    private static readonly BUTTON_CLASSES = {
+        close: 'close-btn',
+        reset: 'reset-button',
+        mode: 'mode-button',
+        light: 'light-button',
+        format: 'format-button',
+        increase: 'increase-button',
+    };
+    private static readonly LABELS = {
+        reset: 'Reset',
+        mode: 'Mode',
+        light: 'Light',
+        format: 'AM/PM-24H',
+        increase: 'Increase',
+    };
+
+    private backgroundColor: string = DigitalClockView.WHITE_COLOR;
+    private clockWrapper: HTMLElement;
     private watchDisplay: HTMLElement;
+    private closeButton: HTMLElement;
+    private resetButton: HTMLElement;
     private modeButton: HTMLElement;
     private lightButton: HTMLElement;
-    private increaseButton: HTMLElement;
-    private resetButton: HTMLElement;
     private formatButton: HTMLElement;
+    private increaseButton: HTMLElement;
     private hourElement: HTMLElement;
     private minuteElement: HTMLElement;
     private secondElement: HTMLElement;
     private formatElement: HTMLElement;
-    private closeButton: HTMLElement;
-    private static yellowColor: string = '#FBE106';
-    private static whiteColor: string = '#FFFFFF';
-    private backgroundColor: string = DigitalClockView.whiteColor;
-    private static clockCounter: number = 0;
-    private clockWrapper: HTMLElement;
 
-    constructor() {
-        this.id = DigitalClockView.clockCounter++;
-        this.clockWrapper = document.createElement('article');
-        this.clockWrapper.id = `digital-clock-wrapper-${DigitalClockView.clockCounter}`;
-        this.clockWrapper.className = 'clock-wrapper clock-article';
+    constructor(private id: number) {
+        this.clockWrapper = this.createElement('article', DigitalClockView.CLOCK_WRAPPER_CLASS, `digital-clock-wrapper-${this.id}`);
+        this.closeButton = this.createButton('button', DigitalClockView.BUTTON_CLASSES.close, `close-button-${this.id}`, 'X');
 
-        this.closeButton = document.createElement('button');
-        this.closeButton.id = `close-button-${DigitalClockView.clockCounter}`;
-        this.closeButton.className = 'close-btn';
-        this.closeButton.textContent = 'X';
+        const watch = this.createElement('div', 'watch', `watch-${this.id}`);
+        const watchContainer = this.createElement('div', 'watch-container', `watch-container-${this.id}`);
+        this.watchDisplay = this.createElement('div', 'watch-display', `watch-display-${this.id}`);
 
-        const watch = document.createElement('div');
-        watch.id = `watch-${DigitalClockView.clockCounter}`;
-        watch.className = 'watch';
+        this.resetButton = this.createControlButton('reset', 'reset-watch', DigitalClockView.LABELS.reset);
+        this.modeButton = this.createControlButton('mode', 'mode-watch', DigitalClockView.LABELS.mode);
+        this.lightButton = this.createControlButton('light', 'light-watch', DigitalClockView.LABELS.light);
+        this.formatButton = this.createControlButton('format', 'format-watch', DigitalClockView.LABELS.format);
+        this.increaseButton = this.createControlButton('increase', 'increase-watch', DigitalClockView.LABELS.increase);
 
-        const resetControl = document.createElement('div');
-        resetControl.id = `reset-control-${DigitalClockView.clockCounter}`;
-        resetControl.className = 'reset-watch watch-control';
-        this.resetButton = document.createElement('button');
-        this.resetButton.id = `reset-button-${DigitalClockView.clockCounter}`;
-        this.resetButton.className = 'reset-button';
-        const resetLabel = document.createElement('span');
-        resetLabel.className = 'label-reset';
-        resetLabel.textContent = 'Reset';
-
-        const modeControl = document.createElement('div');
-        modeControl.id = `mode-control-${DigitalClockView.clockCounter}`;
-        modeControl.className = 'mode-watch watch-control';
-        this.modeButton = document.createElement('button');
-        this.modeButton.id = `mode-button-${DigitalClockView.clockCounter}`;
-        this.modeButton.className = 'mode-button';
-        const modeLabel = document.createElement('span');
-        modeLabel.className = 'label-mode';
-        modeLabel.textContent = 'Mode';
-
-        const lightControl = document.createElement('div');
-        lightControl.id = `light-control-${DigitalClockView.clockCounter}`;
-        lightControl.className = 'light-watch watch-control';
-        this.lightButton = document.createElement('button');
-        this.lightButton.id = `light-button-${DigitalClockView.clockCounter}`;
-        this.lightButton.className = 'light-button';
-        const lightLabel = document.createElement('span');
-        lightLabel.className = 'label-light';
-        lightLabel.textContent = 'Light';
-
-        const formatControl = document.createElement('div');
-        formatControl.className = 'format-watch watch-control';
-        formatControl.id = `format-control-${DigitalClockView.clockCounter}`;
-        this.formatButton = document.createElement('button');
-        this.formatButton.id = `format-button-${DigitalClockView.clockCounter}`;
-        this.formatButton.className = 'format-button';
-        const formatLabel = document.createElement('span');
-        formatLabel.id = `label-format-${DigitalClockView.clockCounter}`;
-        formatLabel.className = 'label-format';
-        formatLabel.textContent = 'AM/PM-24H';
-
-        const increaseControl = document.createElement('div');
-        increaseControl.className = 'increase-watch watch-control';
-        this.increaseButton = document.createElement('button');
-        this.increaseButton.id = `increase-button-${DigitalClockView.clockCounter}`;
-        this.increaseButton.className = 'increase-button';
-        const increaseLabel = document.createElement('span');
-        increaseLabel.className = 'label-increase';
-        increaseLabel.textContent = 'Increase';
-
-        const watchContainer = document.createElement('div');
-        watchContainer.id = `watch-container-${DigitalClockView.clockCounter}`;
-        watchContainer.className = 'watch-container';
-
-        this.watchDisplay = document.createElement('div');
-        this.watchDisplay.id = `watch-display-${DigitalClockView.clockCounter}`;
-        this.watchDisplay.className = 'watch-display';
-
-        // Assemble the structure
-        resetControl.appendChild(this.resetButton);
-        resetControl.appendChild(resetLabel);
-
-        modeControl.appendChild(this.modeButton);
-        modeControl.appendChild(modeLabel);
-
-        lightControl.appendChild(this.lightButton);
-        lightControl.appendChild(lightLabel);
-
-        formatControl.appendChild(this.formatButton);
-        formatControl.appendChild(formatLabel);
-
-        increaseControl.appendChild(this.increaseButton);
-        increaseControl.appendChild(increaseLabel);
-
-        this.hourElement = document.createElement('div');
-        this.hourElement.className = 'digit m';
-
-        const separator = document.createElement('span');
+        this.hourElement = this.createElement('div', 'digit m');
+        const separator = this.createElement('span');
         separator.textContent = ':';
+        this.minuteElement = this.createElement('div', 'digit second s');
+        this.secondElement = this.createElement('div', 'digit digit--small ms');
+        this.formatElement = this.createElement('div', 'format');
 
-        this.minuteElement = document.createElement('div');
-        this.minuteElement.className = 'digit second s';
+        this.assembleClock(watch, watchContainer, separator);
+        this.attachToDOM('clocks-container');
+    }
 
-        this.secondElement = document.createElement('div');
-        this.secondElement.className = 'digit digit--small ms';
+    private createElement(tag: string, className?: string, id?: string): HTMLElement {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (id) element.id = id;
+        return element;
+    }
 
-        this.formatElement = document.createElement('div');
-        this.formatElement.className = 'format';
+    private createButton(tag: string, className: string, id: string, text: string): HTMLElement {
+        const button = this.createElement(tag, className, id);
+        button.textContent = text;
+        return button;
+    }
 
+    private createControlButton(
+        control: keyof typeof DigitalClockView.BUTTON_CLASSES,
+        controlClass: string,
+        labelText: string
+    ): HTMLElement {
+        const controlDiv = this.createElement('div', `${controlClass} watch-control`, `${controlClass}-control-${this.id}`);
+        const button = this.createButton('button', DigitalClockView.BUTTON_CLASSES[control], `${controlClass}-button-${this.id}`, '');
+        const label = this.createElement('span', `label-${control}`);
+        label.textContent = labelText;
+
+        controlDiv.appendChild(button);
+        controlDiv.appendChild(label);
+        return controlDiv;
+    }
+
+    private assembleClock(watch: HTMLElement, watchContainer: HTMLElement, separator: HTMLElement): void {
         this.watchDisplay.appendChild(this.hourElement);
         this.watchDisplay.appendChild(separator);
         this.watchDisplay.appendChild(this.minuteElement);
@@ -139,21 +96,20 @@ export class DigitalClockView {
 
         watchContainer.appendChild(this.watchDisplay);
 
-        watch.appendChild(resetControl);
-        watch.appendChild(modeControl);
-        watch.appendChild(lightControl);
-        watch.appendChild(formatControl);
-        watch.appendChild(increaseControl);
+        watch.appendChild(this.resetButton);
+        watch.appendChild(this.modeButton);
+        watch.appendChild(this.lightButton);
+        watch.appendChild(this.formatButton);
+        watch.appendChild(this.increaseButton);
         watch.appendChild(watchContainer);
 
         this.clockWrapper.appendChild(this.closeButton);
         this.clockWrapper.appendChild(watch);
+    }
 
-        // Assuming you want to add this to an existing element in the document
-        const clockContainer = document.getElementById('clocks-container');
-        console.log('clockContainer', clockContainer);
-        clockContainer.appendChild(this.clockWrapper);
-        this.makeDraggable();
+    private attachToDOM(containerId: string): void {
+        const clockContainer = document.getElementById(containerId);
+        clockContainer?.appendChild(this.clockWrapper);
     }
 
     getCloseButton(): HTMLElement {
@@ -162,14 +118,6 @@ export class DigitalClockView {
 
     getLightButton(): HTMLElement {
         return this.lightButton;
-    }
-
-    drawHandle(position: [number, number], angle: number, type: TimeType): void {
-        throw new Error('Method not implemented.');
-    }
-
-    clear(): void {
-        throw new Error('Method not implemented.');
     }
 
     displayTime(time: string): void {
@@ -182,7 +130,7 @@ export class DigitalClockView {
 
     toggleBackgroundColor(): void {
         this.backgroundColor =
-            this.backgroundColor === DigitalClockView.whiteColor ? DigitalClockView.yellowColor : DigitalClockView.whiteColor;
+            this.backgroundColor === DigitalClockView.WHITE_COLOR ? DigitalClockView.YELLOW_COLOR : DigitalClockView.WHITE_COLOR;
         this.watchDisplay.style.backgroundColor = this.backgroundColor;
     }
 
@@ -197,15 +145,11 @@ export class DigitalClockView {
     }
 
     addEventToCloseButton(handleCloseButton: () => void): void {
-        this.closeButton?.addEventListener('click', () => handleCloseButton());
+        this.closeButton.addEventListener('click', handleCloseButton);
     }
 
     deleteClock(): void {
-        document.getElementById(`digital-clock-wrapper-${this.id + 1}`)?.remove();
-    }
-
-    drawClockFace(): void {
-        throw new Error('Method not implemented.');
+        this.clockWrapper.remove();
     }
 
     getResetButton(): HTMLElement {
@@ -224,48 +168,7 @@ export class DigitalClockView {
         return this.modeButton;
     }
 
-    getRadius(): number {
-        throw new Error('Method not implemented.');
-    }
-
-    getCenter(): [number, number] {
-        throw new Error('Method not implemented.');
-    }
-    makeDraggable() {
-        this.clockWrapper.draggable = true;
-
-        this.clockWrapper.addEventListener('dragstart', (event) => {
-            this.clockWrapper.classList.add('dragging'); // Add a class to style during drag
-            event.dataTransfer!.setData('text/plain', this.clockWrapper.id);
-            event.dataTransfer!.effectAllowed = 'move';
-        });
-
-        this.clockWrapper.addEventListener('dragend', () => {
-            this.clockWrapper.classList.remove('dragging'); // Remove class when drag ends
-        });
-
-        this.clockWrapper.addEventListener('dragover', (event) => {
-            event.preventDefault();
-        });
-
-        this.clockWrapper.addEventListener('drop', (event) => {
-            event.preventDefault();
-            const draggedId = event.dataTransfer?.getData('text/plain');
-            if (draggedId && draggedId !== this.clockWrapper.id) {
-                const draggedElement = document.getElementById(draggedId);
-                const parent = this.clockWrapper.parentElement;
-
-                if (draggedElement && parent) {
-                    // Determine if the dragged element should be placed before or after the current element
-                    if (this.clockWrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
-                        // If the dragged element comes before the this.clockWrapper in the DOM, insert after
-                        parent.insertBefore(draggedElement, this.clockWrapper.nextSibling);
-                    } else {
-                        // If the dragged element comes after the this.clockWrapper in the DOM, insert before
-                        parent.insertBefore(draggedElement, this.clockWrapper);
-                    }
-                }
-            }
-        });
+    getClockWrapper(): HTMLElement {
+        return this.clockWrapper;
     }
 }

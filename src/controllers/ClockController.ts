@@ -34,4 +34,5 @@ export abstract class ClockController {
 
     protected abstract startClock(): void;
     abstract deleteClock(): void;
+    abstract makeDraggable(): void;
 }

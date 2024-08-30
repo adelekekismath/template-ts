@@ -18,7 +18,7 @@ export class DigitalClockController extends ClockController {
     }
 
     protected initializeView(): void {
-        this.view = new DigitalClockView();
+        this.view = new DigitalClockView(this.id);
     }
 
     handleIncreaseButton(): void {
@@ -99,7 +99,38 @@ export class DigitalClockController extends ClockController {
         this.view.deleteClock();
     }
 
-    drawClockFace(): void {
-        throw new Error('Method not implemented.');
+    makeDraggable() {
+        this.view.getClockWrapper().draggable = true;
+
+        this.view.getClockWrapper().addEventListener('dragstart', (event) => {
+            this.view.getClockWrapper().classList.add('dragging');
+            event.dataTransfer!.setData('text/plain', this.view.getClockWrapper().id);
+            event.dataTransfer!.effectAllowed = 'move';
+        });
+
+        this.view.getClockWrapper().addEventListener('dragend', () => {
+            this.view.getClockWrapper().classList.remove('dragging');
+        });
+
+        this.view.getClockWrapper().addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        this.view.getClockWrapper().addEventListener('drop', (event) => {
+            event.preventDefault();
+            const draggedId = event.dataTransfer?.getData('text/plain');
+            if (draggedId && draggedId !== this.view.getClockWrapper().id) {
+                const draggedElement = document.getElementById(draggedId);
+                const parent = this.view.getClockWrapper().parentElement;
+
+                if (draggedElement && parent) {
+                    if (this.view.getClockWrapper().compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
+                        parent.insertBefore(draggedElement, this.view.getClockWrapper().nextSibling);
+                    } else {
+                        parent.insertBefore(draggedElement, this.view.getClockWrapper());
+                    }
+                }
+            }
+        });
     }
 }

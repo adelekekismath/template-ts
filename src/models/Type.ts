@@ -3,3 +3,8 @@ export enum TimeType {
     MINUTES = 'minutes',
     SECONDS = 'seconds',
 }
+
+export type Position = {
+    x: number;
+    y: number;
+};

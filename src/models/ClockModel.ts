@@ -47,7 +47,6 @@ export class ClockModel {
     incrementHour(): void {
         const newHour = this.hours.incrementHour();
         this.hours = new HourManager(newHour);
-        console.log('this.hours', this.hours);
     }
 
     getTimeWithOffset(): Date {

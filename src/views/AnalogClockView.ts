@@ -1,34 +1,33 @@
 
-import { TimeType } from '../models/Type';
+import { Position, TimeType } from '../models/Type';
 
 export class AnalogClockView  {
     private container: HTMLCanvasElement;
-    private static clockCounter = 0;
-    private id: number;
     private closeButton: HTMLButtonElement;
     private clockWrapper: HTMLElement;
-    private center: [number, number];
+    private center: Position;
     private radius: number;
+    private id: number;
 
-    constructor() {
-        this.id = AnalogClockView.clockCounter++;
+    constructor(id: number) {
+        this.id = id;
         this.clockWrapper = document.createElement('article');
-        this.clockWrapper.id = `analog-clock-wrapper-${AnalogClockView.clockCounter}`;
+        this.clockWrapper.id = `analog-clock-wrapper-${this.id}`;
         this.clockWrapper.className = 'clock-wrapper clock-article';
 
         this.closeButton = document.createElement('button');
-        this.closeButton.id = `analog-close-button-${AnalogClockView.clockCounter}`;
+        this.closeButton.id = `analog-close-button-${this.id}`;
         this.closeButton.className = 'close-btn';
         this.closeButton.textContent = 'X';
 
         this.container = document.createElement('canvas');
-        this.container.id = `analog-watch-${AnalogClockView.clockCounter}`;
+        this.container.id = `analog-watch-${this.id}`;
         //this.container.className = 'watch';
 
         this.container.width = 300;
         this.container.height = 300;
-        this.center = [this.container.width / 2, this.container.height / 2];
-        this.radius = this.center[0] - 10; // Simplified to ensure hands fit within the clock face
+        this.center = { x: this.container.width / 2, y: this.container.height / 2 };
+        this.radius = this.center.x - 10; // Simplified to ensure hands fit within the clock face
 
         this.clockWrapper.appendChild(this.closeButton);
         this.clockWrapper.appendChild(this.container);
@@ -44,8 +43,7 @@ export class AnalogClockView  {
     }
 
     deleteClock(): void {
-        console.log('deleteClock', this.id);
-        document.getElementById(`analog-clock-wrapper-${this.id + 1}`)?.remove();
+        document.getElementById(`analog-clock-wrapper-${this.id}`)?.remove();
     }
 
     drawClockFace() {
@@ -53,7 +51,7 @@ export class AnalogClockView  {
         if (!ctx) return;
 
         ctx.beginPath();
-        ctx.arc(this.center[0], this.center[1], this.radius, 0, 2 * Math.PI);
+        ctx.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
         ctx.strokeStyle = 'purple'; // Border color
         ctx.lineWidth = 3;
         ctx.stroke();
@@ -64,19 +62,20 @@ export class AnalogClockView  {
         const numbers = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
         numbers.forEach((number, index) => {
             const angle = ((index - 3) * (Math.PI * 2)) / 12; // Calcul de l'angle
-            const x = this.center[0] + Math.cos(angle) * (this.radius - 20); // Position X
-            const y = this.center[1] + Math.sin(angle) * (this.radius - 20); // Position Y
+            const x = this.center.x + Math.cos(angle) * (this.radius - 20); // Position X
+            const y = this.center.y + Math.sin(angle) * (this.radius - 20); // Position Y
             ctx.fillText(number, x - 5, y + 5); // Dessin du chiffre
         });
     }
 
-    drawHandle(position: [number, number], angle: number, type: TimeType) {
-        const [xPosition, yPosition] = position;
+    drawHandle(position: Position, angle: number, type: TimeType) {
+        const xPosition = position.x;
+        const yPosition = position.y;
         const ctx = this.container.getContext('2d');
         if (!ctx) return;
 
         ctx.beginPath();
-        ctx.moveTo(this.center[0], this.center[1]);
+        ctx.moveTo(this.center.x, this.center.y);
         ctx.lineTo(xPosition, yPosition);
 
         // Définir l'apparence de l'aiguille selon son type
@@ -101,6 +100,10 @@ export class AnalogClockView  {
         ctx.clearRect(0, 0, this.container.width, this.container.height);
     }
 
+    getClockWrapper(): HTMLElement {
+        return this.clockWrapper;
+    }
+
     getCloseButton(): HTMLElement {
         return this.closeButton;
     }
@@ -109,7 +112,7 @@ export class AnalogClockView  {
         return this.radius;
     }
 
-    getCenter(): [number, number] {
+    getCenter(): Position {
         return this.center;
     }
     makeDraggable() {
