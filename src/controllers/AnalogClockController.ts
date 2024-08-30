@@ -28,6 +28,15 @@ export class AnalogClockController extends ClockController {
         this.view.deleteClock();
     }
 
+    /**
+     * Applies a series of transformations to the given handle position:
+     *
+     * 1. **Rotation**: The handle is rotated by the specified angle, with an optional correction factor (`ANGLE_CORRECTION`).
+     * 2. **Translation**: The handle's origin is translated to the center of the clock using the `translationMatrix`.
+     * 3. **Scaling**: The handle is scaled using the `scalingMatrix` with default scaling factors.
+     * 4. **Matrix Multiplication**: These matrices (translation and scaling) are combined sequentially to produce a final transformation matrix.
+     * 5. **Apply Transformation**: The final transformation is applied to the handle to compute its new position.
+     */
     rotateHandle(handle: Position, angle: number): Position {
         const rotationMat = rotationMatrix(angle + ANGLE_CORRECTION);
         const translationMat = translationMatrix(this.view.getCenter().x, this.view.getCenter().y);
@@ -55,7 +64,7 @@ export class AnalogClockController extends ClockController {
     protected initializeView(): void {
         this.view = new AnalogClockView(this.id);
         this.hourHandle = new Position(this.view.getRadius() * HOURS_RADIUS_SCALING, 0);
-        this.minuteHandle = new Position(this.view.getRadius() * MINUTES_RADIUS_SCALING, 0 );
+        this.minuteHandle = new Position(this.view.getRadius() * MINUTES_RADIUS_SCALING, 0);
         this.secondHandle = new Position(this.view.getRadius(), 0);
     }
 
@@ -63,9 +72,7 @@ export class AnalogClockController extends ClockController {
         this.initializeView();
         this.makeDraggable();
         setInterval(() => {
-            this.model.tick(this.incrementHours, this.incrementMinutes);
-            this.incrementHours = false;
-            this.incrementMinutes = false;
+            this.model.tick(false, false);
             this.render();
         }, 1000);
     }

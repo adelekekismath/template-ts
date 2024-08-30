@@ -69,7 +69,7 @@ export class AnalogClockView {
         ctx.fillStyle = '#000000';
         ctx.font = '11px Arial';
 
-        // Ajout des graduations pour les heures
+        // add hours graduations on the clock face
         for (let i = 0; i < 12; i++) {
             const angle = ((i - 3) * (Math.PI * 2)) / 12;
             const x1 = this.center.x + Math.cos(angle) * (this.radius - 10);
@@ -85,7 +85,7 @@ export class AnalogClockView {
             ctx.closePath();
         }
 
-        // Ajout des graduations pour les minutes
+        // add minutes graduations on the clock face
         for (let i = 0; i < 60; i++) {
             const angle = ((i - 15) * (Math.PI * 2)) / 60;
             const x1 = this.center.x + Math.cos(angle) * (this.radius - 10);
