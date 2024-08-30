@@ -3,6 +3,8 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    position: relative;
+    top: 10%;
 }
 
 .clock-article {
@@ -47,6 +49,7 @@
 }
 
 
+
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
 *,
@@ -65,13 +68,19 @@
     --stroke: hsl(0, 0%, 15%);
     --start: hsl(50, 100%, 50%);
     --start-two: hsl(50, 100%, 50%);
+    --background: hsl(0, 13%, 78%);
 }
 
 body {
     min-height: 100vh;
     display: grid;
     place-items: center;
-    background-color: #f0f0f0;
+    background: url('../media/18196.jpg');
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-size: cover; 
+    height: 100vh;
+
 }
 
 button {
@@ -112,6 +121,8 @@ button {
 }
 
 #add-clock-btn {
+    top: 50%;
+    position: relative;
     background-color: #4CAF50; /* Vert */
     border: none;
     color: white;
@@ -288,6 +299,12 @@ span.label-format {
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+
+canvas {
+    position: relative;
+    top: 10%;
+    bottom: 10%;
 }
 
 .watch-display {

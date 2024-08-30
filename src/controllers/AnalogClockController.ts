@@ -47,7 +47,6 @@ export class AnalogClockController extends ClockController {
         const secondPosition = this.rotateHandle(this.secondHandle, secondsAngle);
 
         this.view.clear();
-        this.view.drawClockFace();
         this.view.drawHandle(hourPosition, TimeType.HOURS);
         this.view.drawHandle(minutePosition, TimeType.MINUTES);
         this.view.drawHandle(secondPosition, TimeType.SECONDS);
@@ -55,9 +54,9 @@ export class AnalogClockController extends ClockController {
 
     protected initializeView(): void {
         this.view = new AnalogClockView(this.id);
-        this.hourHandle = { x: this.view.getRadius() * HOURS_RADIUS_SCALING, y: 0 };
-        this.minuteHandle = { x: this.view.getRadius() * MINUTES_RADIUS_SCALING, y: 0 };
-        this.secondHandle = { x: this.view.getRadius(), y: 0 };
+        this.hourHandle = new Position(this.view.getRadius() * HOURS_RADIUS_SCALING, 0);
+        this.minuteHandle = new Position(this.view.getRadius() * MINUTES_RADIUS_SCALING, 0 );
+        this.secondHandle = new Position(this.view.getRadius(), 0);
     }
 
     startClock() {
@@ -70,7 +69,6 @@ export class AnalogClockController extends ClockController {
             this.render();
         }, 1000);
     }
-
 
     addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
         this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));

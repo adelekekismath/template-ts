@@ -80,5 +80,5 @@ export function applyTransformation(point: Position, matrix: Matrix3x3): Positio
     const y = point.y;
     const newX = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2];
     const newY = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2];
-    return { x: newX, y: newY };
+    return new Position(newX,newY);
 }

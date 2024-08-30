@@ -6,7 +6,7 @@ export class DigitalClockController extends ClockController {
     private isHoursEditable = false;
     private isMinutesEditable = false;
     private mode = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
-    private view!: DigitalClockView; // Initialized in `initializeView`
+    private view!: DigitalClockView; 
 
     constructor(timezoneOffset: number) {
         super(timezoneOffset);
@@ -77,6 +77,7 @@ export class DigitalClockController extends ClockController {
         this.addEventListener(this.view.getModeButton(), 'click', () => this.handleModeButton());
         this.addEventListener(this.view.getResetButton(), 'click', () => this.handleResetButton());
         this.addEventListener(this.view.getFormatButton(), 'click', () => this.handleFormatButton());
+        this.makeDraggable();
     }
 
     startClock(): void {

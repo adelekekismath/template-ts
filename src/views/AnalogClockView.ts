@@ -8,7 +8,6 @@ export class AnalogClockView {
     private static readonly HOUR_HAND_COLOR = 'teal';
     private static readonly MINUTE_HAND_COLOR = 'purple';
     private static readonly SECOND_HAND_COLOR = 'coral';
-    private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
     private container: HTMLCanvasElement;
     private closeButton: HTMLButtonElement;
     private clockWrapper: HTMLElement;
@@ -25,7 +24,7 @@ export class AnalogClockView {
         this.container.id = `analog-watch-${this.id}`;
         this.container.width = AnalogClockView.CANVAS_WIDTH;
         this.container.height = AnalogClockView.CANVAS_HEIGHT;
-        this.center = { x: this.container.width / 2, y: this.container.height / 2 };
+        this.center = new Position(this.container.width / 2, this.container.height / 2);
         this.radius = this.center.x - 10;
 
         this.clockWrapper.appendChild(this.closeButton);
@@ -68,14 +67,39 @@ export class AnalogClockView {
         ctx.closePath();
 
         ctx.fillStyle = '#000000';
-        ctx.font = '16px Arial';
+        ctx.font = '11px Arial';
 
-        AnalogClockView.CLOCK_NUMBERS.forEach((number, index) => {
-            const angle = ((index - 3) * (Math.PI * 2)) / 12;
-            const x = this.center.x + Math.cos(angle) * (this.radius - 20);
-            const y = this.center.y + Math.sin(angle) * (this.radius - 20);
-            ctx.fillText(number, x - 5, y + 5);
-        });
+        // Ajout des graduations pour les heures
+        for (let i = 0; i < 12; i++) {
+            const angle = ((i - 3) * (Math.PI * 2)) / 12;
+            const x1 = this.center.x + Math.cos(angle) * (this.radius - 10);
+            const y1 = this.center.y + Math.sin(angle) * (this.radius - 10);
+            const x2 = this.center.x + Math.cos(angle) * (this.radius - 20);
+            const y2 = this.center.y + Math.sin(angle) * (this.radius - 20);
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = '#3d3d3d';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        // Ajout des graduations pour les minutes
+        for (let i = 0; i < 60; i++) {
+            const angle = ((i - 15) * (Math.PI * 2)) / 60;
+            const x1 = this.center.x + Math.cos(angle) * (this.radius - 10);
+            const y1 = this.center.y + Math.sin(angle) * (this.radius - 10);
+            const x2 = this.center.x + Math.cos(angle) * (this.radius - 15);
+            const y2 = this.center.y + Math.sin(angle) * (this.radius - 15);
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = '#6d6d6d';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.closePath();
+        }
     }
 
     drawHandle(position: Position, type: TimeType): void {
@@ -98,9 +122,15 @@ export class AnalogClockView {
         ctx.closePath();
     }
 
-    clear(): void {
-        const ctx = this.container.getContext('2d');
-        if (ctx) ctx.clearRect(0, 0, this.container.width, this.container.height);
+    clear() {
+        const context = this.container.getContext('2d');
+        const radius = this.radius*0.8;
+        context.save();
+        context.beginPath();
+        context.arc(this.center.x, this.center.y,radius , 0, 2*Math.PI, true);
+        context.clip();
+        context.clearRect(this.center.x - radius, this.center.x - radius, radius * 2, radius * 2);
+        context.restore();
     }
 
     getClockWrapper(): HTMLElement {
