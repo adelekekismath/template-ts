@@ -1,22 +1,20 @@
-/**
- * This class manages the current time and provides methods to edit hours and minutes
- */
+import { HourManager, MinuteManager, SecondManager } from './TimeManager';
 
-import { HourManager, MinuteManager, SecondManager } from '../example-unit';
 enum Format {
     AM_PM = 'AM_PM',
-    H24= 'H24',
+    H24 = 'H24',
 }
+
 export class ClockModel {
     private hours: HourManager;
     private minutes: MinuteManager;
     private seconds: SecondManager;
     private currentFormat: Format = Format.H24;
     private timeZoneOffset: number;
-    private amPmFormat: string;
+    private amPmFormat: string = '';
 
-    constructor(TimezoneOffset: number = 0) {
-        this.timeZoneOffset = TimezoneOffset;
+    constructor(timeZoneOffset: number = 0) {
+        this.timeZoneOffset = timeZoneOffset;
         const now = this.getTimeWithOffset();
         this.hours = new HourManager(now.getHours());
         this.minutes = new MinuteManager(now.getMinutes());
@@ -40,48 +38,37 @@ export class ClockModel {
         const hours = this.formatTime(this.hours.get(), format);
         const minutes = this.formatTime(this.minutes.get());
         const seconds = this.formatTime(this.seconds.get());
-        const amPm = this.currentFormat === Format.AM_PM ? this.amPmFormat : '';
+        const amPm = format === Format.AM_PM ? this.amPmFormat : '';
         return `${hours}:${minutes}:${seconds} ${amPm}`;
     }
 
     incrementHour(): void {
-        const newHour = this.hours.incrementHour();
-        this.hours = new HourManager(newHour);
-    }
-
-    getTimeWithOffset(): Date {
-        const time = new Date();
-        time.setHours(time.getUTCHours() + this.timeZoneOffset);
-        return time;
+        this.hours = new HourManager(this.hours.incrementHour());
     }
 
     incrementMinute(): void {
-        const newMinute = this.minutes.incrementMinute();
-        this.minutes = new MinuteManager(newMinute);
+        this.minutes = new MinuteManager(this.minutes.incrementMinute());
     }
 
     tick(incrementHours: boolean, incrementMinutes: boolean): void {
-        const newSecond = this.seconds.incrementSecond();
-        this.seconds = new SecondManager(newSecond);
+        this.seconds = new SecondManager(this.seconds.incrementSecond());
 
-        if (newSecond === 0) {
-            const newMinute = this.minutes.incrementMinute();
-            this.minutes = new MinuteManager(newMinute);
-
-            if (incrementHours) {
-                const newHour = this.hours.incrementHour();
-                this.hours = new HourManager(newHour);
-            } else if (incrementMinutes) {
-                const newMinute = this.minutes.incrementMinute();
-                this.minutes = new MinuteManager(newMinute);
-            }
-
-            if (newMinute === 0) {
-                const newHour = this.hours.incrementHour();
-                this.hours = new HourManager(newHour);
+        if (this.seconds.get() === 0) {
+            this.incrementMinute();
+            if (this.minutes.get() === 0) {
+                this.incrementHour();
             }
         }
+
+        if (incrementMinutes) {
+            this.incrementMinute();
+        }
+
+        if (incrementHours) {
+            this.incrementHour();
+        }
     }
+
     resetToCurrentTime(): void {
         const now = this.getTimeWithOffset();
         this.hours = new HourManager(now.getHours());
@@ -89,15 +76,17 @@ export class ClockModel {
         this.seconds = new SecondManager(now.getSeconds());
     }
 
+    private getTimeWithOffset(): Date {
+        const time = new Date();
+        time.setHours(time.getUTCHours() + this.timeZoneOffset);
+        return time;
+    }
+
     private formatTime(value: number, format?: Format): string {
-            if (format === Format.AM_PM) {
-                this.amPmFormat = (value >= 12 )? 'PM' : 'AM';
-                return value > 12 ? `${value - 12}` : value < 10 ? `0${value}` : `${value}`;
-            } else if (format === Format.H24) {
-                if (this.amPmFormat === 'PM') {
-                    return value < 12 ? `${value + 12}` : `${value}`;
-                }
-            }
+        if (format === Format.AM_PM) {
+            this.amPmFormat = value >= 12 ? 'PM' : 'AM';
+            value = value > 12 ? value - 12 : value;
+        }
         return value < 10 ? `0${value}` : `${value}`;
     }
 }

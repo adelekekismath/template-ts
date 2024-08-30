@@ -1,17 +1,14 @@
-
 import { ClockModel } from '../models/ClockModel';
-
-export enum Format {
-    AM_PM = 'AM_PM',
-    H24 = 'H24',
-}
+import { Format } from '../models/Type';
 
 export abstract class ClockController {
     public id: number;
     protected model: ClockModel;
-    protected incrementHours: boolean = false;
-    protected incrementMinutes: boolean = false;
+    protected incrementHours = false;
+    protected incrementMinutes = false;
     protected format: Format = Format.H24;
+
+    private static readonly UNIQUE_ID_OFFSET = 1000;
 
     constructor(protected timezoneOffset: number) {
         this.model = new ClockModel(timezoneOffset);
@@ -28,10 +25,10 @@ export abstract class ClockController {
     }
 
     protected generateUniqueId(): number {
-        return Date.now() + Math.floor(Math.random() * 1000);
+        return Date.now() + Math.floor(Math.random() * ClockController.UNIQUE_ID_OFFSET);
     }
-    protected abstract initializeView(): void;
 
+    protected abstract initializeView(): void;
     protected abstract startClock(): void;
     abstract deleteClock(): void;
     abstract makeDraggable(): void;

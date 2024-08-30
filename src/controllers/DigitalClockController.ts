@@ -1,17 +1,12 @@
 import { DigitalClockView } from '../views/DigitalClockView';
 import { ClockController } from './ClockController';
-import { TimeType } from '../models/Type';
-
-enum Format {
-    AM_PM = 'AM_PM',
-    H24 = 'H24',
-}
+import { TimeType, Format } from '../models/Type';
 
 export class DigitalClockController extends ClockController {
     private isHoursEditable = false;
     private isMinutesEditable = false;
     private mode = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
-    private view: DigitalClockView;
+    private view!: DigitalClockView; // Initialized in `initializeView`
 
     constructor(timezoneOffset: number) {
         super(timezoneOffset);
@@ -19,6 +14,23 @@ export class DigitalClockController extends ClockController {
 
     protected initializeView(): void {
         this.view = new DigitalClockView(this.id);
+    }
+
+    private updateTimeDisplay(): void {
+        this.view.displayTime(this.model.getCurrentTime(this.format));
+    }
+
+    private blink(timeType: TimeType): void {
+        this.view.blinkElement(timeType);
+        this.isHoursEditable = timeType === TimeType.HOURS;
+        this.isMinutesEditable = timeType === TimeType.MINUTES;
+    }
+
+    private stopBlinking(): void {
+        this.view.stopBlinkElement(TimeType.HOURS);
+        this.view.stopBlinkElement(TimeType.MINUTES);
+        this.isHoursEditable = false;
+        this.isMinutesEditable = false;
     }
 
     handleIncreaseButton(): void {
@@ -45,10 +57,6 @@ export class DigitalClockController extends ClockController {
         }
     }
 
-    addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
-        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));
-    }
-
     handleResetButton(): void {
         this.model.resetToCurrentTime();
         this.updateTimeDisplay();
@@ -59,21 +67,8 @@ export class DigitalClockController extends ClockController {
         this.updateTimeDisplay();
     }
 
-    private blink(timetype: TimeType): void {
-        this.view.blinkElement(timetype);
-        this.isHoursEditable = timetype === TimeType.HOURS;
-        this.isMinutesEditable = timetype === TimeType.MINUTES;
-    }
-
-    private stopBlinking(): void {
-        this.view.stopBlinkElement(TimeType.HOURS);
-        this.view.stopBlinkElement(TimeType.MINUTES);
-        this.isHoursEditable = false;
-        this.isMinutesEditable = false;
-    }
-
-    private updateTimeDisplay(): void {
-        this.view.displayTime(this.model.getCurrentTime(this.format));
+    addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
+        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));
     }
 
     protected initializeButonsEvents(): void {
@@ -99,35 +94,36 @@ export class DigitalClockController extends ClockController {
         this.view.deleteClock();
     }
 
-    makeDraggable() {
-        this.view.getClockWrapper().draggable = true;
+    makeDraggable(): void {
+        const wrapper = this.view.getClockWrapper();
+        wrapper.draggable = true;
 
-        this.view.getClockWrapper().addEventListener('dragstart', (event) => {
-            this.view.getClockWrapper().classList.add('dragging');
-            event.dataTransfer!.setData('text/plain', this.view.getClockWrapper().id);
+        wrapper.addEventListener('dragstart', (event) => {
+            wrapper.classList.add('dragging');
+            event.dataTransfer!.setData('text/plain', wrapper.id);
             event.dataTransfer!.effectAllowed = 'move';
         });
 
-        this.view.getClockWrapper().addEventListener('dragend', () => {
-            this.view.getClockWrapper().classList.remove('dragging');
+        wrapper.addEventListener('dragend', () => {
+            wrapper.classList.remove('dragging');
         });
 
-        this.view.getClockWrapper().addEventListener('dragover', (event) => {
+        wrapper.addEventListener('dragover', (event) => {
             event.preventDefault();
         });
 
-        this.view.getClockWrapper().addEventListener('drop', (event) => {
+        wrapper.addEventListener('drop', (event) => {
             event.preventDefault();
             const draggedId = event.dataTransfer?.getData('text/plain');
-            if (draggedId && draggedId !== this.view.getClockWrapper().id) {
+            if (draggedId && draggedId !== wrapper.id) {
                 const draggedElement = document.getElementById(draggedId);
-                const parent = this.view.getClockWrapper().parentElement;
+                const parent = wrapper.parentElement;
 
                 if (draggedElement && parent) {
-                    if (this.view.getClockWrapper().compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
-                        parent.insertBefore(draggedElement, this.view.getClockWrapper().nextSibling);
+                    if (wrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
+                        parent.insertBefore(draggedElement, wrapper.nextSibling);
                     } else {
-                        parent.insertBefore(draggedElement, this.view.getClockWrapper());
+                        parent.insertBefore(draggedElement, wrapper);
                     }
                 }
             }
