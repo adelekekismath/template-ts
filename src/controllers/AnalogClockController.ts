@@ -1,23 +1,18 @@
 import { AnalogClockView } from '../views/AnalogClockView';
 import { ClockController } from './ClockController';
-import { applyTransformation, multiplyMatrices, rotationMatrix, scalingMatrix, translationMatrix } from '../utils/MatrixUtils';
+import { Matrix3x3, multiplyMatrices, rotationMatrix, scalingMatrix, translationMatrix } from '../utils/MatrixUtils';
 import { Position, TimeType } from '../models/Type';
 
 
-const ANGLE_CORRECTION = -90;
-const DEFAULT_SCALING = 0.8;
-const HOURS_RADIUS_SCALING = 0.6;
-const MINUTES_RADIUS_SCALING = 0.8;
-const DEGREES_PER_SECOND = 6; // 360° / 60s
-const DEGREES_PER_MINUTE = 6; // 360° / 60m
-const DEGREES_PER_HOUR = 30;  // 360° / 12h
-const ADDITIONAL_MINUTE_ANGLE = 0.1; // Additional degrees per second for the minute hand
-const ADDITIONAL_HOUR_ANGLE = 0.5; // Additional degrees per minute for the hour hand
 
 export class AnalogClockController extends ClockController {
-    private hourHandle: Position;
-    private minuteHandle: Position;
-    private secondHandle: Position;
+    private static readonly ANGLE_CORRECTION = 90;
+    private static readonly DEFAULT_SCALING = 0.8;
+    private static readonly DEGREES_PER_SECOND = 6;
+    private static readonly DEGREES_PER_MINUTE = 6;
+    private static readonly DEGREES_PER_HOUR = 30;
+    private static readonly ADDITIONAL_MINUTE_ANGLE = 0.1;
+
     private view: AnalogClockView;
 
     constructor(timezoneOffset: number) {
@@ -29,46 +24,37 @@ export class AnalogClockController extends ClockController {
     }
 
     /**
-     * Applies a series of transformations to the given handle position:
-     *
-     * 1. **Rotation**: The handle is rotated by the specified angle, with an optional correction factor (`ANGLE_CORRECTION`).
-     * 2. **Translation**: The handle's origin is translated to the center of the clock using the `translationMatrix`.
-     * 3. **Scaling**: The handle is scaled using the `scalingMatrix` with default scaling factors.
-     * 4. **Matrix Multiplication**: These matrices (translation and scaling) are combined sequentially to produce a final transformation matrix.
-     * 5. **Apply Transformation**: The final transformation is applied to the handle to compute its new position.
+     * Rotates a handle by applying rotation, translation, and scaling transformations.
      */
-    rotateHandle(handle: Position, angle: number): Position {
-        const rotationMat = rotationMatrix(angle + ANGLE_CORRECTION);
+    private rotateHandle(angle: number): Matrix3x3 {
+        const rotationMat = rotationMatrix(angle + AnalogClockController.ANGLE_CORRECTION);
         const translationMat = translationMatrix(this.view.getCenter().x, this.view.getCenter().y);
-        const scalingMat = scalingMatrix(DEFAULT_SCALING, DEFAULT_SCALING);
-        const translationAndScalMat = multiplyMatrices(translationMat, scalingMat);
-        const finalTransformMatrix = multiplyMatrices(translationAndScalMat, rotationMat);
-        return applyTransformation(handle, finalTransformMatrix);
+        const scalingMat = scalingMatrix(AnalogClockController.DEFAULT_SCALING, AnalogClockController.DEFAULT_SCALING);
+        const combinedMat = multiplyMatrices(translationMat, scalingMat);
+        return multiplyMatrices(combinedMat, rotationMat);
     }
 
-    render() {
-        const secondsAngle = this.model.getSeconds() * DEGREES_PER_SECOND;
-        const minutesAngle = this.model.getMinutes() * DEGREES_PER_MINUTE + this.model.getSeconds() * ADDITIONAL_MINUTE_ANGLE;
-        const hoursAngle = (this.model.getHours() % 12) * DEGREES_PER_HOUR + this.model.getMinutes() * ADDITIONAL_HOUR_ANGLE;
+    render(): void {
+        const secondsAngle = this.model.getSeconds() * AnalogClockController.DEGREES_PER_SECOND;
+        const minutesAngle =
+            this.model.getMinutes() * AnalogClockController.DEGREES_PER_MINUTE +
+            this.model.getSeconds() * AnalogClockController.ADDITIONAL_MINUTE_ANGLE;
+        const hoursAngle = (this.model.getHours() % 12) * AnalogClockController.DEGREES_PER_HOUR;
 
-        const hourPosition = this.rotateHandle(this.hourHandle, hoursAngle);
-        const minutePosition = this.rotateHandle(this.minuteHandle, minutesAngle);
-        const secondPosition = this.rotateHandle(this.secondHandle, secondsAngle);
+        const hourMatrix = this.rotateHandle(hoursAngle);
+        const minuteMatrix = this.rotateHandle(minutesAngle);
+        const secondMatrix = this.rotateHandle(secondsAngle);
 
-        this.view.clear();
-        this.view.drawHandle(hourPosition, TimeType.HOURS);
-        this.view.drawHandle(minutePosition, TimeType.MINUTES);
-        this.view.drawHandle(secondPosition, TimeType.SECONDS);
+        this.view.rotateNeedle(hourMatrix, TimeType.HOURS);
+        this.view.rotateNeedle(minuteMatrix, TimeType.MINUTES);
+        this.view.rotateNeedle(secondMatrix, TimeType.SECONDS);
     }
 
     protected initializeView(): void {
         this.view = new AnalogClockView(this.id);
-        this.hourHandle = new Position(this.view.getRadius() * HOURS_RADIUS_SCALING, 0);
-        this.minuteHandle = new Position(this.view.getRadius() * MINUTES_RADIUS_SCALING, 0);
-        this.secondHandle = new Position(this.view.getRadius(), 0);
     }
 
-    startClock() {
+    startClock(): void {
         this.initializeView();
         this.makeDraggable();
         setInterval(() => {
@@ -81,46 +67,45 @@ export class AnalogClockController extends ClockController {
         this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));
     }
 
+    makeDraggable(): void {
+        const clockWrapper = this.view.getClockWrapper();
+        clockWrapper.draggable = true;
+
+        clockWrapper.addEventListener('dragstart', (event) => {
+            clockWrapper.classList.add('dragging');
+            event.dataTransfer!.setData('text/plain', clockWrapper.id);
+            event.dataTransfer!.effectAllowed = 'move';
+        });
+
+        clockWrapper.addEventListener('dragend', () => {
+            clockWrapper.classList.remove('dragging');
+        });
+
+        clockWrapper.addEventListener('dragover', (event) => event.preventDefault());
+
+        clockWrapper.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const draggedId = event.dataTransfer?.getData('text/plain');
+            if (draggedId && draggedId !== clockWrapper.id) {
+                const draggedElement = document.getElementById(draggedId);
+                const parent = clockWrapper.parentElement;
+
+                if (draggedElement && parent) {
+                    if (clockWrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
+                        parent.insertBefore(draggedElement, clockWrapper.nextSibling);
+                    } else {
+                        parent.insertBefore(draggedElement, clockWrapper);
+                    }
+                }
+            }
+        });
+    }
+
     protected handleIncreaseButton(): void {
         throw new Error('Method not implemented.');
     }
 
     protected handleModeButton(): void {
         throw new Error('Method not implemented.');
-    }
-
-    makeDraggable() {
-        this.view.getClockWrapper().draggable = true;
-
-        this.view.getClockWrapper().addEventListener('dragstart', (event) => {
-            this.view.getClockWrapper().classList.add('dragging');
-            event.dataTransfer!.setData('text/plain', this.view.getClockWrapper().id);
-            event.dataTransfer!.effectAllowed = 'move';
-        });
-
-        this.view.getClockWrapper().addEventListener('dragend', () => {
-            this.view.getClockWrapper().classList.remove('dragging');
-        });
-
-        this.view.getClockWrapper().addEventListener('dragover', (event) => {
-            event.preventDefault();
-        });
-
-        this.view.getClockWrapper().addEventListener('drop', (event) => {
-            event.preventDefault();
-            const draggedId = event.dataTransfer?.getData('text/plain');
-            if (draggedId && draggedId !== this.view.getClockWrapper().id) {
-                const draggedElement = document.getElementById(draggedId);
-                const parent = this.view.getClockWrapper().parentElement;
-
-                if (draggedElement && parent) {
-                    if (this.view.getClockWrapper().compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
-                        parent.insertBefore(draggedElement, this.view.getClockWrapper().nextSibling);
-                    } else {
-                        parent.insertBefore(draggedElement, this.view.getClockWrapper());
-                    }
-                }
-            }
-        });
     }
 }
