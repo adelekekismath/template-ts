@@ -21,7 +21,7 @@ This project focuses on developing an interactive clock application that support
 - **Controller**: Handles user interactions and updates the model and view accordingly.
 
 ### Key Features
-- **Analog and Digital Clocks**: The analog clock is drawn using the `<canvas>` element, while the digital clock is updated in real-time.
+- **Analog and Digital Clocks**:  The digital clock was designed to update in real-time, displaying the current time in hours, minutes, and seconds. Initially, the analog clock's hands were erased and redrawn using the <canvas> element, but this approach was resource-intensive. To optimize performance, I transitioned to using the matrix() function in CSS, allowing for smoother and more efficient movement of the clock hands without the need to recreate them entirely each time.
 - **Timezone Management**: Users can select timezones, and the application adjusts the clocks according to the selected GMT offset.
 - **User Interactions**:
   - Users can add new clocks by selecting the type and timezone.
