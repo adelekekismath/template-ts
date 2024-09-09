@@ -1,4 +1,4 @@
-import { HourManager, MinuteManager, SecondManager } from './TimeManager';
+import { HourModel, MinuteModel, SecondModel } from "./TimeUnitsModel";
 
 enum Format {
     AM_PM = 'AM_PM',
@@ -6,19 +6,18 @@ enum Format {
 }
 
 export class ClockModel {
-    private hours: HourManager;
-    private minutes: MinuteManager;
-    private seconds: SecondManager;
-    private currentFormat: Format = Format.H24;
+    private hours: HourModel;
+    private minutes: MinuteModel;
+    private seconds: SecondModel;
     private timeZoneOffset: number;
     private amPmFormat: string = '';
 
     constructor(timeZoneOffset: number = 0) {
         this.timeZoneOffset = timeZoneOffset;
         const now = this.getTimeWithOffset();
-        this.hours = new HourManager(now.getHours());
-        this.minutes = new MinuteManager(now.getMinutes());
-        this.seconds = new SecondManager(now.getSeconds());
+        this.hours = new HourModel(now.getHours());
+        this.minutes = new MinuteModel(now.getMinutes());
+        this.seconds = new SecondModel(now.getSeconds());
     }
 
     getHours(): number {
@@ -34,7 +33,6 @@ export class ClockModel {
     }
 
     getCurrentTime(format: Format): string {
-        this.currentFormat = format;
         const hours = this.formatTime(this.hours.get(), format);
         const minutes = this.formatTime(this.minutes.get());
         const seconds = this.formatTime(this.seconds.get());
@@ -43,15 +41,15 @@ export class ClockModel {
     }
 
     incrementHour(): void {
-        this.hours = new HourManager(this.hours.incrementHour());
+        this.hours = new HourModel(this.hours.increment());
     }
 
     incrementMinute(): void {
-        this.minutes = new MinuteManager(this.minutes.incrementMinute());
+        this.minutes = new MinuteModel(this.minutes.increment());
     }
 
     tick(incrementHours: boolean, incrementMinutes: boolean): void {
-        this.seconds = new SecondManager(this.seconds.incrementSecond());
+        this.seconds = new SecondModel(this.seconds.increment());
 
         if (this.seconds.get() === 0) {
             this.incrementMinute();
@@ -71,9 +69,9 @@ export class ClockModel {
 
     resetToCurrentTime(): void {
         const now = this.getTimeWithOffset();
-        this.hours = new HourManager(now.getHours());
-        this.minutes = new MinuteManager(now.getMinutes());
-        this.seconds = new SecondManager(now.getSeconds());
+        this.hours = new HourModel(now.getHours());
+        this.minutes = new MinuteModel(now.getMinutes());
+        this.seconds = new SecondModel(now.getSeconds());
     }
 
     private getTimeWithOffset(): Date {

@@ -29,7 +29,7 @@ export abstract class ClockController {
     }
 
     protected abstract initializeView(): void;
-    protected abstract startClock(): void;
+    abstract startClock(): void;
     getId(): number {
         return this.id;
     }
