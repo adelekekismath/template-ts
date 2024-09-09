@@ -22,9 +22,9 @@ export class ClockManagerController {
     }
 
     private removeClock(clockNumber: number): void {
-        const clockToRemove = this.clocks.find((clock) => clock.id === clockNumber);
+        const clockToRemove = this.clocks.find((clock) => clock.getId() === clockNumber);
         if (clockToRemove) {
-            this.clocks = this.clocks.filter((clock) => clock.id !== clockNumber);
+            this.clocks = this.clocks.filter((clock) => clock.getId() !== clockNumber);
             clockToRemove.deleteClock();
         }
     }

@@ -39,7 +39,7 @@
 
 Note: this is here to give you an idea, you are free to do your own design.
 
-![Clock UI 1](./clock_ui_1.png)
+![Clock UI 1](./media/clock_ui_1.png)
 
 ## Part B - Extend your watch
 
@@ -69,7 +69,7 @@ Note: this is here to give you an idea, you are free to do your own design.
 
 Note: this is here to give you an idea, you are free to do your own design.
 
-![Clock UI 2](./clock_ui_2.png)
+![Clock UI 2](./media/clock_ui_2.png)
 
 ## Part C - Further extend your watch
 
@@ -99,4 +99,4 @@ Note: this is here to give you an idea, you are free to do your own design.
 
 Note: this is here to give you an idea, you are free to do your own design.
 
-![Clock UI 3](./clock_ui_3.png)
+![Clock UI 3](./media/clock_ui_3.png)

@@ -1,7 +1,7 @@
 import { AnalogClockView } from '../views/AnalogClockView';
 import { ClockController } from './ClockController';
 import { Matrix3x3, multiplyMatrices, rotationMatrix, scalingMatrix, translationMatrix } from '../utils/MatrixUtils';
-import { Position, TimeType } from '../models/Type';
+import { TimeType } from '../models/Type';
 
 
 
@@ -51,7 +51,7 @@ export class AnalogClockController extends ClockController {
     }
 
     protected initializeView(): void {
-        this.view = new AnalogClockView(this.id);
+        this.view = new AnalogClockView(this.getId());
     }
 
     startClock(): void {
@@ -64,7 +64,7 @@ export class AnalogClockController extends ClockController {
     }
 
     addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
-        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));
+        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.getId()));
     }
 
     makeDraggable(): void {

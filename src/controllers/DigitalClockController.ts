@@ -13,7 +13,7 @@ export class DigitalClockController extends ClockController {
     }
 
     protected initializeView(): void {
-        this.view = new DigitalClockView(this.id);
+        this.view = new DigitalClockView(this.getId());
     }
 
     private updateTimeDisplay(): void {
@@ -68,7 +68,7 @@ export class DigitalClockController extends ClockController {
     }
 
     addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
-        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.id));
+        this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.getId()));
     }
 
     protected initializeButonsEvents(): void {

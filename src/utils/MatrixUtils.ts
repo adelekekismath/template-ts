@@ -1,5 +1,3 @@
-import { Position } from "../models/Type";
-
 export  type Matrix3x3 = number[][];
 
 export function identityMatrix(): Matrix3x3 {

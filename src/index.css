@@ -18,6 +18,48 @@
     overflow: hidden; 
 }
 
+.clock {
+    position: relative;
+    border: 3px solid black;
+    border-radius: 50%;
+    background-color: white;
+    margin: 50px auto;
+}
+
+.clock-number {
+    position: absolute;
+    font-size: 16px;
+    font-family: Arial;
+    transform: translate(-50%, -50%);
+}
+
+.clock-marker {
+    position: absolute;
+    background-color: #3d3d3d;
+    width: 2px;
+    height: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.clock-small-marker {
+    position: absolute;
+    background-color: #6d6d6d;
+    width: 1px;
+    height: 5px;
+    transform: translate(-50%, -50%);
+}
+
+.clock-center {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .clock-article:hover {
     transform: translateY(-5px);
 }
@@ -201,7 +243,7 @@ span.label-light {
     transform: rotate(-230deg);
     position: relative;
     top: -1.5vmin;
-    font-size: larger;
+    font-size: 2vmin;
 }
 
 span.label-increase {
@@ -210,15 +252,15 @@ span.label-increase {
     position: relative;
     top: -2.3vmin;
     left: -2.2vmin;
-    font-size: larger;
+    font-size: 2vmin;
 }
 
 span.label-reset {
-        display: inline-block;
+    display: inline-block;
     transform: rotate(39deg);
     position: relative;
     top: -1.3vmin;
-    font-size: larger;
+    font-size: 2vmin;
     right: 2.5vmin;
 }
 
@@ -227,7 +269,7 @@ span.label-format {
     transform: rotate(-90deg);
     position: relative;
     top: -5vmin;
-    font-size: larger;
+    font-size: 2vmin;
     right: 4.5vmin;
     width: 13vmin;
     

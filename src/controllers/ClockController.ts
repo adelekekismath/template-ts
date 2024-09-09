@@ -2,7 +2,7 @@ import { ClockModel } from '../models/ClockModel';
 import { Format } from '../models/Type';
 
 export abstract class ClockController {
-    public id: number;
+    private id: number;
     protected model: ClockModel;
     protected incrementHours = false;
     protected incrementMinutes = false;
@@ -30,6 +30,9 @@ export abstract class ClockController {
 
     protected abstract initializeView(): void;
     protected abstract startClock(): void;
+    getId(): number {
+        return this.id;
+    }
     abstract deleteClock(): void;
     abstract makeDraggable(): void;
 }
