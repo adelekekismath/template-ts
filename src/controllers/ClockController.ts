@@ -28,7 +28,7 @@ export abstract class ClockController {
         return Date.now() + Math.floor(Math.random() * ClockController.UNIQUE_ID_OFFSET);
     }
 
-    protected abstract initializeView(): void;
+    abstract initializeView(): void;
     abstract startClock(): void;
     getId(): number {
         return this.id;

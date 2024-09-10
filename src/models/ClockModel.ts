@@ -87,4 +87,13 @@ export class ClockModel {
         }
         return value < 10 ? `0${value}` : `${value}`;
     }
+    setMinutes(minutes: number): void {
+        this.minutes = new MinuteModel(minutes % 60); 
+        const hours = Math.floor(minutes / 60);
+        this.hours = new HourModel(this.hours.get() + hours);
+    }
+
+    setHours(hours: number): void {
+        this.hours = new HourModel(hours % 24);
+    }
 }

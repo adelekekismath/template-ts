@@ -13,6 +13,8 @@ export class AnalogClockController extends ClockController {
     private static readonly DEGREES_PER_HOUR = 30;
     private static readonly ADDITIONAL_MINUTE_ANGLE = 0.1;
 
+    private intervalId: NodeJS.Timeout | null = null;
+
     private view: AnalogClockView;
 
     constructor(timezoneOffset: number) {
@@ -50,17 +52,79 @@ export class AnalogClockController extends ClockController {
         this.view.rotateNeedle(secondMatrix, TimeType.SECONDS);
     }
 
-    protected initializeView(): void {
+    initializeView(): void {
         this.view = new AnalogClockView(this.getId());
     }
 
     startClock(): void {
-        this.initializeView();
         this.makeDraggable();
-        setInterval(() => {
+
+        // Add event listener to the edit button
+        this.addEventListener(this.view.getEditButton(), 'click', () => this.toggleEditMode());
+        this.intervalId = setInterval(() => {
             this.model.tick(false, false);
             this.render();
         }, 1000);
+    }
+
+    // Method to toggle edit mode on/off
+    private toggleEditMode(): void {
+        this.view.toggleEditMode();
+
+        if (this.view.isEditModeActive()) {
+            this.view.activeEditMode();
+            this.stopClock(); // Stop the clock during edit mode
+            console.log('Edit mode activated');
+        } else {
+            const transform = this.view.getMinuteNeedleTransformMatrix();
+            const angle = this.extractRotationAngleFromTransform(transform);
+
+            if (angle !== null) {
+                this.updateTimeAfterEdit(angle); // Update time based on the new angle
+                this.view.deactivateEditMode();
+                this.startClock(); // Restart the clock after editing
+            }
+        }
+    }
+
+    // Helper function to extract rotation angle from the transform matrix
+    private extractRotationAngleFromTransform(transform: string): number | null {
+        const matrixMatch = transform.match(/^matrix\((.+)\)$/);
+        if (!matrixMatch) return null;
+
+        const [a, b] = matrixMatch[1].split(', ').map(parseFloat);
+        let angle = Math.atan2(b, a) * (180 / Math.PI); // Convert matrix values to an angle
+        return (angle + 360) % 360; // Normalize angle to [0, 360] range
+    }
+
+    // Method to stop the clock
+    private stopClock(): void {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+            this.makeUndraggable();
+            this.view.enableMinuteHandleDragging();
+        }
+    }
+
+    private calculateMinutesFromAngle(angle: number): number {
+        return Math.round(angle / 6); 
+    }
+
+    // Method to update the time after editing the clock
+    private updateTimeAfterEdit(adjustedAngle: number): void {
+        const newMinutes = this.calculateMinutesFromAngle(adjustedAngle); // Calculate the new minutes based on the angle
+        const currentHours = this.model.getHours();
+
+        const hoursToAdjust = this.view.getMinuteNeedleRotationCount(); // Get the number of hours to adjust
+
+        this.model.setMinutes(newMinutes);
+
+        // Adjust the hours if necessary
+        if (hoursToAdjust !== 0) {
+            console.log(`Adjusting hours by ${hoursToAdjust}`);
+            this.model.setHours(currentHours + hoursToAdjust);
+        }
     }
 
     addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
@@ -99,6 +163,11 @@ export class AnalogClockController extends ClockController {
                 }
             }
         });
+    }
+
+    makeUndraggable(): void {
+        const clockWrapper = this.view.getClockWrapper();
+        clockWrapper.draggable = false;
     }
 
     protected handleIncreaseButton(): void {

@@ -20,9 +20,9 @@
 
 .clock {
     position: relative;
-    border: 3px solid black;
+    border: 5px solid black;
     border-radius: 50%;
-    background-color: white;
+    background: #ececec;
     margin: 50px auto;
 }
 
@@ -35,7 +35,7 @@
 
 .clock-marker {
     position: absolute;
-    background-color: #3d3d3d;
+    background-color: black;
     width: 2px;
     height: 10px;
     transform: translate(-50%, -50%);
@@ -71,6 +71,18 @@
     margin-bottom: 15px;
     background-color: #f9f9f9;
     padding-bottom: 20px;
+}
+
+.clock-marker {
+    position: absolute;
+    z-index: 2;
+    width: 2px;
+    height: 8px;
+    background: black;
+    left: 50%;
+    margin-left: -5px;
+    margin-top: -2px;
+    transform-origin: 50% 150px;
 }
 
 .clock-type-legend {
@@ -170,35 +182,49 @@ button {
     left: 0;
 }
 
+.minute-container{
+    pointer-events: auto;
+    z-index: 10;
+    
+}
+
 .hour-needle {
     background: teal;
-    height: 20%;
+    height: 35%;
     left: 48.75%;
     position: absolute;
-    top: 30%;
+    top: 20%;
     transform-origin: 50% 100%;
     width: 1.5%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
 }
 
 .minute-needle {
     background: purple;
-    height: 35%;
+    height: 45%;
     left: 49%;
     position: absolute;
-    top: 20%;
+    top: 10%;
     transform-origin: 50% 100%;
     width: 1.1%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    pointer-events: auto;
+    z-index: 10;
 }
 
 .second-needle {
     background: coral;
-    height: 40%;
+    height: 50%;
     left: 49.5%;
     position: absolute;
-    top: 17%;
+    top: 7%;
     transform-origin: 50% 80%;
     width: 0.8%;
     z-index: 8;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
 }
 
 #add-clock-btn {
@@ -363,6 +389,36 @@ span.label-format {
     height: 100%;
     width: 100%;
     transform: translate(-50%, -50%) translate(0, 2%);
+}
+
+.edit-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    background-color: #4385cc; /* Couleur bleue */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Changement de couleur lors du survol */
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Effet lorsque le bouton est pressé */
+.edit-btn:active {
+    background-color: #004080;
+    transform: scale(0.95); /* Réduire légèrement la taille lors du clic */
+}
+
+/* Style en mode édition */
+.edit-btn.editing {
+    background-color: #FF5733; /* Couleur orange pour indiquer l'édition */
 }
 
 .watch__content:after {

@@ -3,10 +3,9 @@ import { Matrix3x3 } from '../utils/MatrixUtils';
 
 export class AnalogClockView {
     private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper clock-article';
-    private static readonly CANVAS_SIZE = 300;
+    private static readonly CLOCK_FACE_SIZE = 300;
     private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
-    private container: HTMLCanvasElement;
     private closeButton: HTMLButtonElement;
     private clockWrapper: HTMLElement;
     private clockFace: HTMLElement;
@@ -16,6 +15,10 @@ export class AnalogClockView {
     private hourNeedle: HTMLElement;
     private minuteNeedle: HTMLElement;
     private secondNeedle: HTMLElement;
+    private editButton: HTMLButtonElement;
+    private isInEditMode: boolean = false;
+    private minuteNeedleAngleBeforeDrag: number = 0;
+    private minuteNeedleRotationCount: number = 0;
 
     private center: Position;
     private radius: number;
@@ -23,15 +26,31 @@ export class AnalogClockView {
 
     constructor(id: number) {
         this.id = id;
+        this.initializeClockWrapper();
+        this.initializeClockFace();
+        this.initializeNeedleContainers();
+
+        const clocksContainer = document.getElementById('clocks-container');
+        clocksContainer?.appendChild(this.clockWrapper);
+    }
+
+    private initializeClockWrapper(): void {
         this.clockWrapper = this.createElement('article', AnalogClockView.CLOCK_WRAPPER_CLASS, `analog-clock-wrapper-${this.id}`);
         this.closeButton = this.createButton('button', 'close-btn', `analog-close-button-${this.id}`, 'X');
-        this.container = this.createCanvas();
-        this.center = { x: this.container.width / 2, y: this.container.height / 2 };
+        this.editButton = this.createButton('button', 'edit-btn', `edit-button-${this.id}`, 'Edit Time');
+        this.clockWrapper.appendChild(this.editButton);
+        this.clockWrapper.appendChild(this.closeButton);
+    }
+
+    private initializeClockFace(): void {
+        this.center = { x: AnalogClockView.CLOCK_FACE_SIZE / 2, y: AnalogClockView.CLOCK_FACE_SIZE / 2 };
         this.radius = this.center.x - 10;
         this.drawClockFace();
+    }
+
+    private initializeNeedleContainers(): void {
         this.createNeedleContainers();
-        this.clockFace.append(this.hourContainer, this.minuteContainer, this.secondContainer, this.closeButton, this.container);
-        document.getElementById('clocks-container')?.appendChild(this.clockWrapper);
+        this.clockFace.append(this.hourContainer, this.minuteContainer, this.secondContainer);
     }
 
     private createElement(tag: string, className?: string, id?: string): HTMLElement {
@@ -45,14 +64,6 @@ export class AnalogClockView {
         const button = this.createElement(tag, className, id) as HTMLButtonElement;
         button.textContent = text;
         return button;
-    }
-
-    private createCanvas(): HTMLCanvasElement {
-        const canvas = this.createElement('canvas') as HTMLCanvasElement;
-        canvas.id = `analog-watch-${this.id}`;
-        canvas.width = AnalogClockView.CANVAS_SIZE;
-        canvas.height = AnalogClockView.CANVAS_SIZE;
-        return canvas;
     }
 
     private createNeedleContainers(): void {
@@ -70,61 +81,62 @@ export class AnalogClockView {
     }
 
     drawClockFace() {
-        this.clockFace = this.createElement('div', 'clock', `clock-face-${this.id}`);
+        this.clockFace = document.createElement('div');
+        this.clockFace.className = 'clock';
+        this.clockFace.id = `clock-face-${this.id}`;
         this.clockFace.style.width = `${this.radius * 2}px`;
         this.clockFace.style.height = `${this.radius * 2}px`;
 
-        // Create numbers for the clock
-        AnalogClockView.CLOCK_NUMBERS.forEach((number, index) => {
-            const angle = ((index - 3) * Math.PI * 2) / 12; // Calculate angle for each number
-            const x = this.radius + Math.cos(angle) * (this.radius - 30); // Adjust number's x position
-            const y = this.radius + Math.sin(angle) * (this.radius - 30); // Adjust number's y position
+        const createClockNumber = (number: string, index: number) => {
+            const angle = ((index - 3) * Math.PI * 2) / 12;
+            const x = this.radius + Math.cos(angle) * (this.radius - 35);
+            const y = this.radius + Math.sin(angle) * (this.radius - 35);
 
-            const numberElement = this.createElement('div', 'clock-number', `clock-number-${number}`);
-            numberElement.innerText = number.toString();
-            numberElement.style.left = `${x}px`;
-            numberElement.style.top = `${y}px`;
-
+            const numberElement = document.createElement('div');
+            numberElement.className = 'clock-number';
+            numberElement.id = `clock-number-${number}`;
+            numberElement.innerText = number;
+            numberElement.style.left = `${x - 3}px`;
+            numberElement.style.top = `${y - 3}px`;
             this.clockFace.appendChild(numberElement);
-        });
+        };
 
-        // Create hour markers (12 main markers)
-        for (let i = 0; i < 12; i++) {
-            const angle = (i * Math.PI * 2) / 12;
-            const x = this.radius + Math.cos(angle) * (this.radius - 15); // Adjusted radius for hour markers
-            const y = this.radius + Math.sin(angle) * (this.radius - 15); // Adjusted radius for hour markers
+        const createClockMarker = (i: number) => {
+            const dialLine = document.createElement('div');
+            dialLine.className = 'clock-marker';
+            dialLine.id = `clock-marker-${i}`;
 
-            const marker = document.createElement('div');
-            marker.classList.add('clock-marker');
-            marker.style.transform += ` rotate(${(angle * 180) / Math.PI}deg)`;
-            marker.style.left = `${x}px`;
-            marker.style.top = `${y}px`;
+            if (i % 5 === 0) {
+                dialLine.style.width = '3px';
+                dialLine.style.height = '17px';
+            }
 
-            this.clockFace.appendChild(marker);
-        }
+            dialLine.style.left = `${this.radius}px`;
+            dialLine.style.top = `${this.radius}px`;
+            dialLine.style.transform = `rotate(${i * 6}deg) translateY(-${this.radius - 5}px)`;
+            dialLine.style.transformOrigin = 'center top';
 
-        // Create minute markers (60 markers)
+            this.clockFace.appendChild(dialLine);
+        };
+
+        // Create clock numbers
+        AnalogClockView.CLOCK_NUMBERS.forEach(createClockNumber);
+
+        // Create markers (60 markers, with every 5th marker larger for hours)
         for (let i = 0; i < 60; i++) {
-            if (i % 5 === 0) continue; // Skip if it is an hour marker
-            const angle = (i * Math.PI * 2) / 60;
-            const x = this.radius + Math.cos(angle) * (this.radius - 10); // Adjusted radius for minute markers
-            const y = this.radius + Math.sin(angle) * (this.radius - 10); // Adjusted radius for minute markers
-
-            const smallMarker = document.createElement('div');
-            smallMarker.classList.add('clock-small-marker');
-            smallMarker.style.transform += ` rotate(${(angle * 270) / Math.PI}deg)`;
-            smallMarker.style.left = `${x}px`;
-            smallMarker.style.top = `${y}px`;
-
-            this.clockFace.appendChild(smallMarker);
+            createClockMarker(i);
         }
 
         // Draw clock center point
-        const centerPoint = this.createElement('div', 'clock-center', `clock-center-${this.id}`);
+        const centerPoint = document.createElement('div');
+        centerPoint.className = 'clock-center';
+        centerPoint.id = `clock-center-${this.id}`;
         this.clockFace.appendChild(centerPoint);
+
         this.clockWrapper.appendChild(this.clockFace);
     }
 
+    // Rotate the needle based on the time
     rotateNeedle(transformedMat: Matrix3x3, timeType: TimeType): void {
         const matrix = `matrix(${transformedMat[0][1]}, ${transformedMat[0][0]}, ${transformedMat[1][1]}, ${transformedMat[1][0]}, 0, 0)`;
         switch (timeType) {
@@ -138,6 +150,81 @@ export class AnalogClockView {
                 this.secondContainer.style.transform = matrix;
                 break;
         }
+    }
+
+    toggleEditMode(): void {
+        this.isInEditMode = !this.isInEditMode;
+    }
+
+    activeEditMode(): void {
+        this.isInEditMode = true;
+        this.minuteNeedleAngleBeforeDrag = this.getMinuteNeedleTransform();
+        this.editButton.textContent = 'Finish Edit';
+    }
+
+    deactivateEditMode(): void {
+        this.editButton.textContent = 'Edit Time';
+        this.minuteNeedleRotationCount = 0;
+        this.minuteNeedleAngleBeforeDrag = 0;
+    }
+
+    getMinuteNeedleTransform(): number {
+        return parseFloat(this.minuteContainer.style.transform.split(',')[0].split('(')[1]);
+    }
+
+    getMinuteNeedleTransformMatrix(): string {
+        return window.getComputedStyle(this.minuteContainer).getPropertyValue('transform');
+    }
+
+    enableMinuteHandleDragging(): void {
+        if (!this.isInEditMode) return;
+
+        const calculateAngle = (e: MouseEvent): number => {
+            const rect = this.clockFace.getBoundingClientRect();
+            const centerX = rect.left + this.radius;
+            const centerY = rect.top + this.radius;
+            const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+            return (angle + 360 + 90) % 360; // Adjust angle relative to minute hand
+        };
+
+        const updateRotationCount = (adjustedAngle: number) => {
+            if (this.minuteNeedleAngleBeforeDrag > 300 && adjustedAngle < 60) {
+                this.minuteNeedleRotationCount++;
+            } else if (this.minuteNeedleAngleBeforeDrag < 60 && adjustedAngle > 300) {
+                this.minuteNeedleRotationCount--;
+            }
+        };
+
+        const moveNeedle = (e: MouseEvent) => {
+            const adjustedAngle = calculateAngle(e);
+            updateRotationCount(adjustedAngle);
+
+            this.minuteNeedleAngleBeforeDrag = adjustedAngle; // Update previous angle
+            this.minuteContainer.style.transform = `rotate(${adjustedAngle}deg)`;
+        };
+
+        this.minuteContainer.addEventListener('mousedown', () => {
+            if (!this.isInEditMode) return;
+
+            document.addEventListener('mousemove', moveNeedle);
+
+            document.addEventListener(
+                'mouseup',
+                () => {
+                    document.removeEventListener('mousemove', moveNeedle);
+                },
+                { once: true }
+            );
+        });
+    }
+
+    // Ajout d'une méthode pour obtenir l'état du mode d'édition
+    isEditModeActive(): boolean {
+        return this.isInEditMode;
+    }
+
+    getEditButton(): HTMLButtonElement {
+        return this.editButton;
     }
 
     addEventToCloseButton(handleCloseButton: () => void): void {
@@ -162,5 +249,9 @@ export class AnalogClockView {
 
     getCenter(): Position {
         return this.center;
+    }
+
+    getMinuteNeedleRotationCount(): number {
+        return this.minuteNeedleRotationCount;
     }
 }

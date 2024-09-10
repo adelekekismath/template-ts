@@ -8,6 +8,7 @@ export class ClockManagerController {
 
     addClock(timezoneOffset: number = 0, type: ClockType): void {
         const clock = this.createClock(type, timezoneOffset);
+        clock.initializeView();
         clock.startClock();
         this.clocks.push(clock);
         this.addEventToCloseButton(clock);

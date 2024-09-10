@@ -12,7 +12,7 @@ export class DigitalClockController extends ClockController {
         super(timezoneOffset);
     }
 
-    protected initializeView(): void {
+    initializeView(): void {
         this.view = new DigitalClockView(this.getId());
     }
 
@@ -81,7 +81,6 @@ export class DigitalClockController extends ClockController {
     }
 
     startClock(): void {
-        this.initializeView();
         this.initializeButonsEvents();
         setInterval(() => {
             this.model.tick(this.incrementHours, this.incrementMinutes);
