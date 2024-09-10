@@ -46,6 +46,9 @@ export class ClockModel {
 
     incrementMinute(): void {
         this.minutes = new MinuteModel(this.minutes.increment());
+        if (this.minutes.get() === 0) {
+            this.incrementHour();
+        }
     }
 
     tick(incrementHours: boolean, incrementMinutes: boolean): void {

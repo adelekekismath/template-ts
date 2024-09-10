@@ -76,14 +76,20 @@ export class AnalogClockController extends ClockController {
             this.stopClock(); // Stop the clock during edit mode
             console.log('Edit mode activated');
         } else {
-            const transform = this.view.getMinuteNeedleTransformMatrix();
-            const angle = this.extractRotationAngleFromTransform(transform);
+            if (this.view.hasClockBeenEdited()) {
+                const transform = this.view.getMinuteNeedleTransformMatrix();
+                const angle = this.extractRotationAngleFromTransform(transform);
 
-            if (angle !== null) {
-                this.updateTimeAfterEdit(angle); // Update time based on the new angle
+                if (angle !== null) {
+                    this.updateTimeAfterEdit(angle); // Update time based on the new angle
+                    this.view.deactivateEditMode();
+                    this.startClock(); // Restart the clock after editing
+                }
+            } else {
                 this.view.deactivateEditMode();
                 this.startClock(); // Restart the clock after editing
             }
+            
         }
     }
 

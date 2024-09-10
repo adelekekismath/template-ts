@@ -8,7 +8,7 @@
 }
 
 .clock-article {
-    border: 2px solid #00BFFF; 
+    border: 2px solid var(--watch-bg); 
     border-radius: 10px;
     background-color: #ffffff;
     padding: 10px;
@@ -20,9 +20,9 @@
 
 .clock {
     position: relative;
-    border: 5px solid black;
+    border: 4px solid var(--watch-bg);
     border-radius: 50%;
-    background: #ececec;
+    background: hsl(270, 25%, 98%);
     margin: 50px auto;
 }
 
@@ -31,22 +31,7 @@
     font-size: 16px;
     font-family: Arial;
     transform: translate(-50%, -50%);
-}
-
-.clock-marker {
-    position: absolute;
-    background-color: black;
-    width: 2px;
-    height: 10px;
-    transform: translate(-50%, -50%);
-}
-
-.clock-small-marker {
-    position: absolute;
-    background-color: #6d6d6d;
-    width: 1px;
-    height: 5px;
-    transform: translate(-50%, -50%);
+    color: var(--watch-bg);
 }
 
 .clock-center {
@@ -76,9 +61,9 @@
 .clock-marker {
     position: absolute;
     z-index: 2;
-    width: 2px;
+    width: 1px;
     height: 8px;
-    background: black;
+    background: var(--watch-bg);
     left: 50%;
     margin-left: -5px;
     margin-top: -2px;
@@ -396,7 +381,7 @@ span.label-format {
     top: 10px;
     left: 10px;
     padding: 10px 20px;
-    background-color: #4385cc; /* Couleur bleue */
+    background-color: var(--watch-bg); 
     color: white;
     border: none;
     border-radius: 8px;
@@ -405,20 +390,20 @@ span.label-format {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Changement de couleur lors du survol */
+
 .edit-btn:hover {
-    background-color: #0056b3;
+    background-color: hsl(270, 96%, 20%);
 }
 
-/* Effet lorsque le bouton est pressé */
+
 .edit-btn:active {
-    background-color: #004080;
-    transform: scale(0.95); /* Réduire légèrement la taille lors du clic */
+    background-color: hsl(270, 70%, 71%);
+    transform: scale(0.95); 
 }
 
-/* Style en mode édition */
+
 .edit-btn.editing {
-    background-color: #FF5733; /* Couleur orange pour indiquer l'édition */
+    background-color: #FF5733; 
 }
 
 .watch__content:after {
@@ -483,7 +468,7 @@ canvas {
     position: relative;
     width: 50vmin;
     height: 40vmin;
-    border: 2px solid #00AEEF;
+    border: 2px solid var(--watch-bg);
     border-radius: 2vmin;
     padding: 10px;
     display: inline-block;

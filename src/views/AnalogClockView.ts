@@ -19,6 +19,7 @@ export class AnalogClockView {
     private isInEditMode: boolean = false;
     private minuteNeedleAngleBeforeDrag: number = 0;
     private minuteNeedleRotationCount: number = 0;
+    private hasBeEdited: boolean = false;
 
     private center: Position;
     private radius: number;
@@ -107,7 +108,7 @@ export class AnalogClockView {
             dialLine.id = `clock-marker-${i}`;
 
             if (i % 5 === 0) {
-                dialLine.style.width = '3px';
+                dialLine.style.width = '2px';
                 dialLine.style.height = '17px';
             }
 
@@ -132,6 +133,17 @@ export class AnalogClockView {
         centerPoint.className = 'clock-center';
         centerPoint.id = `clock-center-${this.id}`;
         this.clockFace.appendChild(centerPoint);
+
+        const logo = document.createElement('img');
+        logo.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d9/GE_HealthCare_logo_2023.png'; 
+        logo.alt = 'GE Healthcare';
+        logo.style.position = 'absolute';
+        logo.style.width = '100px'; 
+        logo.style.height = '30px';
+        logo.style.left = `${this.radius -50}px`; 
+        logo.style.top = `${this.radius - 80}px`; 
+        this.clockFace.appendChild(logo);
+
 
         this.clockWrapper.appendChild(this.clockFace);
     }
@@ -166,6 +178,7 @@ export class AnalogClockView {
         this.editButton.textContent = 'Edit Time';
         this.minuteNeedleRotationCount = 0;
         this.minuteNeedleAngleBeforeDrag = 0;
+        this.hasBeEdited = false;
     }
 
     getMinuteNeedleTransform(): number {
@@ -201,6 +214,7 @@ export class AnalogClockView {
 
             this.minuteNeedleAngleBeforeDrag = adjustedAngle; // Update previous angle
             this.minuteContainer.style.transform = `rotate(${adjustedAngle}deg)`;
+            this.hasBeEdited = true;
         };
 
         this.minuteContainer.addEventListener('mousedown', () => {
@@ -253,5 +267,9 @@ export class AnalogClockView {
 
     getMinuteNeedleRotationCount(): number {
         return this.minuteNeedleRotationCount;
+    }
+
+    hasClockBeenEdited(): boolean {
+        return this.hasBeEdited;
     }
 }
