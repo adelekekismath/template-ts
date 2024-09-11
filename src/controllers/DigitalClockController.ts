@@ -6,7 +6,7 @@ export class DigitalClockController extends ClockController {
     private isHoursEditable = false;
     private isMinutesEditable = false;
     private mode = 0; // 0: Normal, 1: Edit Hours, 2: Edit Minutes
-    private view!: DigitalClockView; 
+    private view!: DigitalClockView;
 
     constructor(timezoneOffset: number) {
         super(timezoneOffset);
@@ -95,35 +95,48 @@ export class DigitalClockController extends ClockController {
     }
 
     makeDraggable(): void {
-        const wrapper = this.view.getClockWrapper();
-        wrapper.draggable = true;
+        const clockWrapper = this.view.getClockWrapper();
+        clockWrapper.draggable = true;
 
-        wrapper.addEventListener('dragstart', (event) => {
-            wrapper.classList.add('dragging');
-            event.dataTransfer!.setData('text/plain', wrapper.id);
+        clockWrapper.addEventListener('dragstart', (event) => {
+            clockWrapper.classList.add('dragging');
+            event.dataTransfer!.setData('text/plain', clockWrapper.id);
             event.dataTransfer!.effectAllowed = 'move';
         });
 
-        wrapper.addEventListener('dragend', () => {
-            wrapper.classList.remove('dragging');
+        clockWrapper.addEventListener('dragend', () => {
+            clockWrapper.classList.remove('dragging');
         });
 
-        wrapper.addEventListener('dragover', (event) => {
-            event.preventDefault();
-        });
+        clockWrapper.addEventListener('dragover', (event) => event.preventDefault());
 
-        wrapper.addEventListener('drop', (event) => {
+        clockWrapper.addEventListener('drop', (event) => {
             event.preventDefault();
             const draggedId = event.dataTransfer?.getData('text/plain');
-            if (draggedId && draggedId !== wrapper.id) {
-                const draggedElement = document.getElementById(draggedId);
-                const parent = wrapper.parentElement;
+            if (!draggedId || draggedId === clockWrapper.id) return;
 
-                if (draggedElement && parent) {
-                    if (wrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
-                        parent.insertBefore(draggedElement, wrapper.nextSibling);
+            const draggedElement = document.getElementById(draggedId);
+            const parent = clockWrapper.parentElement;
+
+            if (draggedElement && parent) {
+                const allClocks = Array.from(parent.children);
+
+                // Find the index of the dropped element and the dragged element
+                const droppedIndex = allClocks.indexOf(clockWrapper);
+                const draggedIndex = allClocks.indexOf(draggedElement);
+
+                if (droppedIndex > -1 && draggedIndex > -1) {
+                    const droppedElement = parent.children[droppedIndex];
+
+                   // Swap the dragged and dropped elements
+                    if (droppedIndex < draggedIndex) {
+                        const nextSibling = draggedElement.nextSibling;
+                        parent.insertBefore(draggedElement, droppedElement);
+                        parent.insertBefore(droppedElement, nextSibling);
                     } else {
-                        parent.insertBefore(draggedElement, wrapper);
+                        const nextSibling = draggedElement.nextSibling;
+                        parent.insertBefore(draggedElement, droppedElement.nextSibling);
+                        parent.insertBefore(droppedElement, nextSibling);
                     }
                 }
             }

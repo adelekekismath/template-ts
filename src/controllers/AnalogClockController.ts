@@ -54,13 +54,11 @@ export class AnalogClockController extends ClockController {
 
     initializeView(): void {
         this.view = new AnalogClockView(this.getId());
+        this.addEventListener(this.view.getEditButton(), 'click', () => this.toggleEditMode());
     }
 
     startClock(): void {
         this.makeDraggable();
-
-        // Add event listener to the edit button
-        this.addEventListener(this.view.getEditButton(), 'click', () => this.toggleEditMode());
         this.intervalId = setInterval(() => {
             this.model.tick(false, false);
             this.render();
@@ -74,7 +72,6 @@ export class AnalogClockController extends ClockController {
         if (this.view.isEditModeActive()) {
             this.view.activeEditMode();
             this.stopClock(); // Stop the clock during edit mode
-            console.log('Edit mode activated');
         } else {
             if (this.view.hasClockBeenEdited()) {
                 const transform = this.view.getMinuteNeedleTransformMatrix();
@@ -82,14 +79,13 @@ export class AnalogClockController extends ClockController {
 
                 if (angle !== null) {
                     this.updateTimeAfterEdit(angle); // Update time based on the new angle
-                    this.view.deactivateEditMode();
-                    this.startClock(); // Restart the clock after editing
                 }
+                this.view.deactivateEditMode();
+                this.startClock(); // Restart the clock after editing
             } else {
                 this.view.deactivateEditMode();
                 this.startClock(); // Restart the clock after editing
             }
-            
         }
     }
 
@@ -114,7 +110,7 @@ export class AnalogClockController extends ClockController {
     }
 
     private calculateMinutesFromAngle(angle: number): number {
-        return Math.round(angle / 6); 
+        return Math.round(angle / 6);
     }
 
     // Method to update the time after editing the clock
@@ -156,21 +152,35 @@ export class AnalogClockController extends ClockController {
         clockWrapper.addEventListener('drop', (event) => {
             event.preventDefault();
             const draggedId = event.dataTransfer?.getData('text/plain');
-            if (draggedId && draggedId !== clockWrapper.id) {
-                const draggedElement = document.getElementById(draggedId);
-                const parent = clockWrapper.parentElement;
+            if (!draggedId || draggedId === clockWrapper.id) return;
 
-                if (draggedElement && parent) {
-                    if (clockWrapper.compareDocumentPosition(draggedElement) & Node.DOCUMENT_POSITION_PRECEDING) {
-                        parent.insertBefore(draggedElement, clockWrapper.nextSibling);
+            const draggedElement = document.getElementById(draggedId);
+            const parent = clockWrapper.parentElement;
+
+            if (draggedElement && parent) {
+                const allClocks = Array.from(parent.children);
+
+                // Find the index of the dropped element and the dragged element
+                const droppedIndex = allClocks.indexOf(clockWrapper);
+                const draggedIndex = allClocks.indexOf(draggedElement);
+
+                if (droppedIndex > -1 && draggedIndex > -1) {
+                    const droppedElement = parent.children[droppedIndex];
+
+                    // Swap the dragged and dropped elements
+                    if (droppedIndex < draggedIndex) {
+                        const nextSibling = draggedElement.nextSibling;
+                        parent.insertBefore(draggedElement, droppedElement);
+                        parent.insertBefore(droppedElement, nextSibling);
                     } else {
-                        parent.insertBefore(draggedElement, clockWrapper);
+                        const nextSibling = draggedElement.nextSibling;
+                        parent.insertBefore(draggedElement, droppedElement.nextSibling);
+                        parent.insertBefore(droppedElement, nextSibling);
                     }
                 }
             }
         });
     }
-
     makeUndraggable(): void {
         const clockWrapper = this.view.getClockWrapper();
         clockWrapper.draggable = false;
