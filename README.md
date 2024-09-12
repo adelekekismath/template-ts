@@ -24,8 +24,9 @@ This project focuses on developing an interactive clock application that support
 - **Analog and Digital Clocks**:  The digital clock was designed to update in real-time, displaying the current time in hours, minutes, and seconds. Initially, the analog clock's hands were erased and redrawn using the <canvas> element, but this approach was resource-intensive. To optimize performance, I transitioned to using the matrix() function in CSS, allowing for smoother and more efficient movement of the clock hands without the need to recreate them entirely each time.
 - **Timezone Management**: Users can select timezones, and the application adjusts the clocks according to the selected GMT offset.
 - **User Interactions**:
-  - Users can add new clocks by selecting the type and timezone.
+  - Users can add new clocks by selecting the clock's type and timezone.
   - Clocks can be rearranged via drag-and-drop and removed individually.
+  -  Users can  directly manipulate the clock hands to set the time, pausing the analog clock during adjustments.
 
 ### Challenges Encountered
 - **Matrix Transformations**: Implementing accurate transformations for the clock hands in the analog clock was challenging. Ensuring that rotations and translations were applied correctly without distorting the hands required careful calculation and testing.
@@ -36,15 +37,9 @@ This project focuses on developing an interactive clock application that support
 
 ### UI Enhancements
 - **Custom Themes**: Implement user-selectable themes to personalize clock appearances.
-- **Accessibility**: Improve keyboard navigation and support for screen readers to broaden the application's usability.
 
 ### Advanced Features
-- **Interactive Analog Clock**: Allow users to directly manipulate the clock hands to set the time, pausing the clock during adjustments.
 - **Multi-language Support**: Add support for multiple languages to enhance global usability.
-
-### Performance Optimizations
-- **Reduce Redundant Operations**: Optimize the drawing routines to minimize CPU usage by eliminating unnecessary redraws.
-- **Efficient Rendering Cycle**: Refine the rendering process to ensure smoother, more responsive updates, especially on lower-powered devices.
 
 ## Conclusion
 This project served as a practical exploration of advanced web development concepts, including DOM manipulation with TypeScript, geometric transformations, and real-time event handling. The challenges faced and overcome during development have laid the foundation for future enhancements and optimizations, making the application both robust and extensible.
