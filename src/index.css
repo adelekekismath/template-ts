@@ -28,8 +28,7 @@
 
 .clock-number {
     position: absolute;
-    font-size: 16px;
-    font-family: Arial;
+    font-size: 1.5vmin;
     transform: translate(-50%, -50%);
     color: var(--watch-bg);
 }
@@ -79,7 +78,6 @@
 .clock-type-label {
     display: block;
     margin: 8px 0;
-    font-size: 1em;
     cursor: pointer;
 }
 
@@ -116,10 +114,9 @@ body {
     place-items: center;
     background: url('../media/18196.jpg');
     margin: 0;
-    font-family: 'Arial', sans-serif;
     background-size: cover; 
     height: 100vh;
-
+    font-size: 2vmin;
 }
 
 button {
@@ -134,10 +131,10 @@ button {
 .increase-button,
 .reset-button,
 .format-button {
-    width: 100%;
-    height: 50%;
+    width: 70%;
+    height: 35%;
     position: absolute;
-    bottom: -0.5vmin;
+    bottom: -0.05vmin;
     border: 0.3vmin solid var(--stroke);
     border-radius: 0.3vmin;
     background: var(--start);
@@ -150,7 +147,7 @@ button {
 .increase-button:active,
 .reset-button:active,
 .format-button:active {
-    height: 50%; 
+    height: 40%; 
     transform: scaleY(0.9); 
 }
 
@@ -222,7 +219,6 @@ button {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 12px;
@@ -246,7 +242,7 @@ span.label-mode {
     left: 3vmin;
     top: -1.4vmin;
     position: relative;
-    font-size: larger;
+    font-size: 2vmin;
 }
 
 span.label-light {
@@ -385,7 +381,7 @@ span.label-format {
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    width: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -432,7 +428,6 @@ canvas {
 .watch-display {
     color: var(--digit);
     display: flex;
-    font-size: 4vmin;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -481,7 +476,7 @@ canvas {
     background-color: transparent;
     border: none;
     color: black;
-    font-size: 18px;
+    font-size: 10px;
     cursor: pointer;
     font-weight: bold;
 }
@@ -498,7 +493,6 @@ canvas {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
-    font-family: Arial, sans-serif;
 }
 
 .dialog-form {
@@ -516,7 +510,8 @@ canvas {
     padding: 5px;
     border-radius: 4px;
     margin-bottom: 20px;
-    width: 100%;
+    width: 80%;
+    font-size: 2vmin;
 }
 
 .dialog-buttons {
@@ -526,10 +521,11 @@ canvas {
 }
 
 .button {
-    padding: 8px 12px;
+    padding: 4px 6px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .confirm-button {
