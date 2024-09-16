@@ -49,7 +49,7 @@ export class DigitalClockView {
         this.increaseButton = this.createControlButton('increase', 'increase-watch', DigitalClockView.LABELS.increase);
 
         this.hourElement = this.createElement('div', 'digit m');
-        const separator = this.createElement('span');
+        const separator = this.createElement('span', 'digit');
         separator.textContent = ':';
         this.minuteElement = this.createElement('div', 'digit second s');
         this.secondElement = this.createElement('div', 'digit digit--small ms');

@@ -3,7 +3,7 @@ import { Matrix3x3 } from '../utils/MatrixUtils';
 
 export class AnalogClockView {
     private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper clock-article';
-    private static readonly CLOCK_FACE_SIZE = 145;
+    private static readonly CLOCK_FACE_SIZE = 220;
     private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
     private closeButton: HTMLButtonElement;
@@ -90,8 +90,8 @@ export class AnalogClockView {
 
         const createClockNumber = (number: string, index: number) => {
             const angle = ((index - 3) * Math.PI * 2) / 12;
-            const x = this.radius + Math.cos(angle) * (this.radius - 35);
-            const y = this.radius + Math.sin(angle) * (this.radius - 35);
+            const x = this.radius + Math.cos(angle) * (this.radius - 25);
+            const y = this.radius + Math.sin(angle) * (this.radius - 25);
 
             const numberElement = document.createElement('div');
             numberElement.className = 'clock-number';
@@ -109,7 +109,7 @@ export class AnalogClockView {
 
             if (i % 5 === 0) {
                 dialLine.style.width = '2px';
-                dialLine.style.height = '17px';
+                dialLine.style.height = '10px';
             }
 
             dialLine.style.left = `${this.radius}px`;
@@ -138,10 +138,10 @@ export class AnalogClockView {
         logo.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d9/GE_HealthCare_logo_2023.png'; 
         logo.alt = 'GE Healthcare';
         logo.style.position = 'absolute';
-        logo.style.width = '100px'; 
-        logo.style.height = '30px';
+        logo.style.width = '85px'; 
+        logo.style.height = '15px';
         logo.style.left = `${this.radius -50}px`; 
-        logo.style.top = `${this.radius - 80}px`; 
+        logo.style.top = `${this.radius - 50}px`; 
         this.clockFace.appendChild(logo);
 
 
