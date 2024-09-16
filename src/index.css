@@ -1,131 +1,130 @@
 .clocks-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    position: relative;
-    top: 10%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+  top: 10%;
 }
 
 .clock-article {
-    border: 2px solid var(--watch-bg); 
-    border-radius: 10px;
-    background-color: #ffffff;
-    padding: 10px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    overflow: hidden; 
-    min-width: 290px;
-    min-height: 230px;
+  border: 2px solid var(--watch-bg);
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  min-width: 290px;
+  min-height: 230px;
 }
 
 .clock {
-    position: relative;
-    border: 4px solid var(--watch-bg);
-    border-radius: 50%;
-    background: hsl(270, 25%, 98%);
-    margin: 15px auto;
+  position: relative;
+  border: 4px solid var(--watch-bg);
+  border-radius: 50%;
+  background: hsl(270, 25%, 98%);
+  margin: 15px auto;
 }
 
 .clock-number {
-    position: absolute;
-    font-size: 1.5vmin;
-    transform: translate(-50%, -50%);
-    color: var(--watch-bg);
+  position: absolute;
+  font-size: 1.5vmin;
+  transform: translate(-50%, -50%);
+  color: var(--watch-bg);
 }
 
 .clock-center {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: black;
-    border-radius: 50%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .clock-article:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .clock-type-fieldset {
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: #f9f9f9;
-    padding-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  padding-bottom: 20px;
 }
 
 .clock-marker {
-    position: absolute;
-    z-index: 2;
-    width: 1px;
-    height: 5px;
-    background: var(--watch-bg);
-    left: 50%;
-    margin-left: -5px;
-    margin-top: -2px;
-    transform-origin: 50% 150px;
+  position: absolute;
+  z-index: 2;
+  width: 1px;
+  height: 5px;
+  background: var(--watch-bg);
+  left: 50%;
+  margin-left: -5px;
+  margin-top: -2px;
+  transform-origin: 50% 150px;
 }
 
 .clock-type-legend {
-    font-weight: bold;
-    color: #333;
-    padding: 0 10px;
+  font-weight: bold;
+  color: #333;
+  padding: 0 10px;
 }
 
 .clock-type-label {
-    display: block;
-    margin: 8px 0;
-    cursor: pointer;
+  display: block;
+  margin: 8px 0;
+  cursor: pointer;
 }
 
 .clock-type-label input {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
-
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
 
 *,
 *:before,
 *:after {
-    box-sizing: border-box;
-    user-select: none;
+  box-sizing: border-box;
+  user-select: none;
 }
 
 :root {
-    --digit: hsl(87, 43%, 4%);
-    --face: hsl(96, 33%, 97%);
-    --content: hsl(0, 0%, 40%);
-    --glare: hsla(0, 0%, 100%, 0.2);
-    --watch-bg: hsl(270, 100%, 30%);
-    --stroke: hsl(0, 0%, 15%);
-    --start: hsl(50, 100%, 50%);
-    --start-two: hsl(50, 100%, 50%);
-    --background: hsl(0, 13%, 78%);
+  --digit: hsl(87, 43%, 4%);
+  --face: hsl(96, 33%, 97%);
+  --content: hsl(0, 0%, 40%);
+  --glare: hsla(0, 0%, 100%, 0.2);
+  --watch-bg: hsl(270, 100%, 30%);
+  --stroke: hsl(0, 0%, 15%);
+  --start: hsl(50, 100%, 50%);
+  --start-two: hsl(50, 100%, 50%);
+  --background: hsl(0, 13%, 78%);
 }
 
 body {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: url('../media/18196.jpg');
-    margin: 0;
-    background-size: cover; 
-    height: 100vh;
-    font-size: 2vmin;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: url("../media/18196.jpg");
+  margin: 0;
+  background-size: cover;
+  height: 100vh;
+  font-size: 2.3vmin !important;
 }
 
 button {
-    appearance: none;
-    border: 0;
-    outline: transparent;
-    background: none;
+  appearance: none;
+  border: 0;
+  outline: transparent;
+  background: none;
+  font-size: 2.3vmin;
 }
 
 .mode-button,
@@ -133,15 +132,15 @@ button {
 .increase-button,
 .reset-button,
 .format-button {
-    width: 70%;
-    height: 35%;
-    position: absolute;
-    bottom: -0.05vmin;
-    border: 0.3vmin solid var(--stroke);
-    border-radius: 0.3vmin;
-    background: var(--start);
-    overflow: hidden;
-    transition: transform 0.2s ease, height 0.2s ease;
+  width: 70%;
+  height: 35%;
+  position: absolute;
+  bottom: -0.05vmin;
+  border: 0.3vmin solid var(--stroke);
+  border-radius: 0.3vmin;
+  background: var(--start);
+  overflow: hidden;
+  transition: transform 0.2s ease, height 0.2s ease;
 }
 
 .mode-button:active,
@@ -149,397 +148,399 @@ button {
 .increase-button:active,
 .reset-button:active,
 .format-button:active {
-    height: 40%; 
-    transform: scaleY(0.9); 
+  height: 40%;
+  transform: scaleY(0.9);
 }
 
 .reset-button,
 .format-button {
-    background-color: #3e8e41;
+  background-color: #3e8e41;
 }
 
-.minute-container, .hour-container, .second-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+.minute-container,
+.hour-container,
+.second-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-.minute-container{
-    pointer-events: auto;
-    z-index: 10;
-    
+.minute-container {
+  pointer-events: auto;
+  z-index: 10;
 }
 
 .hour-needle {
-    background: teal;
-    height: 35%;
-    left: 48.75%;
-    position: absolute;
-    top: 20%;
-    transform-origin: 50% 100%;
-    width: 1.5%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
+  background: teal;
+  height: 35%;
+  left: 48.75%;
+  position: absolute;
+  top: 20%;
+  transform-origin: 50% 100%;
+  width: 1.5%;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
 }
 
 .minute-needle {
-    background: purple;
-    height: 45%;
-    left: 49%;
-    position: absolute;
-    top: 10%;
-    transform-origin: 50% 100%;
-    width: 1.1%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    pointer-events: auto;
-    z-index: 10;
+  background: purple;
+  height: 45%;
+  left: 49%;
+  position: absolute;
+  top: 10%;
+  transform-origin: 50% 100%;
+  width: 1.1%;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  pointer-events: auto;
+  z-index: 10;
 }
 
 .second-needle {
-    background: coral;
-    height: 50%;
-    left: 49.5%;
-    position: absolute;
-    top: 7%;
-    transform-origin: 50% 80%;
-    width: 0.8%;
-    z-index: 8;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
+  background: coral;
+  height: 50%;
+  left: 49.5%;
+  position: absolute;
+  top: 7%;
+  transform-origin: 50% 80%;
+  width: 0.8%;
+  z-index: 8;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
 }
 
 #add-clock-btn {
-    top: 50%;
-    position: relative;
-    background-color: #4CAF50; /* Vert */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-    box-shadow: 0 4px #2d6b35;
-    transition: background-color 0.3s ease;
+  top: 50%;
+  position: relative;
+  background-color: #4caf50; /* Vert */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  box-shadow: 0 4px #2d6b35;
+  transition: background-color 0.3s ease;
 }
 
 #add-clock-btn:hover {
-    background-color: #45a049; /* Vert plus clair au survol */
+  background-color: #45a049; /* Vert plus clair au survol */
 }
 
 #add-clock-btn:active {
-    background-color: #3e8e41; /* Vert plus foncé lors du clic */
-    box-shadow: 0 2px #2d6b35;
-    transform: translateY(2px);
+  background-color: #3e8e41; /* Vert plus foncé lors du clic */
+  box-shadow: 0 2px #2d6b35;
+  transform: translateY(2px);
 }
 
 span.label-mode {
-    display: inline-block; 
-    transform: rotate(-39deg);
-    left: 3vmin;
-    top: -1.4vmin;
-    position: relative;
-    font-size: 2vmin;
+  display: inline-block;
+  transform: rotate(-39deg);
+  left: 3vmin;
+  top: -1.4vmin;
+  position: relative;
+  font-size: 2vmin;
 }
 
 span.label-light {
-    display: inline-block; 
-    transform: rotate(-230deg);
-    position: relative;
-    top: -1.5vmin;
-    font-size: 2vmin;
+  display: inline-block;
+  transform: rotate(-230deg);
+  position: relative;
+  top: -1.5vmin;
+  font-size: 2vmin;
 }
 
 span.label-increase {
-    display: inline-block; 
-    transform: rotate(230deg);
-    position: relative;
-    top: -2.3vmin;
-    left: -2.2vmin;
-    font-size: 2vmin;
+  display: inline-block;
+  transform: rotate(230deg);
+  position: relative;
+  top: -2.3vmin;
+  left: -2.2vmin;
+  font-size: 2vmin;
 }
 
 span.label-reset {
-    display: inline-block;
-    transform: rotate(39deg);
-    position: relative;
-    top: -1.3vmin;
-    font-size: 2vmin;
-    right: 2.5vmin;
+  display: inline-block;
+  transform: rotate(39deg);
+  position: relative;
+  top: -1.3vmin;
+  font-size: 2vmin;
+  right: 2.5vmin;
 }
 
 span.label-format {
-    display: inline-block;
-    transform: rotate(-90deg);
-    position: relative;
-    top: -5vmin;
-    font-size: 2vmin;
-    right: 4.5vmin;
-    width: 13vmin;
-    
+  display: inline-block;
+  transform: rotate(-90deg);
+  position: relative;
+  top: -5vmin;
+  font-size: 2vmin;
+  right: 4.5vmin;
+  width: 13vmin;
 }
-
 
 .mode-button:after,
 .light-button:after,
 .increase-button:after,
 .reset-button:after,
 .format-button:after {
-    content: '';
-    height: 100%;
-    width: 100%;
-    border-radius: 1vmin;
-    background: var(--start-two);
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    transform: translate(-20%, 35%);
+  content: "";
+  height: 100%;
+  width: 100%;
+  border-radius: 1vmin;
+  background: var(--start-two);
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  transform: translate(-20%, 35%);
 }
 
-.reset-button:after, .format-button:after {
-    background-color: #3e8e41;
+.reset-button:after,
+.format-button:after {
+  background-color: #3e8e41;
 }
 
 .watch {
-    height: 30vmin;
-    width: 30vmin;
-    background-color: var(--watch-bg);
-    border-radius: 50%;
-    border: 0.3vmin solid var(--stroke);
-    position: relative;
-    left: 2.8vmin;
-    top: 2.5vmin;
-
+  height: 30vmin;
+  width: 30vmin;
+  background-color: var(--watch-bg);
+  border-radius: 50%;
+  border: 0.3vmin solid var(--stroke);
+  position: relative;
+  left: 2.8vmin;
+  top: 2.5vmin;
 }
 
 .watch-control {
-    --size: min(35px, 10vmin);
-    height: var(--size);
-    width: var(--size);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transition: transform 0.05s;
-    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translate(0, -17.1vmin) translateY(calc(var(--y, 0) * 1%));
-    z-index: 10;
+  --size: min(35px, 10vmin);
+  height: var(--size);
+  width: var(--size);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transition: transform 0.05s;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg))
+    translate(0, -17.1vmin) translateY(calc(var(--y, 0) * 1%));
+  z-index: 10;
 }
 
 .mode-watch {
-    --rotation: 40deg;
+  --rotation: 40deg;
 }
 
 .reset-watch {
-    --rotation: -40deg;
+  --rotation: -40deg;
 }
 
 .light-watch {
-    --rotation: -130deg;
+  --rotation: -130deg;
 }
 
 .format-watch {
-    --rotation: 90deg;
+  --rotation: 90deg;
 }
 
 .increase-watch {
-    --rotation: 130deg;
+  --rotation: 130deg;
 }
 
 .watch__content {
-    height: 40vmin;
-    border: 0.5vmin solid var(--stroke);
-    width: 40vmin;
-    background-color: var(--content);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
+  height: 40vmin;
+  border: 0.5vmin solid var(--stroke);
+  width: 40vmin;
+  background-color: var(--content);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
 }
 
 .watch__content:before {
-    box-shadow: 0 0 0 5vmin var(--shadow);
-    border-radius: 50%;
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 100%;
-    width: 100%;
-    transform: translate(-50%, -50%) translate(0, 2%);
+  box-shadow: 0 0 0 5vmin var(--shadow);
+  border-radius: 50%;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  transform: translate(-50%, -50%) translate(0, 2%);
 }
 
 .edit-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 5px 10px;
-    background-color: var(--watch-bg); 
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  background-color: var(--watch-bg);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 
 .edit-btn:hover {
-    background-color: hsl(270, 96%, 20%);
+  background-color: hsl(270, 96%, 20%);
 }
-
 
 .edit-btn:active {
-    background-color: hsl(270, 70%, 71%);
-    transform: scale(0.95); 
+  background-color: hsl(270, 70%, 71%);
+  transform: scale(0.95);
 }
 
-
 .edit-btn.editing {
-    background-color: #FF5733; 
+  background-color: #ff5733;
 }
 
 .watch__content:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 100%;
-    width: 100%;
-    transform: translate(-50%, -50%) rotate(-50deg);
-    background: linear-gradient(transparent 0 15%, var(--glare) 16% 35%, transparent 36% 40%, var(--glare) 41% 45%, transparent 46%);
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  transform: translate(-50%, -50%) rotate(-50deg);
+  background: linear-gradient(
+    transparent 0 15%,
+    var(--glare) 16% 35%,
+    transparent 36% 40%,
+    var(--glare) 41% 45%,
+    transparent 46%
+  );
 }
 .watch-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 canvas {
-    position: relative;
-    top: 10%;
-    bottom: 10%;
+  position: relative;
+  top: 10%;
+  bottom: 10%;
 }
 
 .watch-display {
-    color: var(--digit);
-    display: flex;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1.75vmin;
-    border-radius: 1vmin;
-    background: var(--face);
-    width: 25vmin;
-    height: 8vmin;
-    justify-content: center;
+  color: var(--digit);
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.75vmin;
+  border-radius: 1vmin;
+  background: var(--face);
+  width: 25vmin;
+  height: 8vmin;
+  justify-content: center;
 }
 
 .digit {
-    font-size: 4vmin;
+  font-size: 4vmin;
 }
 
 .ms {
-    padding-left: 1vmin;
-    font-size: 2.4vmin !important;
-    transform: translate(0, 38%);
-    position: relative;
-    bottom: 0;
-    right: 0;
+  padding-left: 1vmin;
+  font-size: 2.4vmin !important;
+  transform: translate(0, 38%);
+  position: relative;
+  bottom: 0;
+  right: 0;
 }
 
 .blinking {
-    animation: blinker 1s linear infinite;
+  animation: blinker 1s linear infinite;
 }
 
 @keyframes blinker {
-    50% {
-        opacity: 0;
-    }
+  50% {
+    opacity: 0;
+  }
 }
 
 .clock-wrapper {
-    position: relative;
-    width: 50vmin;
-    height: 40vmin;
-    border: 2px solid var(--watch-bg);
-    border-radius: 2vmin;
-    padding: 10px;
-    display: inline-block;
+  position: relative;
+  width: 50vmin;
+  height: 40vmin;
+  border: 2px solid var(--watch-bg);
+  border-radius: 2vmin;
+  padding: 10px;
+  display: inline-block;
 }
 
 .close-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: transparent;
-    border: none;
-    color: black;
-    font-size: 10px;
-    cursor: pointer;
-    font-weight: bold;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-size: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .close-btn:hover {
-    color: red;
+  color: red;
 }
 
 .custom-dialog {
-    border: none;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
 }
 
 .dialog-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .dialog-form label {
-    margin-bottom: 10px;
-    font-weight: bold;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 #timezone {
-    padding: 5px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    width: 80%;
-    font-size: 2vmin;
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 80%;
+  font-size: 2vmin;
 }
 
 .dialog-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .button {
-    padding: 4px 6px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .confirm-button {
-    background-color: #4CAF50;
-    color: white;
+  background-color: #4caf50;
+  color: white;
 }
 
 .cancel-button {
-    background-color: #f44336;
-    color: white;
+  background-color: #f44336;
+  color: white;
 }
-

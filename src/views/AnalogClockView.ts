@@ -138,8 +138,8 @@ export class AnalogClockView {
         logo.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d9/GE_HealthCare_logo_2023.png'; 
         logo.alt = 'GE Healthcare';
         logo.style.position = 'absolute';
-        logo.style.width = '85px'; 
-        logo.style.height = '15px';
+        logo.style.width = '95px'; 
+        logo.style.height = '20px';
         logo.style.left = `${this.radius -50}px`; 
         logo.style.top = `${this.radius - 50}px`; 
         this.clockFace.appendChild(logo);
