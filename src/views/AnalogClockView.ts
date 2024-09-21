@@ -2,8 +2,8 @@ import { Position, TimeType } from '../models/Type';
 import { Matrix3x3 } from '../utils/MatrixUtils';
 
 export class AnalogClockView {
-    private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper clock-article';
-    private static readonly CLOCK_FACE_SIZE = 220;
+    private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper analog clock-article';
+    private static readonly CLOCK_FACE_SIZE = 280;
     private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
     private closeButton: HTMLButtonElement;

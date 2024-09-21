@@ -17,7 +17,7 @@
   transition: transform 0.3s ease;
   overflow: hidden;
   min-width: 290px;
-  min-height: 230px;
+  min-height: 300px;
 }
 
 .clock {
@@ -30,7 +30,7 @@
 
 .clock-number {
   position: absolute;
-  font-size: 1.5vmin;
+  font-size: clamp(10px, 1.8vmin, 20px);
   transform: translate(-50%, -50%);
   color: var(--watch-bg);
 }
@@ -116,7 +116,7 @@ body {
   margin: 0;
   background-size: cover;
   height: 100vh;
-  font-size: 2.3vmin !important;
+  font-size:  clamp(10px, 2.3vmin, 20px);
 }
 
 button {
@@ -124,7 +124,8 @@ button {
   border: 0;
   outline: transparent;
   background: none;
-  font-size: 2.3vmin;
+  font-size: clamp(10px, 2vmin, 20px);
+  font-family: inherit !important;
 }
 
 .mode-button,
@@ -135,11 +136,13 @@ button {
   width: 70%;
   height: 35%;
   position: absolute;
-  bottom: -0.05vmin;
+  bottom: -4px;
   border: 0.3vmin solid var(--stroke);
   border-radius: 0.3vmin;
   background: var(--start);
   overflow: hidden;
+  min-width: 28px;
+  min-height: 9px;
   transition: transform 0.2s ease, height 0.2s ease;
 }
 
@@ -226,6 +229,7 @@ button {
   border-radius: 12px;
   box-shadow: 0 4px #2d6b35;
   transition: background-color 0.3s ease;
+  font-family: inherit ;
 }
 
 #add-clock-btn:hover {
@@ -244,7 +248,6 @@ span.label-mode {
   left: 3vmin;
   top: -1.4vmin;
   position: relative;
-  font-size: 2vmin;
 }
 
 span.label-light {
@@ -252,7 +255,6 @@ span.label-light {
   transform: rotate(-230deg);
   position: relative;
   top: -1.5vmin;
-  font-size: 2vmin;
 }
 
 span.label-increase {
@@ -261,7 +263,6 @@ span.label-increase {
   position: relative;
   top: -2.3vmin;
   left: -2.2vmin;
-  font-size: 2vmin;
 }
 
 span.label-reset {
@@ -269,7 +270,6 @@ span.label-reset {
   transform: rotate(39deg);
   position: relative;
   top: -1.3vmin;
-  font-size: 2vmin;
   right: 2.5vmin;
 }
 
@@ -278,7 +278,6 @@ span.label-format {
   transform: rotate(-90deg);
   position: relative;
   top: -5vmin;
-  font-size: 2vmin;
   right: 4.5vmin;
   width: 13vmin;
 }
@@ -311,6 +310,8 @@ span.label-format {
   border-radius: 50%;
   border: 0.3vmin solid var(--stroke);
   position: relative;
+  min-width: 200px;
+  min-height: 200px;
   left: 2.8vmin;
   top: 2.5vmin;
 }
@@ -444,12 +445,13 @@ canvas {
 }
 
 .digit {
-  font-size: 4vmin;
+  font-size: clamp(30px, 4vmin, 40px) ;
+
 }
 
 .ms {
   padding-left: 1vmin;
-  font-size: 2.4vmin !important;
+  font-size: clamp(15px, 2.3vmin, 25px)!important;
   transform: translate(0, 38%);
   position: relative;
   bottom: 0;
@@ -473,7 +475,17 @@ canvas {
   border: 2px solid var(--watch-bg);
   border-radius: 2vmin;
   padding: 10px;
+  position: relative;
+}
+
+.digital {
   display: inline-block;
+}
+
+.analog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .close-btn {
@@ -486,6 +498,7 @@ canvas {
   font-size: 10px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1.7vmin;
 }
 
 .close-btn:hover {
@@ -518,7 +531,8 @@ canvas {
   border-radius: 4px;
   margin-bottom: 20px;
   width: 80%;
-  font-size: 2vmin;
+  font-size: clamp(10px, 2vmin, 20px);
+  font-family: inherit;
 }
 
 .dialog-buttons {

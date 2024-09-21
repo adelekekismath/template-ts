@@ -3,7 +3,7 @@ import { TimeType } from '../models/Type';
 export class DigitalClockView {
     private static readonly YELLOW_COLOR: string = '#FBE106';
     private static readonly WHITE_COLOR: string = '#FFFFFF';
-    private static readonly CLOCK_WRAPPER_CLASS: string = 'clock-wrapper clock-article';
+    private static readonly CLOCK_WRAPPER_CLASS: string = 'clock-wrapper digital clock-article';
     private static readonly BUTTON_CLASSES = {
         close: 'close-btn',
         reset: 'reset-button',
