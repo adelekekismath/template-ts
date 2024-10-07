@@ -1,7 +1,7 @@
 /**
  * Generic class to manage time units (hours, minutes, seconds).
  */
-class TimeModel {
+export class TimeModel {
     constructor(private readonly value: number, private readonly max: number) {}
 
     /**
@@ -19,29 +19,3 @@ class TimeModel {
     }
 }
 
-/**
- * Manager for hours, using TimeModel with a 24-hour cycle.
- */
-export class HourModel extends TimeModel {
-    constructor(hours: number) {
-        super(hours, 24);
-    }
-}
-
-/**
- * Manager for minutes, using TimeModel with a 60-minute cycle.
- */
-export class MinuteModel extends TimeModel {
-    constructor(minutes: number) {
-        super(minutes, 60);
-    }
-}
-
-/**
- * Manager for seconds, using TimeModel with a 60-second cycle.
- */
-export class SecondModel extends TimeModel {
-    constructor(seconds: number) {
-        super(seconds, 60);
-    }
-}

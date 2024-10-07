@@ -39,7 +39,7 @@ This project focuses on developing an interactive clock application that support
 - **Custom Themes**: Implement user-selectable themes to personalize clock appearances.
 
 ### Advanced Features
-- **Multi-language Support**: Add support for multiple languages to enhance global usability.
+- **Multi-language Support**: Add support for multiple languages to enhance Main usability.
 
 ## Conclusion
 This project served as a practical exploration of advanced web development concepts, including DOM manipulation with TypeScript, geometric transformations, and real-time event handling. The challenges faced and overcome during development have laid the foundation for future enhancements and optimizations, making the application both robust and extensible.

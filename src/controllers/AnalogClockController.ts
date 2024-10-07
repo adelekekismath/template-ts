@@ -60,7 +60,7 @@ export class AnalogClockController extends ClockController {
     startClock(): void {
         this.makeDraggable();
         this.intervalId = setInterval(() => {
-            this.model.tick(false, false);
+            this.tick();
             this.render();
         }, 1000);
     }
@@ -120,7 +120,7 @@ export class AnalogClockController extends ClockController {
 
         const hoursToAdjust = this.view.getMinuteNeedleRotationCount(); // Get the number of hours to adjust
 
-        this.model.setMinutes(newMinutes);
+        this.setMinutes(newMinutes);
 
         // Adjust the hours if necessary
         if (hoursToAdjust !== 0) {

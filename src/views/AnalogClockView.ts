@@ -1,4 +1,4 @@
-import { Position, TimeType } from '../models/Type';
+import { Format, Position, TimeType } from '../models/Type';
 import { Matrix3x3 } from '../utils/MatrixUtils';
 
 export class AnalogClockView {
@@ -42,6 +42,8 @@ export class AnalogClockView {
         this.clockWrapper.appendChild(this.editButton);
         this.clockWrapper.appendChild(this.closeButton);
     }
+
+    
 
     private initializeClockFace(): void {
         this.center = { x: AnalogClockView.CLOCK_FACE_SIZE / 2, y: AnalogClockView.CLOCK_FACE_SIZE / 2 };

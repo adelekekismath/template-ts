@@ -3,7 +3,7 @@ import { AnalogClockController } from './AnalogClockController';
 import { ClockController } from './ClockController';
 import { ClockType } from '../models/Type';
 
-export class ClockManagerController {
+export class ClocksController {
     private clocks: ClockController[] = [];
 
     addClock(timezoneOffset: number = 0, type: ClockType): void {
@@ -29,4 +29,5 @@ export class ClockManagerController {
             clockToRemove.deleteClock(); 
         }
     }
+    
 }

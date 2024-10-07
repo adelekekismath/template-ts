@@ -1,102 +1,67 @@
-import { HourModel, MinuteModel, SecondModel } from "./TimeUnitsModel";
+import { TimeModel } from "./TimeUnitsModel";
 
-enum Format {
-    AM_PM = 'AM_PM',
-    H24 = 'H24',
-}
 
 export class ClockModel {
-    private hours: HourModel;
-    private minutes: MinuteModel;
-    private seconds: SecondModel;
+    private hours: TimeModel;
+    private minutes: TimeModel;
+    private seconds: TimeModel;
     private timeZoneOffset: number;
     private amPmFormat: string = '';
 
     constructor(timeZoneOffset: number = 0) {
         this.timeZoneOffset = timeZoneOffset;
-        const now = this.getTimeWithOffset();
-        this.hours = new HourModel(now.getHours());
-        this.minutes = new MinuteModel(now.getMinutes());
-        this.seconds = new SecondModel(now.getSeconds());
+        const now = this.getTimeZoneOffset();
+        this.hours = new TimeModel(now.getHours(), 23);
+        this.minutes = new TimeModel(now.getMinutes(), 60);
+        this.seconds = new TimeModel(now.getSeconds(), 60);
     }
 
     getHours(): number {
         return this.hours.get();
     }
 
+    setHours(hours: number): void {
+        this.hours = new TimeModel(hours, 23);
+    }
+
     getMinutes(): number {
         return this.minutes.get();
+    }
+
+    setMinutes(minutes: number): void {
+        this.minutes = new TimeModel(minutes, 60);
     }
 
     getSeconds(): number {
         return this.seconds.get();
     }
 
-    getCurrentTime(format: Format): string {
-        const hours = this.formatTime(this.hours.get(), format);
-        const minutes = this.formatTime(this.minutes.get());
-        const seconds = this.formatTime(this.seconds.get());
-        const amPm = format === Format.AM_PM ? this.amPmFormat : '';
-        return `${hours}:${minutes}:${seconds} ${amPm}`;
+    setSeconds(seconds: number): void {
+        this.seconds = new TimeModel(seconds, 60);
     }
 
-    incrementHour(): void {
-        this.hours = new HourModel(this.hours.increment());
+    incrementHours(): void {
+        this.hours = new TimeModel(this.hours.increment(), 23);
     }
 
-    incrementMinute(): void {
-        this.minutes = new MinuteModel(this.minutes.increment());
+    incrementMinutes(): void {
+        this.minutes = new TimeModel(this.minutes.increment(), 60);
         if (this.minutes.get() === 0) {
-            this.incrementHour();
+            this.incrementHours();
         }
     }
 
-    tick(incrementHours: boolean, incrementMinutes: boolean): void {
-        this.seconds = new SecondModel(this.seconds.increment());
-
+    incrementSeconds(): void {
+        this.seconds = new TimeModel(this.seconds.increment(), 60);
         if (this.seconds.get() === 0) {
-            this.incrementMinute();
-            if (this.minutes.get() === 0) {
-                this.incrementHour();
-            }
-        }
-
-        if (incrementMinutes) {
-            this.incrementMinute();
-        }
-
-        if (incrementHours) {
-            this.incrementHour();
+            this.incrementMinutes();
         }
     }
 
-    resetToCurrentTime(): void {
-        const now = this.getTimeWithOffset();
-        this.hours = new HourModel(now.getHours());
-        this.minutes = new MinuteModel(now.getMinutes());
-        this.seconds = new SecondModel(now.getSeconds());
-    }
 
-    private getTimeWithOffset(): Date {
-        const time = new Date();
-        time.setHours(time.getUTCHours() + this.timeZoneOffset);
-        return time;
-    }
-
-    private formatTime(value: number, format?: Format): string {
-        if (format === Format.AM_PM) {
-            this.amPmFormat = value >= 12 ? 'PM' : 'AM';
-            value = value > 12 ? value - 12 : value;
-        }
-        return value < 10 ? `0${value}` : `${value}`;
-    }
-    setMinutes(minutes: number): void {
-        this.minutes = new MinuteModel(minutes % 60); 
-        const hours = Math.floor(minutes / 60);
-        this.hours = new HourModel(this.hours.get() + hours);
-    }
-
-    setHours(hours: number): void {
-        this.hours = new HourModel(hours % 24);
+    getTimeZoneOffset(): Date {
+        const now = new Date();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        return new Date(utc + (3600000 * this.timeZoneOffset));
     }
 }

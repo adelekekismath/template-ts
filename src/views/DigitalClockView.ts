@@ -1,4 +1,4 @@
-import { TimeType } from '../models/Type';
+import { TimeType, Format } from '../models/Type';
 
 export class DigitalClockView {
     private static readonly YELLOW_COLOR: string = '#FBE106';
@@ -19,6 +19,7 @@ export class DigitalClockView {
         format: 'AM/PM-24H',
         increase: 'Increase',
     };
+    private format : Format = Format.H24;
 
     private backgroundColor: string = DigitalClockView.WHITE_COLOR;
     private clockWrapper: HTMLElement;
@@ -45,7 +46,7 @@ export class DigitalClockView {
         this.resetButton = this.createControlButton('reset', 'reset-watch', DigitalClockView.LABELS.reset);
         this.modeButton = this.createControlButton('mode', 'mode-watch', DigitalClockView.LABELS.mode);
         this.lightButton = this.createControlButton('light', 'light-watch', DigitalClockView.LABELS.light);
-        this.formatButton = this.createControlButton('format', 'format-watch', DigitalClockView.LABELS.format);
+        this.formatButton = this.createControlButton('format' , 'format-watch ', DigitalClockView.LABELS.format);
         this.increaseButton = this.createControlButton('increase', 'increase-watch', DigitalClockView.LABELS.increase);
 
         this.hourElement = this.createElement('div', 'digit m');
@@ -53,7 +54,7 @@ export class DigitalClockView {
         separator.textContent = ':';
         this.minuteElement = this.createElement('div', 'digit second s');
         this.secondElement = this.createElement('div', 'digit digit--small ms');
-        this.formatElement = this.createElement('div', 'format');
+        this.formatElement = this.createElement('div', 'format digit digit--small ms');
 
         this.assembleClock(watch, watchContainer, separator);
         this.attachToDOM('clocks-container');
@@ -71,6 +72,7 @@ export class DigitalClockView {
         button.textContent = text;
         return button;
     }
+    
 
     private createControlButton(
         control: keyof typeof DigitalClockView.BUTTON_CLASSES,
@@ -120,12 +122,25 @@ export class DigitalClockView {
         return this.lightButton;
     }
 
-    displayTime(time: string): void {
-        const [hours, minutes, seconds, format] = time.split(':');
-        this.hourElement.textContent = hours;
-        this.minuteElement.textContent = minutes;
-        this.secondElement.textContent = seconds;
-        this.formatElement.textContent = format;
+    toggleFormat(): void {
+        this.format = this.format === Format.H24 ? Format.AM_PM : Format.H24;
+    }
+
+    displayTime(time: Date): void {
+        this.hourElement.textContent = this.formaTime(time.getHours());
+        this.minuteElement.textContent = time.getMinutes().toString().padStart(2, '0');
+        this.secondElement.textContent = time.getSeconds().toString().padStart(2, '0');
+        this.formatElement.textContent = this.format === Format.AM_PM ? time.getHours() >= 12 ? 'PM' : 'AM' : '';
+    }
+
+    formaTime(unit: number): string {
+        if (this.format === Format.AM_PM) {
+            const amPm = unit >= 12 ? 'PM' : 'AM';
+            unit = unit % 12 || 12;
+            if (unit < 10) return `0${unit}`;
+            return `${unit}`;
+        }
+        return unit.toString().padStart(2, '0');
     }
 
     toggleBackgroundColor(): void {
