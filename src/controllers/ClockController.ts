@@ -1,5 +1,5 @@
 import { ClockModel } from '../models/ClockModel';
-import { Format } from '../models/Type';
+import { Format, TimeType } from '../models/Type';
 import {TimeModel} from '../models/TimeUnitsModel'
 
 export abstract class ClockController {
@@ -34,23 +34,14 @@ export abstract class ClockController {
     }
 
 
-
-    protected currentTime(): Date {
-        return this.model.getTimeZoneOffset();
-    }
-
-
     protected setMinutes(minutes: number): void {
-        this.model.setMinutes(minutes);
+        this.model.setTimeUnit(TimeType.MINUTES, minutes);
         const hours = Math.floor(minutes / 60);
-        this.model.setHours(hours);
+        this.model.setTimeUnit(TimeType.HOURS, hours);
     }
-
-
- 
 
     tick(): void {
-        this.model.incrementSeconds();
+        this.model.incrementTimeUnit(TimeType.SECONDS);
     }
 
     abstract initializeView(): void;

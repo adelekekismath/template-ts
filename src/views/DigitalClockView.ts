@@ -1,6 +1,7 @@
-import { TimeType, Format } from '../models/Type';
+import { ClockModel } from '../models/ClockModel';
+import { TimeType, Format, Observer } from '../models/Type';
 
-export class DigitalClockView {
+export class DigitalClockView implements Observer {
     private static readonly YELLOW_COLOR: string = '#FBE106';
     private static readonly WHITE_COLOR: string = '#FFFFFF';
     private static readonly CLOCK_WRAPPER_CLASS: string = 'clock-wrapper digital clock-article';
@@ -35,7 +36,8 @@ export class DigitalClockView {
     private secondElement: HTMLElement;
     private formatElement: HTMLElement;
 
-    constructor(private id: number) {
+    constructor(private id: number, private model: ClockModel) {
+        this.model.addObserver(this);
         this.clockWrapper = this.createElement('article', DigitalClockView.CLOCK_WRAPPER_CLASS, `digital-clock-wrapper-${this.id}`);
         this.closeButton = this.createButton('button', DigitalClockView.BUTTON_CLASSES.close, `close-button-${this.id}`, 'X');
 
@@ -59,6 +61,7 @@ export class DigitalClockView {
         this.assembleClock(watch, watchContainer, separator);
         this.attachToDOM('clocks-container');
     }
+
 
     private createElement(tag: string, className?: string, id?: string): HTMLElement {
         const element = document.createElement(tag);
@@ -126,11 +129,26 @@ export class DigitalClockView {
         this.format = this.format === Format.H24 ? Format.AM_PM : Format.H24;
     }
 
-    displayTime(time: Date): void {
-        this.hourElement.textContent = this.formaTime(time.getHours());
-        this.minuteElement.textContent = time.getMinutes().toString().padStart(2, '0');
-        this.secondElement.textContent = time.getSeconds().toString().padStart(2, '0');
-        this.formatElement.textContent = this.format === Format.AM_PM ? time.getHours() >= 12 ? 'PM' : 'AM' : '';
+    update(data: { value: number, type: TimeType }): void {
+        switch (data.type) {
+            case TimeType.HOURS:
+                this.hourElement.textContent = this.formaTime(data.value);
+                this.formatElement.textContent = this.format === Format.AM_PM ? data.value >= 12 ? 'PM' : 'AM' : '';
+                break;
+            case TimeType.MINUTES:
+                this.minuteElement.textContent = data.value.toString().padStart(2, '0');
+                break;
+            case TimeType.SECONDS:
+                this.secondElement.textContent = data.value.toString().padStart(2, '0');
+                break;
+        }
+        
+    }
+
+    initializeClock(hours: number, minutes: number, seconds: number): void {
+        this.hourElement.textContent = hours.toString().padStart(2, '0');
+        this.minuteElement.textContent = minutes.toString().padStart(2, '0');
+        this.secondElement.textContent = seconds.toString().padStart(2, '0');
     }
 
     formaTime(unit: number): string {

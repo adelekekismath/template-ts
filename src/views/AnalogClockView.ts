@@ -1,7 +1,8 @@
-import { Format, Position, TimeType } from '../models/Type';
+import { ClockModel } from '../models/ClockModel';
+import { Format, Observer, Position, TimeType } from '../models/Type';
 import { Matrix3x3 } from '../utils/MatrixUtils';
 
-export class AnalogClockView {
+export class AnalogClockView implements Observer {
     private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper analog clock-article';
     private static readonly CLOCK_FACE_SIZE = 280;
     private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
@@ -25,7 +26,8 @@ export class AnalogClockView {
     private radius: number;
     private id: number;
 
-    constructor(id: number) {
+    constructor(id: number, private model : ClockModel) {
+        this.model.addObserver(this);
         this.id = id;
         this.initializeClockWrapper();
         this.initializeClockFace();
@@ -136,24 +138,15 @@ export class AnalogClockView {
         centerPoint.id = `clock-center-${this.id}`;
         this.clockFace.appendChild(centerPoint);
 
-        const logo = document.createElement('img');
-        logo.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d9/GE_HealthCare_logo_2023.png'; 
-        logo.alt = 'GE Healthcare';
-        logo.style.position = 'absolute';
-        logo.style.width = '95px'; 
-        logo.style.height = '20px';
-        logo.style.left = `${this.radius -50}px`; 
-        logo.style.top = `${this.radius - 50}px`; 
-        this.clockFace.appendChild(logo);
-
 
         this.clockWrapper.appendChild(this.clockFace);
     }
 
     // Rotate the needle based on the time
-    rotateNeedle(transformedMat: Matrix3x3, timeType: TimeType): void {
+    update(data: { transformedMat: Matrix3x3, type: TimeType }): void {
+        const { transformedMat, type } = data;
         const matrix = `matrix(${transformedMat[0][1]}, ${transformedMat[0][0]}, ${transformedMat[1][1]}, ${transformedMat[1][0]}, 0, 0)`;
-        switch (timeType) {
+        switch (type) {
             case TimeType.HOURS:
                 this.hourContainer.style.transform = matrix;
                 break;

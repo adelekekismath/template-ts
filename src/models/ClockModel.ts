@@ -1,67 +1,126 @@
+import { Matrix3x3 } from "../utils/MatrixUtils";
 import { TimeModel } from "./TimeUnitsModel";
+import { ClockType, Observer, TimeType } from "./Type";
 
+export class Observable {
+    private observers: Observer[] = [];
 
-export class ClockModel {
-    private hours: TimeModel;
-    private minutes: TimeModel;
-    private seconds: TimeModel;
+    addObserver(observer: Observer): void {
+        this.observers.push(observer);
+    }
+
+    removeObserver(observer: Observer): void {
+        this.observers = this.observers.filter(obs => obs !== observer);
+    }
+
+    notifyObservers(data: any): void {
+        this.observers.forEach(observer => observer.update(data));
+    }
+}
+
+export class ClockModel extends Observable {
+    private static readonly MAX_HOURS = 24;
+    private static readonly MAX_MINUTES_SECONDS = 60;
+
+    private timeUnits: Record<TimeType, TimeModel>;
     private timeZoneOffset: number;
-    private amPmFormat: string = '';
+    private clockType: ClockType;
 
-    constructor(timeZoneOffset: number = 0) {
+    constructor(timeZoneOffset: number = 0, clockType: ClockType = ClockType.DIGITAL) {
+        super();
         this.timeZoneOffset = timeZoneOffset;
-        const now = this.getTimeZoneOffset();
-        this.hours = new TimeModel(now.getHours(), 23);
-        this.minutes = new TimeModel(now.getMinutes(), 60);
-        this.seconds = new TimeModel(now.getSeconds(), 60);
+        this.clockType = clockType;
+        const now = this.getTimezoneOffset();
+
+        this.timeUnits = {
+            [TimeType.HOURS]: new TimeModel(now.getHours(), ClockModel.MAX_HOURS),
+            [TimeType.MINUTES]: new TimeModel(now.getMinutes(), ClockModel.MAX_MINUTES_SECONDS),
+            [TimeType.SECONDS]: new TimeModel(now.getSeconds(), ClockModel.MAX_MINUTES_SECONDS),
+        };
     }
 
-    getHours(): number {
-        return this.hours.get();
+    getTimeUnit(type: TimeType): number {
+        return this.timeUnits[type].get();
     }
 
-    setHours(hours: number): void {
-        this.hours = new TimeModel(hours, 23);
+    setTimeUnit(type: TimeType, value: number): void {
+        this.timeUnits[type] = new TimeModel(value, this.getMaxValueForType(type));
+        this.notifyIfDigital({ value: this.timeUnits[type].get(), type });
     }
 
-    getMinutes(): number {
-        return this.minutes.get();
+    incrementTimeUnit(type: TimeType): void {
+        const maxVal = this.getMaxValueForType(type);
+        const currentModel = this.timeUnits[type];
+
+        this.timeUnits[type] = new TimeModel(currentModel.increment(), maxVal);
+
+        if (type === TimeType.SECONDS && this.timeUnits[TimeType.SECONDS].get() === 0) {
+            this.incrementTimeUnit(TimeType.MINUTES);
+        } else if (type === TimeType.MINUTES && this.timeUnits[TimeType.MINUTES].get() === 0) {
+            this.incrementTimeUnit(TimeType.HOURS);
+        }
+
+        this.notifyIfDigital({ value: this.timeUnits[type].get(), type });
     }
 
-    setMinutes(minutes: number): void {
-        this.minutes = new TimeModel(minutes, 60);
-    }
-
-    getSeconds(): number {
-        return this.seconds.get();
-    }
-
-    setSeconds(seconds: number): void {
-        this.seconds = new TimeModel(seconds, 60);
-    }
-
-    incrementHours(): void {
-        this.hours = new TimeModel(this.hours.increment(), 23);
-    }
-
-    incrementMinutes(): void {
-        this.minutes = new TimeModel(this.minutes.increment(), 60);
-        if (this.minutes.get() === 0) {
-            this.incrementHours();
+    private notifyIfDigital(data: { value: number, type: TimeType }): void {
+        if (this.clockType === ClockType.DIGITAL) {
+            this.notifyObservers(data);
         }
     }
 
-    incrementSeconds(): void {
-        this.seconds = new TimeModel(this.seconds.increment(), 60);
-        if (this.seconds.get() === 0) {
-            this.incrementMinutes();
-        }
-    }
-
-
-    getTimeZoneOffset(): Date {
+    private getTimezoneOffset(): Date {
         const now = new Date();
         const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
         return new Date(utc + (3600000 * this.timeZoneOffset));
+    }
+
+    private getMaxValueForType(type: TimeType): number {
+        if (type === TimeType.HOURS) {
+            return ClockModel.MAX_HOURS;
+        }
+        return ClockModel.MAX_MINUTES_SECONDS;
+    }
+
+    setHourMatrix(matrix: Matrix3x3): void {
+        throw new Error('Method not implemented.');
+    }
+    setMinuteMatrix(matrix: Matrix3x3): void {
+        throw new Error('Method not implemented.');
+    }
+
+    setSecondMatrix(matrix: Matrix3x3): void {
+        throw new Error('Method not implemented.');
+    }
+
+
+}
+
+export class AnalogClockModel extends ClockModel {
+    private matrices: Record<TimeType, Matrix3x3> = {
+        [TimeType.HOURS]: null,
+        [TimeType.MINUTES]: null,
+        [TimeType.SECONDS]: null,
+    };
+
+    constructor(timeZoneOffset: number = 0) {
+        super(timeZoneOffset, ClockType.ANALOG);
+    }
+
+    setMatrix(type: TimeType, matrix: Matrix3x3): void {
+        this.matrices[type] = matrix;
+        this.notifyObservers({ transformedMat: matrix, type });
+    }
+
+    setHourMatrix(matrix: Matrix3x3): void {
+        this.setMatrix(TimeType.HOURS, matrix);
+    }
+
+    setMinuteMatrix(matrix: Matrix3x3): void {
+        this.setMatrix(TimeType.MINUTES, matrix);
+    }
+
+    setSecondMatrix(matrix: Matrix3x3): void {
+        this.setMatrix(TimeType.SECONDS, matrix);
     }
 }

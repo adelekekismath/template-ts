@@ -13,12 +13,10 @@ export class DigitalClockController extends ClockController {
     }
 
     initializeView(): void {
-        this.view = new DigitalClockView(this.getId());
+        this.view = new DigitalClockView(this.getId(), this.model);
+        this.view.initializeClock(this.model.getTimeUnit(TimeType.HOURS), this.model.getTimeUnit(TimeType.MINUTES), this.model.getTimeUnit(TimeType.SECONDS));
     }
 
-    private updateTimeDisplay(): void {
-        this.view.displayTime(this.currentTime());
-    }
 
     private blink(timeType: TimeType): void {
         this.view.blinkElement(timeType);
@@ -35,11 +33,10 @@ export class DigitalClockController extends ClockController {
 
     handleIncreaseButton(): void {
         if (this.isHoursEditable) {
-            this.model.incrementHours();
+            this.model.incrementTimeUnit(TimeType.HOURS);
         } else if (this.isMinutesEditable) {
-            this.model.incrementMinutes();
+            this.model.incrementTimeUnit(TimeType.MINUTES);
         }
-        this.updateTimeDisplay();
     }
 
     handleModeButton(): void {
@@ -59,12 +56,10 @@ export class DigitalClockController extends ClockController {
 
     handleResetButton(): void {
         this.resetClock();
-        this.updateTimeDisplay();
     }
 
     handleFormatButton(): void {
         this.view.toggleFormat();
-        this.updateTimeDisplay();
     }
 
     addEventToCloseButton(removeClock: (clockNumber: number) => void): void {
@@ -86,7 +81,6 @@ export class DigitalClockController extends ClockController {
             this.tick();
             this.incrementHours = false;
             this.incrementMinutes = false;
-            this.updateTimeDisplay();
         }, 1000);
     }
 

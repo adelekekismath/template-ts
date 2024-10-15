@@ -31,7 +31,6 @@ export class MainController {
         const selectedTimezone = this.view.getSelectedTimezone();
         const selectedType = this.view.getSelectedClockType();
         const clockType = selectedType === 'analog' ? ClockType.ANALOG : ClockType.DIGITAL;
-        console.log(selectedType);
         this.clocksController.addClock(parseInt(selectedTimezone), clockType);
         this.view.closeDialog();
     }

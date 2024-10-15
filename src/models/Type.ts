@@ -20,3 +20,7 @@ export enum ClockType {
     ANALOG,
     DIGITAL,
 }
+
+export interface Observer {
+    update(data: any): void;
+}

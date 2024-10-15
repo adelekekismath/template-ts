@@ -1,4 +1,8 @@
-export  type Matrix3x3 = number[][];
+export type Matrix3x3 = [
+    [number, number, number],
+    [number, number, number],
+    [number, number, number]
+];
 
 export function identityMatrix(): Matrix3x3 {
     return [

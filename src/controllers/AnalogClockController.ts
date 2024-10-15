@@ -1,6 +1,7 @@
 import { AnalogClockView } from '../views/AnalogClockView';
 import { ClockController } from './ClockController';
 import { Matrix3x3, multiplyMatrices, rotationMatrix, scalingMatrix, translationMatrix } from '../utils/MatrixUtils';
+import { AnalogClockModel } from '../models/ClockModel';
 import { TimeType } from '../models/Type';
 
 
@@ -19,6 +20,7 @@ export class AnalogClockController extends ClockController {
 
     constructor(timezoneOffset: number) {
         super(timezoneOffset);
+        this.model = new AnalogClockModel(timezoneOffset);
     }
 
     deleteClock(): void {
@@ -37,23 +39,22 @@ export class AnalogClockController extends ClockController {
     }
 
     render(): void {
-        const secondsAngle = this.model.getSeconds() * AnalogClockController.DEGREES_PER_SECOND;
+        const secondsAngle = this.model.getTimeUnit(TimeType.SECONDS) * AnalogClockController.DEGREES_PER_SECOND;
         const minutesAngle =
-            this.model.getMinutes() * AnalogClockController.DEGREES_PER_MINUTE +
-            this.model.getSeconds() * AnalogClockController.ADDITIONAL_MINUTE_ANGLE;
-        const hoursAngle = (this.model.getHours() % 12) * AnalogClockController.DEGREES_PER_HOUR;
+            this.model.getTimeUnit(TimeType.MINUTES) * AnalogClockController.DEGREES_PER_MINUTE +
+            this.model.getTimeUnit(TimeType.SECONDS) * AnalogClockController.ADDITIONAL_MINUTE_ANGLE;
+        const hoursAngle = (this.model.getTimeUnit(TimeType.HOURS) % 12) * AnalogClockController.DEGREES_PER_HOUR;
 
-        const hourMatrix = this.rotateHandle(hoursAngle);
-        const minuteMatrix = this.rotateHandle(minutesAngle);
-        const secondMatrix = this.rotateHandle(secondsAngle);
+        this.model.setMinuteMatrix(this.rotateHandle(minutesAngle));
+        this.model.setHourMatrix(this.rotateHandle(hoursAngle));
+        this.model.setSecondMatrix(this.rotateHandle(secondsAngle));
 
-        this.view.rotateNeedle(hourMatrix, TimeType.HOURS);
-        this.view.rotateNeedle(minuteMatrix, TimeType.MINUTES);
-        this.view.rotateNeedle(secondMatrix, TimeType.SECONDS);
     }
+    
 
     initializeView(): void {
-        this.view = new AnalogClockView(this.getId());
+        this.view = new AnalogClockView(this.getId(), this.model);
+        this.render();
         this.addEventListener(this.view.getEditButton(), 'click', () => this.toggleEditMode());
     }
 
@@ -116,7 +117,7 @@ export class AnalogClockController extends ClockController {
     // Method to update the time after editing the clock
     private updateTimeAfterEdit(adjustedAngle: number): void {
         const newMinutes = this.calculateMinutesFromAngle(adjustedAngle); // Calculate the new minutes based on the angle
-        const currentHours = this.model.getHours();
+        const currentHours = this.model.getTimeUnit(TimeType.HOURS);
 
         const hoursToAdjust = this.view.getMinuteNeedleRotationCount(); // Get the number of hours to adjust
 
@@ -124,8 +125,7 @@ export class AnalogClockController extends ClockController {
 
         // Adjust the hours if necessary
         if (hoursToAdjust !== 0) {
-            console.log(`Adjusting hours by ${hoursToAdjust}`);
-            this.model.setHours(currentHours + hoursToAdjust);
+            this.model.setTimeUnit(TimeType.HOURS, currentHours + hoursToAdjust);
         }
     }
 

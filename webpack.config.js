@@ -28,7 +28,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'GE Empty Template',
+            title: 'Time Manager',
             template: path.join(process.cwd(), 'src/index.html'),
             filename: 'index.html',
         }),
