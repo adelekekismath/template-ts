@@ -1,14 +1,14 @@
 import { ClockModel } from '../models/ClockModel';
 import { Format, Observer, Position, TimeType } from '../models/Type';
 import { Matrix3x3 } from '../utils/MatrixUtils';
+import { ClockView } from './ClockView';
 
-export class AnalogClockView implements Observer {
+export class AnalogClockView extends ClockView implements Observer {
     private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper analog clock-article';
     private static readonly CLOCK_FACE_SIZE = 280;
     private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
-    private closeButton: HTMLButtonElement;
-    private clockWrapper: HTMLElement;
+
     private clockFace: HTMLElement;
     private hourContainer: HTMLElement;
     private minuteContainer: HTMLElement;
@@ -27,6 +27,7 @@ export class AnalogClockView implements Observer {
     private id: number;
 
     constructor(id: number, private model : ClockModel) {
+        super(id);
         this.model.addObserver(this);
         this.id = id;
         this.initializeClockWrapper();
@@ -58,18 +59,6 @@ export class AnalogClockView implements Observer {
         this.clockFace.append(this.hourContainer, this.minuteContainer, this.secondContainer);
     }
 
-    private createElement(tag: string, className?: string, id?: string): HTMLElement {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (id) element.id = id;
-        return element;
-    }
-
-    private createButton(tag: string, className: string, id: string, text: string): HTMLButtonElement {
-        const button = this.createElement(tag, className, id) as HTMLButtonElement;
-        button.textContent = text;
-        return button;
-    }
 
     private createNeedleContainers(): void {
         this.hourContainer = this.createElement('div', 'hour-container', `hour-container-${this.id}`);

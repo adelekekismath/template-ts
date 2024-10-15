@@ -50,5 +50,4 @@ export abstract class ClockController {
         return this.id;
     }
     abstract deleteClock(): void;
-    abstract makeDraggable(): void;
 }

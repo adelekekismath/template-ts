@@ -59,7 +59,7 @@ export class AnalogClockController extends ClockController {
     }
 
     startClock(): void {
-        this.makeDraggable();
+        this.view.makeDraggable();
         this.intervalId = setInterval(() => {
             this.tick();
             this.render();
@@ -105,7 +105,7 @@ export class AnalogClockController extends ClockController {
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
-            this.makeUndraggable();
+            this.view.makeUndraggable();
             this.view.enableMinuteHandleDragging();
         }
     }
@@ -133,58 +133,6 @@ export class AnalogClockController extends ClockController {
         this.addEventListener(this.view.getCloseButton(), 'click', () => removeClock(this.getId()));
     }
 
-    makeDraggable(): void {
-        const clockWrapper = this.view.getClockWrapper();
-        clockWrapper.draggable = true;
-
-        clockWrapper.addEventListener('dragstart', (event) => {
-            clockWrapper.classList.add('dragging');
-            event.dataTransfer!.setData('text/plain', clockWrapper.id);
-            event.dataTransfer!.effectAllowed = 'move';
-        });
-
-        clockWrapper.addEventListener('dragend', () => {
-            clockWrapper.classList.remove('dragging');
-        });
-
-        clockWrapper.addEventListener('dragover', (event) => event.preventDefault());
-
-        clockWrapper.addEventListener('drop', (event) => {
-            event.preventDefault();
-            const draggedId = event.dataTransfer?.getData('text/plain');
-            if (!draggedId || draggedId === clockWrapper.id) return;
-
-            const draggedElement = document.getElementById(draggedId);
-            const parent = clockWrapper.parentElement;
-
-            if (draggedElement && parent) {
-                const allClocks = Array.from(parent.children);
-
-                // Find the index of the dropped element and the dragged element
-                const droppedIndex = allClocks.indexOf(clockWrapper);
-                const draggedIndex = allClocks.indexOf(draggedElement);
-
-                if (droppedIndex > -1 && draggedIndex > -1) {
-                    const droppedElement = parent.children[droppedIndex];
-
-                    // Swap the dragged and dropped elements
-                    if (droppedIndex < draggedIndex) {
-                        const nextSibling = draggedElement.nextSibling;
-                        parent.insertBefore(draggedElement, droppedElement);
-                        parent.insertBefore(droppedElement, nextSibling);
-                    } else {
-                        const nextSibling = draggedElement.nextSibling;
-                        parent.insertBefore(draggedElement, droppedElement.nextSibling);
-                        parent.insertBefore(droppedElement, nextSibling);
-                    }
-                }
-            }
-        });
-    }
-    makeUndraggable(): void {
-        const clockWrapper = this.view.getClockWrapper();
-        clockWrapper.draggable = false;
-    }
 
     protected handleIncreaseButton(): void {
         throw new Error('Method not implemented.');

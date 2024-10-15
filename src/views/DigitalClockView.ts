@@ -1,7 +1,8 @@
 import { ClockModel } from '../models/ClockModel';
 import { TimeType, Format, Observer } from '../models/Type';
+import { ClockView } from './ClockView';
 
-export class DigitalClockView implements Observer {
+export class DigitalClockView extends ClockView implements Observer {
     private static readonly YELLOW_COLOR: string = '#FBE106';
     private static readonly WHITE_COLOR: string = '#FFFFFF';
     private static readonly CLOCK_WRAPPER_CLASS: string = 'clock-wrapper digital clock-article';
@@ -23,9 +24,7 @@ export class DigitalClockView implements Observer {
     private format : Format = Format.H24;
 
     private backgroundColor: string = DigitalClockView.WHITE_COLOR;
-    private clockWrapper: HTMLElement;
     private watchDisplay: HTMLElement;
-    private closeButton: HTMLElement;
     private resetButton: HTMLElement;
     private modeButton: HTMLElement;
     private lightButton: HTMLElement;
@@ -37,6 +36,7 @@ export class DigitalClockView implements Observer {
     private formatElement: HTMLElement;
 
     constructor(private id: number, private model: ClockModel) {
+        super(id);
         this.model.addObserver(this);
         this.clockWrapper = this.createElement('article', DigitalClockView.CLOCK_WRAPPER_CLASS, `digital-clock-wrapper-${this.id}`);
         this.closeButton = this.createButton('button', DigitalClockView.BUTTON_CLASSES.close, `close-button-${this.id}`, 'X');
@@ -60,20 +60,6 @@ export class DigitalClockView implements Observer {
 
         this.assembleClock(watch, watchContainer, separator);
         this.attachToDOM('clocks-container');
-    }
-
-
-    private createElement(tag: string, className?: string, id?: string): HTMLElement {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (id) element.id = id;
-        return element;
-    }
-
-    private createButton(tag: string, className: string, id: string, text: string): HTMLElement {
-        const button = this.createElement(tag, className, id);
-        button.textContent = text;
-        return button;
     }
     
 
