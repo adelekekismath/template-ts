@@ -1,3 +1,4 @@
+import { parseInt } from "lodash";
 import { Matrix3x3 } from "../utils/MatrixUtils";
 import { TimeModel } from "./TimeUnitsModel";
 import { ClockType, Observer, TimeType } from "./Type";
@@ -70,9 +71,15 @@ export class ClockModel extends Observable {
     }
 
     private getTimezoneOffset(): Date {
+        const GMT_Hours = Math.floor(this.timeZoneOffset);
+        const GMT_Minutes = Math.fround(this.timeZoneOffset - GMT_Hours) * 60;
+        console.log("GMT_Hours: ", GMT_Hours);
         const now = new Date();
         const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-        return new Date(utc + (3600000 * this.timeZoneOffset));
+        if( GMT_Minutes <= 0) {
+            return new Date(utc + (3600000 * GMT_Hours));
+        }
+        return new Date(utc + (3600000 * GMT_Hours) + (60000 * GMT_Minutes));
     }
 
     private getMaxValueForType(type: TimeType): number {

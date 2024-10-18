@@ -19,6 +19,7 @@ export class MainController {
     initialize(): void {
         this.view.onAddClockBtnClick(() => this.handleAddClock());
         this.view.onConfirmTimezoneBtnClick(()=> this.handleConfirmTimezone())
+        this.view.onCloseDialogBtnClick(() => this.view.closeDialog());
     }
 
     handleAddClock(): void {
@@ -31,7 +32,8 @@ export class MainController {
         const selectedTimezone = this.view.getSelectedTimezone();
         const selectedType = this.view.getSelectedClockType();
         const clockType = selectedType === 'analog' ? ClockType.ANALOG : ClockType.DIGITAL;
-        this.clocksController.addClock(parseInt(selectedTimezone), clockType);
+        this.clocksController.addClock(parseFloat(selectedTimezone), clockType);
+        
         this.view.closeDialog();
     }
 

@@ -1,6 +1,5 @@
 import { ClockModel } from '../models/ClockModel';
-import { Format, TimeType } from '../models/Type';
-import {TimeModel} from '../models/TimeUnitsModel'
+import { TimeType } from '../models/Type';
 
 export abstract class ClockController {
     private id: number;
