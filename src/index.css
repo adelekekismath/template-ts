@@ -112,7 +112,8 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: url("../media/18196.jpg");
+  background: linear-gradient(white,var(--watch-bg));
+  background-size: cover;
   margin: 0;
   background-size: cover;
   height: 100vh;
