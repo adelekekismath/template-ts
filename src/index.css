@@ -30,7 +30,6 @@
 
 .clock-number {
   position: absolute;
-  font-size: clamp(10px, 1.8vmin, 20px);
   transform: translate(-50%, -50%);
   color: var(--watch-bg);
 }
@@ -117,7 +116,7 @@ body {
   margin: 0;
   background-size: cover;
   height: 100vh;
-  font-size:  clamp(10px, 2.3vmin, 20px);
+  font-size:  clamp(10px, 1.5rem, 20px);
 }
 
 button {
@@ -125,7 +124,7 @@ button {
   border: 0;
   outline: transparent;
   background: none;
-  font-size: clamp(10px, 2vmin, 20px);
+  font-size: inherit;
   font-family: inherit !important;
 }
 
@@ -138,8 +137,8 @@ button {
   height: 35%;
   position: absolute;
   bottom: -4px;
-  border: 0.3vmin solid var(--stroke);
-  border-radius: 0.3vmin;
+  border: 1px solid var(--stroke);
+  border-radius: 3px;
   background: var(--start);
   overflow: hidden;
   min-width: 28px;
@@ -246,8 +245,8 @@ button {
 span.label-mode {
   display: inline-block;
   transform: rotate(-39deg);
-  left: 3vmin;
-  top: -1.4vmin;
+  left: 0px;
+  top: -12px;
   position: relative;
 }
 
@@ -255,32 +254,32 @@ span.label-light {
   display: inline-block;
   transform: rotate(-230deg);
   position: relative;
-  top: -1.5vmin;
+  top: -15px;
 }
 
 span.label-increase {
   display: inline-block;
   transform: rotate(230deg);
   position: relative;
-  top: -2.3vmin;
-  left: -2.2vmin;
+  top: -13.8px;
+  left: -13.2px;
 }
 
 span.label-reset {
   display: inline-block;
   transform: rotate(39deg);
   position: relative;
-  top: -1.3vmin;
-  right: 2.5vmin;
+  top: -13px;
+  right: 15px;
 }
 
 span.label-format {
   display: inline-block;
   transform: rotate(-90deg);
   position: relative;
-  top: -5vmin;
-  right: 4.5vmin;
-  width: 13vmin;
+  top: -40px;
+  right: 28px;
+  width: 78px;
 }
 
 .mode-button:after,
@@ -291,7 +290,7 @@ span.label-format {
   content: "";
   height: 100%;
   width: 100%;
-  border-radius: 1vmin;
+  border-radius: 6px;
   background: var(--start-two);
   position: absolute;
   bottom: 100%;
@@ -305,20 +304,20 @@ span.label-format {
 }
 
 .watch {
-  height: 30vmin;
-  width: 30vmin;
+  height: 180px;
+  width: 180px;
   background-color: var(--watch-bg);
   border-radius: 50%;
-  border: 0.3vmin solid var(--stroke);
+  border: 1px solid var(--stroke);
   position: relative;
   min-width: 200px;
   min-height: 200px;
-  left: 2.8vmin;
-  top: 2.5vmin;
+  left: 16.8px;
+  top: 15px;
 }
 
 .watch-control {
-  --size: min(35px, 10vmin);
+  --size: min(35px, 60px);
   height: var(--size);
   width: var(--size);
   position: absolute;
@@ -326,8 +325,9 @@ span.label-format {
   left: 50%;
   transition: transform 0.05s;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg))
-    translate(0, -17.1vmin) translateY(calc(var(--y, 0) * 1%));
+    translate(0, -120px) translateY(calc(var(--y, 0) * 1%));
   z-index: 10;
+  font-size: 18px;
 }
 
 .mode-watch {
@@ -351,9 +351,9 @@ span.label-format {
 }
 
 .watch__content {
-  height: 40vmin;
-  border: 0.5vmin solid var(--stroke);
-  width: 40vmin;
+  height: 240px;
+  border: 3px solid var(--stroke);
+  width: 240px;
   background-color: var(--content);
   border-radius: 50%;
   position: absolute;
@@ -364,7 +364,7 @@ span.label-format {
 }
 
 .watch__content:before {
-  box-shadow: 0 0 0 5vmin var(--shadow);
+  box-shadow: 0 0 0 30px var(--shadow);
   border-radius: 50%;
   content: "";
   position: absolute;
@@ -437,22 +437,22 @@ canvas {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 1.75vmin;
-  border-radius: 1vmin;
+  padding: 11px;
+  border-radius: 6px;
   background: var(--face);
-  width: 25vmin;
-  height: 8vmin;
+  width: 150px;
+  height: 48px;
   justify-content: center;
 }
 
 .digit {
-  font-size: clamp(30px, 4vmin, 40px) ;
+  font-size: clamp(30px, 24px, 40px) ;
 
 }
 
 .ms {
-  padding-left: 1vmin;
-  font-size: clamp(15px, 2.3vmin, 25px)!important;
+  padding-left: 6px;
+  font-size: clamp(15px, 13.8px, 25px)!important;
   transform: translate(0, 38%);
   position: relative;
   bottom: 0;
@@ -471,16 +471,17 @@ canvas {
 
 .clock-wrapper {
   position: relative;
-  width: 50vmin;
-  height: 40vmin;
+  width: 350px;
+  height: 250px;
   border: 2px solid var(--watch-bg);
-  border-radius: 2vmin;
+  border-radius: 12px;
   padding: 10px;
   position: relative;
 }
 
 .digital {
   display: inline-block;
+  padding: 30px 0 0 30px
 }
 
 .analog {
@@ -499,7 +500,7 @@ canvas {
   font-size: 10px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 1.7vmin;
+  font-size: inherit
 }
 
 .close-btn:hover {
@@ -532,7 +533,7 @@ canvas {
   border-radius: 4px;
   margin-bottom: 20px;
   width: 80%;
-  font-size: clamp(10px, 2vmin, 20px);
+  font-size: inherit;
   font-family: inherit;
 }
 

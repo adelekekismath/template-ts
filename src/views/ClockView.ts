@@ -4,7 +4,8 @@ export class ClockView {
 
     constructor(id: number) {
         this.clockWrapper = this.createElement('div', 'clock-wrapper', `clock-wrapper-${id}`);
-        this.closeButton = this.createButton('button', 'close-button', `close-button-${id}`, 'X');
+        this.closeButton = this.createButton('button', 'close-btn', `close-button-${id}`, '');
+        this.closeButton.innerHTML= `<i class="fa-solid fa-xmark"></i>`;
     }
 
     protected createElement(tag: string, className?: string, id?: string): HTMLElement {

@@ -39,7 +39,7 @@ export class DigitalClockView extends ClockView implements Observer {
         super(id);
         this.model.addObserver(this);
         this.clockWrapper = this.createElement('article', DigitalClockView.CLOCK_WRAPPER_CLASS, `digital-clock-wrapper-${this.id}`);
-        this.closeButton = this.createButton('button', DigitalClockView.BUTTON_CLASSES.close, `close-button-${this.id}`, 'X');
+ 
 
         const watch = this.createElement('div', 'watch', `watch-${this.id}`);
         const watchContainer = this.createElement('div', 'watch-container', `watch-container-${this.id}`);
@@ -112,14 +112,16 @@ export class DigitalClockView extends ClockView implements Observer {
     }
 
     toggleFormat(): void {
+        const currentHour = Number(this.hourElement.textContent);
         this.format = this.format === Format.H24 ? Format.AM_PM : Format.H24;
+        this.formatElement.textContent = this.format === Format.AM_PM ? currentHour >= 12 ? 'PM' : 'AM' : '';
+        this.hourElement.textContent = this.formaTime(currentHour);
     }
 
     update(data: { value: number, type: TimeType }): void {
         switch (data.type) {
             case TimeType.HOURS:
                 this.hourElement.textContent = this.formaTime(data.value);
-                this.formatElement.textContent = this.format === Format.AM_PM ? data.value >= 12 ? 'PM' : 'AM' : '';
                 break;
             case TimeType.MINUTES:
                 this.minuteElement.textContent = data.value.toString().padStart(2, '0');
@@ -128,6 +130,7 @@ export class DigitalClockView extends ClockView implements Observer {
                 this.secondElement.textContent = data.value.toString().padStart(2, '0');
                 break;
         }
+       
         
     }
 

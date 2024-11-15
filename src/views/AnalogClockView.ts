@@ -1,11 +1,11 @@
 import { ClockModel } from '../models/ClockModel';
-import { Format, Observer, Position, TimeType } from '../models/Type';
+import { Observer, Position, TimeType } from '../models/Type';
 import { Matrix3x3 } from '../utils/MatrixUtils';
 import { ClockView } from './ClockView';
 
 export class AnalogClockView extends ClockView implements Observer {
     private static readonly CLOCK_WRAPPER_CLASS = 'clock-wrapper analog clock-article';
-    private static readonly CLOCK_FACE_SIZE = 280;
+    private static readonly CLOCK_FACE_SIZE = 230;
     private static readonly CLOCK_NUMBERS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
 
@@ -40,7 +40,6 @@ export class AnalogClockView extends ClockView implements Observer {
 
     private initializeClockWrapper(): void {
         this.clockWrapper = this.createElement('article', AnalogClockView.CLOCK_WRAPPER_CLASS, `analog-clock-wrapper-${this.id}`);
-        this.closeButton = this.createButton('button', 'close-btn', `analog-close-button-${this.id}`, 'X');
         this.editButton = this.createButton('button', 'edit-btn', `edit-button-${this.id}`, 'Edit Time');
         this.clockWrapper.appendChild(this.editButton);
         this.clockWrapper.appendChild(this.closeButton);
