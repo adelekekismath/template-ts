@@ -19,13 +19,24 @@ export class MainController {
     initialize(): void {
         this.view.onAddClockBtnClick(() => this.handleAddClock());
         this.view.onConfirmTimezoneBtnClick(()=> this.handleConfirmTimezone())
-        this.view.onCloseDialogBtnClick(() => this.view.closeDialog());
+        this.view.onCloseDialogBtnClick(() => this.view.closeClockSettingDialog());
+        this.view.onInfoBtnClick(() => this.handleInfoBtn());
+        this.view.onCloseInfoDialogBtnClick(() => this.handleInfoCloseBtn());
+    }
+
+    handleInfoBtn(): void {
+        console.log('info button clicked');
+        this.view.openInfoDialog();
+    }
+
+    handleInfoCloseBtn(): void {
+        this.view.closeInfoDialog();
     }
 
     handleAddClock(): void {
         const timeZones = this.model.getTimeZones();
         this.view.populateTimezones(timeZones);
-        this.view.openDialog();
+        this.view.openClockSettingDialog();
     }
 
     handleConfirmTimezone(): void {
@@ -34,12 +45,10 @@ export class MainController {
         const clockType = selectedType === 'analog' ? ClockType.ANALOG : ClockType.DIGITAL;
         this.clocksController.addClock(parseFloat(selectedTimezone), clockType);
         
-        this.view.closeDialog();
+        this.view.closeClockSettingDialog();
     }
 
-    startClock(): void {
-
-    }
+    startClock(): void {}
 
 
 }

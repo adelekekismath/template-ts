@@ -1,17 +1,23 @@
 export class MainView {
-    dialog: HTMLDialogElement;
+    clockSettingDialog: HTMLDialogElement;
+    infoDialog: HTMLDialogElement;
     timezoneSelect : HTMLSelectElement;
     addClockBtn : HTMLElement;
+    infoBtn : HTMLElement;
     confirmTimezoneBtn : HTMLElement;
     closeDialogBtn : HTMLElement;
+    closeInfoDialogBtn : HTMLElement;
     clockTypeInput : HTMLInputElement
 
     constructor() {
-        this.dialog = document.getElementById('timezone-dialog') as HTMLDialogElement;
+        this.clockSettingDialog = document.getElementById('timezone-dialog') as HTMLDialogElement;
+        this.infoDialog = document.getElementById('info-dialog') as HTMLDialogElement;
         this.timezoneSelect = document.getElementById('timezone') as HTMLSelectElement;
         this.addClockBtn = document.getElementById('add-clock-btn');
+        this.infoBtn = document.getElementById('info-btn');
         this.confirmTimezoneBtn = document.getElementById('confirm-timezone');
         this.closeDialogBtn = document.getElementById('close-dialog');
+        this.closeInfoDialogBtn = document.getElementById('close-info-dialog');
         this.clockTypeInput = document.querySelector('input[name="clock-type"]:checked') as HTMLInputElement;
     }
 
@@ -35,6 +41,14 @@ export class MainView {
         this.addClockBtn?.addEventListener('click', callback);
     }
 
+    onInfoBtnClick(callback: () => void): void {
+        this.infoBtn?.addEventListener('click', callback);
+    }
+
+    onCloseInfoDialogBtnClick(callback: () => void): void {
+        this.closeInfoDialogBtn?.addEventListener('click', callback);
+    }
+
     onConfirmTimezoneBtnClick(callback: () => void): void {
         this.confirmTimezoneBtn?.addEventListener('click', callback);
     }
@@ -47,12 +61,20 @@ export class MainView {
         this.clockTypeInput?.addEventListener('click', callback);
     }
 
-    openDialog(): void {
-        this.dialog.showModal();
+    openClockSettingDialog(): void {
+        this.clockSettingDialog.showModal();
     }
 
-    closeDialog(): void {
-        this.dialog.close();
+    closeClockSettingDialog(): void {
+        this.clockSettingDialog.close();
+    }
+
+    openInfoDialog(): void {
+        this.infoDialog.showModal();
+    }
+
+    closeInfoDialog(): void {
+        this.infoDialog.close();
     }
 
     getSelectedTimezone(): string {
