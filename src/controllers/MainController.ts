@@ -25,7 +25,6 @@ export class MainController {
     }
 
     handleInfoBtn(): void {
-        console.log('info button clicked');
         this.view.openInfoDialog();
     }
 

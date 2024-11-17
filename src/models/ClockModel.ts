@@ -72,7 +72,6 @@ export class ClockModel extends Observable {
     private getTimezoneOffset(): Date {
         const GMT_Hours = Math.floor(this.timeZoneOffset);
         const GMT_Minutes = Math.fround(this.timeZoneOffset - GMT_Hours) * 60;
-        console.log("GMT_Hours: ", GMT_Hours);
         const now = new Date();
         const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
         if( GMT_Minutes <= 0) {

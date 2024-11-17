@@ -1,3 +1,7 @@
+import 'dialog-polyfill';
+import 'dialog-polyfill/dist/dialog-polyfill.css';
+import dialogPolyfill from 'dialog-polyfill';
+
 export class MainView {
     clockSettingDialog: HTMLDialogElement;
     infoDialog: HTMLDialogElement;
@@ -12,6 +16,8 @@ export class MainView {
     constructor() {
         this.clockSettingDialog = document.getElementById('timezone-dialog') as HTMLDialogElement;
         this.infoDialog = document.getElementById('info-dialog') as HTMLDialogElement;
+        this.registerAsDialogPolyfill(this.clockSettingDialog);
+        this.registerAsDialogPolyfill(this.infoDialog);
         this.timezoneSelect = document.getElementById('timezone') as HTMLSelectElement;
         this.addClockBtn = document.getElementById('add-clock-btn');
         this.infoBtn = document.getElementById('info-btn');
@@ -29,6 +35,10 @@ export class MainView {
             option.textContent = timeZone;
             this.timezoneSelect.appendChild(option);
         });
+    }
+
+    registerAsDialogPolyfill(dialog : HTMLDialogElement): void {
+        dialogPolyfill.registerDialog(dialog);
     }
 
 
