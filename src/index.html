@@ -4,75 +4,80 @@
 <head>
     <meta charset="utf-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <!-- support for mobile touch devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="css" href="index.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <button id="add-clock-btn">Add a new clock</button>
-    <div id="clocks-container" class="clocks-container">
-        <dialog id="timezone-dialog" class="custom-dialog">
-            <form method="dialog" class="dialog-form">
-                <fieldset class="clock-type-fieldset">
-                <legend class="clock-type-legend">Select Clock Type:</legend>
-                <label class="clock-type-label" for="digital-clock">
-                    <input type="radio" id="digital-clock" name="clock-type" value="digital" checked>
-                    Digital Clock
-                </label>
-                <label class="clock-type-label" for="analog-clock">
-                    <input type="radio" id="analog-clock" name="clock-type" value="analog">
-                    Analog Clock
-                </label>
-            </fieldset>
-                <label for="timezone">Select Timezone:</label>
-                <select id="timezone"></select>
-                <div class="dialog-buttons">
-                    <button id="confirm-timezone" class="button confirm-button">Confirm</button>
-                    <button id="close-dialog" class="button cancel-button" type="reset">Cancel</button>
-                </div>
-            </form>
+    <div class="container">
+        <div class="welcome">
+            <h1>🕒 Welcome to World Clock</h1>
+            <p class="description">Track time zones across the globe in style.</p>
+            <button id="add-clock-btn"><i class="fas fa-plus"></i> Add a new clock</button>
+        </div>
+        
+        <div id="clocks-container" class="clocks-container">
+            <dialog id="timezone-dialog" class="custom-dialog">
+                <form method="dialog" class="dialog-form">
+                    <fieldset class="clock-type-fieldset">
+                    <legend class="clock-type-legend">Select Clock Type:</legend>
+                    <label class="clock-type-label" for="digital-clock">
+                        <input type="radio" id="digital-clock" name="clock-type" value="digital" checked>
+                        Digital Clock
+                    </label>
+                    <label class="clock-type-label" for="analog-clock">
+                        <input type="radio" id="analog-clock" name="clock-type" value="analog">
+                        Analog Clock
+                    </label>
+                </fieldset>
+                    <label for="timezone">Select Timezone:</label>
+                    <select id="timezone"></select>
+                    <div class="dialog-buttons">
+                        <button id="confirm-timezone" class="button confirm-button">Confirm</button>
+                        <button id="close-dialog" class="button cancel-button" type="reset">Cancel</button>
+                    </div>
+                </form>
+            </dialog>
+        </div>
+        <button id="info-btn"><i class="fa-solid fa-info" aria-hidden="true"></i></button>
+        <dialog id="info-dialog">
+            <div class="dialog-content">
+                <button id="close-info-dialog" class="close-btn">&times;</button>
+                <h2 class="dialog-title">About the Interactive Clock Application</h2>
+                
+                <section class="dialog-section">
+                    <h3 class="section-title">🤷🏾‍♀️ What is this application?</h3>
+                    <p class="dialog-text">This interactive clock application allows you to add multiple clocks to your screen, each with a different timezone. You can choose between an analog or digital clock, move and organize them as you wish, and even manually adjust the time if needed.</p>
+                </section>
+                
+                <section class="dialog-section">
+                    <h3 class="section-title">💡 How to use it?</h3>
+                    <ul class="usage-list">
+                        <li>To add a new clock, click the "Add a new clock" button.</li>
+                        <li>To remove a clock, use the "x" button on the respective clock.</li>
+                        <li>To personalize the time on analog clock , click on "Edit Time" button, then click on the minute's hand to adjust it.</li>
+                        <li>You can also drag and drop clock by clicking on the clock and moving it to the desired location.</li>
+                    </ul>
+                </section>
+        
+                <section class="dialog-section">
+                    <h3 class="section-title">🔧 Technologies Used and Why?</h3>
+                    <p class="dialog-text">This application was developed in <strong>native TypeScript and CSS</strong> , without any frameworks, to optimize performance and allow full control over every aspect of the application. The use of "pure" JavaScript creates a lightweight and fast application, following a clear structure with the MVC (Model-View-Controller) pattern to separate data, display, and user interactions.</p>
+                </section>
+                
+                <section class="dialog-section">
+                    <h3 class="section-title">📚 Resources & Tools</h3>
+                    <ul class="resource-list">
+                        <li><a href="https://www.typescriptlang.org/" target="_blank" rel="noopener">TypeScript</a> for a more reliable and scalable development experience.</li>
+                        <li><a href="https://sass-lang.com/" target="_blank" rel="noopener">Sass</a> for more modular and reusable styling.</li>
+                        <li><a href="https://www.zeitverschiebung.net/en/" target="_blank" rel="noopener">Timezone API</a> to get the list of timezones.</li>
+                        <li><a href="https://fontawesome.com/" target="_blank" rel="noopener">Font Awesome</a> for icons.</li>
+                        <li><a href="https://www.carloscaballero.io/understanding-mvc-for-frontend-typescript/" target="_blank" rel="noopener">Understanding MVC for Frontend TypeScript</a> article by Carlos Caballero.</li>
+                    </ul>
+                </section>
+            </div>
         </dialog>
     </div>
-    <button id="info-btn"><i class="fa-solid fa-info" aria-hidden="true"></i></button>
-    <dialog id="info-dialog">
-        <div class="dialog-content">
-            <button id="close-info-dialog" class="close-btn">&times;</button>
-            <h2 class="dialog-title">About the Interactive Clock Application</h2>
-            
-            <section class="dialog-section">
-                <h3 class="section-title">🤷🏾‍♀️ What is this application?</h3>
-                <p class="dialog-text">This interactive clock application allows you to add multiple clocks to your screen, each with a different timezone. You can choose between an analog or digital clock, move and organize them as you wish, and even manually adjust the time if needed.</p>
-            </section>
-            
-            <section class="dialog-section">
-                <h3 class="section-title">💡 How to use it?</h3>
-                <ul class="usage-list">
-                    <li>To add a new clock, click the "Add a new clock" button.</li>
-                    <li>To remove a clock, use the "x" button on the respective clock.</li>
-                    <li>To personalize the time on analog clock , click on "Edit Time" button, then click on the minute's hand to adjust it.</li>
-                    <li>You can also drag and drop clock by clicking on the clock and moving it to the desired location.</li>
-                </ul>
-            </section>
-    
-            <section class="dialog-section">
-                <h3 class="section-title">🔧 Technologies Used and Why?</h3>
-                <p class="dialog-text">This application was developed in <strong>native TypeScript and CSS</strong> , without any frameworks, to optimize performance and allow full control over every aspect of the application. The use of "pure" JavaScript creates a lightweight and fast application, following a clear structure with the MVC (Model-View-Controller) pattern to separate data, display, and user interactions.</p>
-            </section>
-            
-            <section class="dialog-section">
-                <h3 class="section-title">📚 Resources & Tools</h3>
-                <ul class="resource-list">
-                    <li><a href="https://www.typescriptlang.org/" target="_blank" rel="noopener">TypeScript</a> for a more reliable and scalable development experience.</li>
-                    <li><a href="https://sass-lang.com/" target="_blank" rel="noopener">Sass</a> for more modular and reusable styling.</li>
-                    <li><a href="https://www.zeitverschiebung.net/en/" target="_blank" rel="noopener">Timezone API</a> to get the list of timezones.</li>
-                    <li><a href="https://fontawesome.com/" target="_blank" rel="noopener">Font Awesome</a> for icons.</li>
-                    <li><a href="https://www.carloscaballero.io/understanding-mvc-for-frontend-typescript/" target="_blank" rel="noopener">Understanding MVC for Frontend TypeScript</a> article by Carlos Caballero.</li>
-                </ul>
-            </section>
-        </div>
-    </dialog>
-    
 </body>
 
 </html>

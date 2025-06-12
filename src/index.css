@@ -1,53 +1,105 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
+
+:root {
+  --digit: hsl(87, 43%, 4%);
+  --face: hsl(0, 0%, 100%);
+  --content: hsl(0, 0%, 40%);
+  --glare: hsla(0, 0%, 100%, 0.2);
+  --watch-bg: hsl(270, 100%, 40%);
+  --stroke: hsl(0, 0%, 15%);
+  --background: hsl(220, 60%, 94%);
+  --accent: hsl(270, 90%, 60%);
+  --accent-light: hsl(270, 100%, 80%);
+  --accent-dark: hsl(270, 80%, 35%);
+  --start: hsl(50, 100%, 50%);
+  --start-two: hsl(50, 100%, 50%);
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, var(--background), #ffffff);
+  margin: 0;
+  padding: 0;
+  display: grid;
+  min-height: 100vh;
+  color: var(--content);
+}
+
+
+.welcome {
+    text-align: left;
+    margin: 50px;
+}
+
 .clocks-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  position: relative;
-  top: 10%;
+  gap: 30px;
+  padding: 40px;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.blinking {
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .clock-article {
-  border: 2px solid var(--watch-bg);
-  border-radius: 10px;
-  background-color: #ffffff;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  overflow: hidden;
-  min-width: 290px;
-  min-height: 300px;
+  background: var(--face);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px var(--shadow), inset 0 2px 4px #ffffff;
+  padding: 20px;
+  min-width: 300px;
+  min-height: 320px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clock-article:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 }
 
 .clock {
-  position: relative;
-  border: 4px solid var(--watch-bg);
   border-radius: 50%;
-  background: hsl(273, 24%, 93%);
-  margin: 15px auto;
+  border: 4px solid var(--accent-dark);
+  background: linear-gradient(145deg, #f3f3f3, #e6e6e6);
+  margin: 0 auto 15px;
+  position: relative;
+  width: 180px;
+  height: 180px;
+  box-shadow: inset 0 0 6px #999, 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.clock-center {
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .clock-number {
   position: absolute;
   transform: translate(-50%, -50%);
-  color: var(--watch-bg);
+  color: var(--accent-dark);
+  font-size: 1rem;
 }
 
-.clock-center {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: black;
-  border-radius: 50%;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.clock-article:hover {
-  transform: translateY(-5px);
-}
 
 .clock-type-fieldset {
   border: 2px solid #ccc;
@@ -95,30 +147,7 @@
   user-select: none;
 }
 
-:root {
-  --digit: hsl(87, 43%, 4%);
-  --face: hsl(96, 33%, 97%);
-  --content: hsl(0, 0%, 40%);
-  --glare: hsla(0, 0%, 100%, 0.2);
-  --watch-bg: hsl(270, 100%, 30%);
-  --stroke: hsl(0, 0%, 15%);
-  --start: hsl(50, 100%, 50%);
-  --start-two: hsl(50, 100%, 50%);
-  --background: hsl(0, 13%, 78%);
-}
 
-body {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(to bottom, #e0f7fa, #ffffff);
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding: 0;
-  margin: 0;
-  height: 100vh;
-  font-size:  clamp(10px, 1.5rem, 20px);
-}
 
 button {
   appearance: none;
@@ -216,32 +245,28 @@ button {
 }
 
 #add-clock-btn {
-  top: 50%;
-  position: relative;
-  background-color: #4caf50; /* Vert */
+  background-color: var(--accent-dark);
   border: none;
+  padding: 12px 26px;
   color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  margin: 4px 2px;
+  font-size: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 0 var(--accent);
   cursor: pointer;
-  border-radius: 12px;
-  text-shadow: 0 0 2px #000;
-  box-shadow: 0 4px #2d6b35;
-  transition: background-color 0.3s ease;
-  font-family: inherit ;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 #add-clock-btn:hover {
-  background-color: #45a049; /* Vert plus clair au survol */
+  background-color: var(--accent-light);
+  box-shadow: 0 2px 0 var(--accent-dark);
+  transform: translateY(-2px);
 }
 
 #add-clock-btn:active {
-  background-color: #3e8e41; /* Vert plus foncé lors du clic */
-  box-shadow: 0 2px #2d6b35;
-  transform: translateY(2px);
+  background-color: var(--accent-dark);
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--accent-dark);
 }
 
 span.label-mode {
@@ -378,30 +403,28 @@ span.label-format {
 }
 
 .edit-btn {
+  background-color: var(--accent-dark);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   position: absolute;
   top: 10px;
   left: 10px;
-  padding: 5px 10px;
-  background-color: var(--watch-bg);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .edit-btn:hover {
-  background-color: hsl(270, 96%, 20%);
-}
-
-.edit-btn:active {
-  background-color: hsl(270, 70%, 71%);
-  transform: scale(0.95);
+  background-color: var(--accent);
 }
 
 .edit-btn.editing {
-  background-color: #ff5733;
+  background-color: crimson;
 }
+
+
+
 
 .watch__content:after {
   content: "";
@@ -442,7 +465,7 @@ canvas {
   padding: 11px;
   border-radius: 6px;
   background: var(--face);
-  width: 150px;
+  width: 170px;
   height: 48px;
   justify-content: center;
 }
@@ -569,7 +592,7 @@ canvas {
   right: 10px;
   color: white;
   box-shadow: 0 0 5px #000;
-  background-color: #4caf50;
+  background-color: var(--accent-dark);
   width: 40px;
   height: 40px;
   border-radius: 50%;
